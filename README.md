@@ -3,8 +3,13 @@ Time series data management and visualisation made easy for Excel users and R pr
 
 # Get James in R
 
-  devtools::install_git("...")
+``` R
+devtools::install_git("...")
+```
 
 # Use James
 
-  Easy example here.
+```
+library(james)
+# Easy example here.
+```
