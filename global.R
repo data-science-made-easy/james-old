@@ -2,6 +2,7 @@
 COL_SCHEME  <- list(dot_median = "dot_median", fan = "fan")
 Y2_OPTIONS  <- c("y", "Y")
 USE_OPTIONS <- c("y", "cds")
+DEFAULT     <- "default"
 TAB_NAME    <- list(meta = "meta", settings = "setting", help = "help")
 META_FIELDS <- list(id = "id",	use = "use", "title" = "title",	ylab = "ylab", series_type = "series_type", hline_reference = "hline_reference", x_at = "x_at",	x_labels = "x_labels", x_lim = "x_lim", y_lim = "y_lim", future = "future", xlab = "xlab", email = "email", comment = "comment")
 FIG_TYPE    <- list(line = "line", line_dot = "line_dot", bar_next = "bar--", bar_top = "bar=", dot = "dot", dot_small = "dot_small", x_axis = "x_axis", fan = "fan")
