@@ -1,2 +1,4 @@
 data
 create_package.R
+.Rapp.history
+package.Rcheck
