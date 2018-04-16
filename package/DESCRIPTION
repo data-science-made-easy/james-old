@@ -1,5 +1,5 @@
 Package: James
-Title: Time series data management and visualisation made easy for Excel users and R programmers4.
+Title: Data I/O and visualisation made easy for Excel users and R programmers.
 Version: 17.04
 Authors@R: Martijn Dijkstra <m.dijkstra.cpb@gmail.com> [aut, cre]
 Description: What the package does (one paragraph).
@@ -7,3 +7,4 @@ Depends: R (>= 3.4.3)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+DESCRIPTION: James makes it easy to import, store and visualise (time series) Excel data in different versions.
