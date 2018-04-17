@@ -162,16 +162,14 @@ j_get <- function(index, type, version, scenario = .j_root$active_scenario, proj
   
   if (0 == length(index)) {
     return(NULL)
-  } else {
+  } else if (1 == length(index)) {
     what   <- what[1]
     object <- .j_root$data_lst[[index]]
     if ("object" == what) return(object)
     if ("data"   == what) return(object$data)
     if ("fig"    == what) return(object$fig)
     stop(paste0("j_get(..., what = '", what, "') is NOT allowed."))
-  }
-  
-  return(if (0 == length(index)) NULL else if (get_fig) .j_root$data_lst[[index]]$fig else .j_root$data_lst[[index]]$data)
+  } else stop(paste0("j_get cannot return > 1 result. Please narrow your search."))
 }
 
 j_activate <- function(type, version, scenario = .j_root$active_scenario, project = .j_root$active_project, index) {
