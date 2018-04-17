@@ -8,7 +8,12 @@ devtools::install_github("data-science-made-easy/james")
 ```
 
 # Use James
-James has only a few functions, which do most of the work for you.
+James has only a few functions, which do most of the work for you:
+1. `j_ls()`
+2. `j_put()`
+3. `j_get()`
+4. `j_save()`
+
 ## Easy example:
 ```
 library(james)
