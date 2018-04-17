@@ -5,10 +5,10 @@ Author: Martijn Dijkstra
 Maintainer: Martijn Dijkstra <m.dijkstra.cpb@gmail.com>
 Authors@R: "Martijn Dijkstra <m.dijkstra.cpb@gmail.com> [aut, cre]"
 Description: What the package does (one paragraph).
-Depends: R (>= 3.4.3)
+Depends: R (>= 3.4.3), R6, utils
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-DESCRIPTION: James makes it easy to import, store and visualise (time series) Excel data in different versions.
+DESCRIPTION: James makes it easy to import, store and visualise (time series) Excel data
 RoxygenNote: 6.0.1
 Suggests: testthat
