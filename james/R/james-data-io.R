@@ -188,17 +188,6 @@ j_activate <- function(type, version, scenario = .j_root$active_scenario, projec
 j_save <- function() .j_root$save()
 
 
-# j_init(file_name = "trivial.cpb", active_scenario = DEFAULT_SCENARIO, active_project = "kcep2017")
-#
-# import_xlsx_as_ts(1, type = "a", project = "pa", scenario = "sa", ignore = F)
-# import_xlsx_as_ts(1, type = "a", project = "pa", scenario = "sb", ignore = F)
-# import_xlsx_as_ts(2, type = "a")
-# import_xlsx_as_ts(2, type = "a", ignore = F)
-# import_xlsx_as_ts(1, type = "a", project = "pb", scenario = "sb", ignore = F)
-#
-# j_ls()
-
-
 
 
 
