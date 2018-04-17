@@ -16,10 +16,9 @@ j_ls()
 ```
 
 This creates a file <your user name>.james in your home directory. First time, j_ls() shows an empty table.
-``` R
-[1] index     project   scenario  type      version   dim|class doc      
-<0 rows> (or 0-length row.names)
-```
+
+    [1] index     project   scenario  type      version   dim|class doc      
+      <0 rows> (or 0-length row.names)
 
 Now you can add some data:
 ``` R
@@ -27,3 +26,5 @@ j_put(1:10)
 j_ls()
 ```
 
+      index project scenario type version dim|class  doc
+    1     1                             1 character <NA>
