@@ -28,6 +28,7 @@ j_get <- function(index, type, version, scenario = james.env$j_root$active_scena
   james_initialise()
   
   if (missing(index)) {
+    if (missing(type)) type <- ""
     j_table <- j_ls(active_project_scenario_only = FALSE, collapsed = FALSE)
     if (missing(version)) { # take last
       index <- tail(which(type == j_table$type & scenario == j_table$scenario & project == j_table$project), 1)
