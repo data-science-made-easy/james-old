@@ -4,7 +4,7 @@ Time series data management and visualisation made easy for Excel users and R pr
 # Get James in R
 
 ``` R
-devtools::install_git("...")
+devtools::install_github("data-science-made-easy/james")
 ```
 
 # Use James
