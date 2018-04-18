@@ -29,10 +29,6 @@ version if successfully added, else FALSE
 \description{
 Put data in archive at specified location. Beware
 }
-\examples{
-example(j_get)
-
-}
 \seealso{
 \code{\link{j_get}}, \code{\link{j_ls}}, \code{\link{j_init}}
 }

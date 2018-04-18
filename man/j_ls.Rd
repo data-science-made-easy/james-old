@@ -26,10 +26,6 @@ data.frame which describes the data in james.env$j_root, given the parameters
 \description{
 Equivalent of R's native ls() function.
 }
-\examples{
-example(j_get)
-
-}
 \seealso{
 \code{\link{j_init}} to initialise James. See \code{\link{j_put}} and \code{\link{j_get}} to get/put data
 }
