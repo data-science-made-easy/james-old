@@ -30,56 +30,19 @@ James has only a few functions, which do most of the work for you:
 - `j_get()` gets a data set from the storage
 - `j_save()` stores your data to disc for later use
 
-> Note: This creates a file "<your user name>.james" in your home directory, which saves all your data in RDSformat to disc. Please see the ‘R Internals’ manual for details.
+> Note: This creates a file `<your user name>.james` in your home directory, which saves all your data in RDS-format to disc. Please see the ‘R Internals’ manual for details.
 
-## Easy example:
+## Easy examples:
 ``` R
-j_ls()
-```
-
-First time, j_ls() shows an empty table.
-
-    [1] index     project   scenario  type      version   dim|class doc      
-      <0 rows> (or 0-length row.names)
-
-Now you can add some data:
-``` R
-j_put(1:10)
-```
-
-The data which you've just added is shown in the overview below.
-
-``` R
-j_ls()
-
-      index project scenario type version dim|class  doc
-    1     1                             1 character <NA>
-```
-
-To observe it again:
-``` R
-j_get(index = 1)
- [1]  1  2  3  4  5  6  7  8  9 10
-```
-
-An alternative to get the data back is:
-``` R
-j_get(version = 1)
- [1]  1  2  3  4  5  6  7  8  9 10
-```
-
-Adding a new version goes automatically:
-``` R
-j_put(101:110)
-
-j_ls()
-
-      index project scenario type version dim|class  doc
-    2     2                             2 character <NA>
-```
-
-However, the first version stays available, too:
-``` R
-j_get(index = 1)
- [1]  1  2  3  4  5  6  7  8  9 10
+index <- j_put("hi", type = "greeting") # Store "hi" as a type of greeting
+j_ls() # see it is stored (in memory). j_save() stores it to disc, too.
+j_get(index)  # get it back
+j_put("bye", type = "greeting") # put another greeting
+j_get(type = "greeting") # And get it back
+j_ls() # shows only the last greeting
+j_ls(collapsed = FALSE) # shows both
+j_get(type = "greeting", version = 1) # gets the first greeting back
+j_put("bye", type = "greeting", scenario = "English words", project = "language courses") # store greeting as part of a project and a scenario
+j_put("bread", type = "food", scenario = "English words", project = "language courses") # add another data type to this scenario
+j_ls() # shows most recent versions of data types for active project and scenario
 ```
