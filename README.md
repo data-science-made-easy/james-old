@@ -2,21 +2,33 @@
 Time series data management and visualisation made easy for Excel users and R programmers.
 
 # Get James in R
+Open `R` and install `devtools`:
+``` R
+install.packages("devtools")
+```
+
+This makes it easy to install `james` directly from github, using devtools:
 
 ``` R
 devtools::install_github("data-science-made-easy/james")
 ```
 
+Now you can load the package:
+``` R
+library(james)
+```
+
+Congratulations, you now have the cutting-edge development version!
+
 # Use James
 James has only a few functions, which do most of the work for you:
-1. `j_ls()`
+1. `j_ls()` shows you an 
 2. `j_put()`
 3. `j_get()`
 4. `j_save()`
 
 ## Easy example:
-```
-library(james)
+``` R
 j_ls()
 ```
 
