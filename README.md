@@ -2,7 +2,9 @@
 Time series data management and visualisation made easy for Excel users and R programmers.
 
 # Get James in R
-Open `R` and install `devtools`:
+First download [R](https://cran.r-project.org/) or [RStudio](https://www.rstudio.com).
+
+Open `R` (or `RStudio`) and install `devtools`:
 ``` R
 install.packages("devtools")
 ```
@@ -22,17 +24,20 @@ Congratulations, you now have the cutting-edge development version!
 
 # Use James
 James has only a few functions, which do most of the work for you:
-1. `j_ls()` shows you an 
-2. `j_put()`
-3. `j_get()`
-4. `j_save()`
+
+- `j_ls()` lists the 'working version' your data (details below)
+- `j_put()` puts a data set in the storage
+- `j_get()` gets a data set from the storage
+- `j_save()` stores your data to disc for later use
+
+> Note: This creates a file "<your user name>.james" in your home directory, which saves all your data in RDSformat to disc. Please see the ‘R Internals’ manual for details.
 
 ## Easy example:
 ``` R
 j_ls()
 ```
 
-This creates a file <your user name>.james in your home directory. First time, j_ls() shows an empty table.
+First time, j_ls() shows an empty table.
 
     [1] index     project   scenario  type      version   dim|class doc      
       <0 rows> (or 0-length row.names)
