@@ -6,7 +6,6 @@ Maintainer: Martijn Dijkstra <m.dijkstra.cpb@gmail.com>
 Authors@R: "Martijn Dijkstra <m.dijkstra.cpb@gmail.com> [aut, cre]"
 Description: James makes it easy to import, store and visualise (time series) Excel data.
 Depends: R (>= 3.4.3), R6, utils
-Imports: R6
 License: MIT + file LICENSE
 NeedsCompilation: no
 Encoding: UTF-8
