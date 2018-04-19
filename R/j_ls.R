@@ -4,22 +4,22 @@
 #'
 #' @param type data type
 #' @param version version of data you want to filter on
-#' @param scenario scenario filter (defaults to active scenario), see also active_project_scenario_only
-#' @param project project filter (defaults to active project), see also active_project_scenario_only
-#' @param collapsed shows only most recent version of each data type (default TRUE)
-#' @param active_project_scenario_only if project/scenario are missing, list only data in your active project and active scenario (default TRUE)
+#' @param scenario scenario filter (defaults to active scenario if filter_active = TRUE)
+#' @param project project filter (defaults to active project if filter_active = TRUE)
+#' @param collapse show only most recent version of each data type (default FALSE)
+#' @param filter_active if project/scenario are missing, list only data in your active project and active scenario (default FALSE)
 #'
 #' @return data.frame which describes the data in james.env$j_root, given the parameters
 #'
-#' @seealso \code{\link{j_init}} to initialise James. See \code{\link{j_put}} and \code{\link{j_get}} to get/put data
+#' @seealso \code{\link{j_activate}} to activate another project/scenario
 #'
 #' @importFrom utils head tail
 #' @export
 
-j_ls <- function(type, version, scenario, project, collapsed = TRUE, active_project_scenario_only = TRUE) {
+j_ls <- function(type, version, scenario, project, collapse = FALSE, filter_active = FALSE) {
   james_initialise()
   
-  if (active_project_scenario_only) {
+  if (filter_active) {
     if (missing(project))  project  <- james.env$j_root$active_project
     if (missing(scenario)) scenario <- james.env$j_root$active_scenario
   }
@@ -49,8 +49,8 @@ j_ls <- function(type, version, scenario, project, collapsed = TRUE, active_proj
     df[j, "doc"]         <- x$doc
   }
 
-  # If "collapsed", filter most recent version per project/scenario/type
-  if (collapsed && 0 < nrow(df)) {
+  # If "collapse", filter most recent version per project/scenario/type
+  if (collapse && 0 < nrow(df)) {
     filter_cols <- c("project", "scenario", "type")
     pst <- unique(df[, filter_cols])
     for (i in 1:nrow(pst)) {

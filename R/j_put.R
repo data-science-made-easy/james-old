@@ -25,7 +25,7 @@ j_put <- function(x, type = "", doc = NA, scenario = james.env$j_root$active_sce
   if (!add_x) add_x <- !identical(x, x2_object$data) || !identical(doc, x2_object$doc)
   
   if (add_x) {
-    lst              <- j_ls(active_project_scenario_only = FALSE, collapsed = FALSE)
+    lst              <- j_ls(collapse = FALSE, filter_active = FALSE)
     index            <- which(type == lst$type & scenario == lst$scenario & project == lst$project)
     version          <- 1 + length(index) # New version
     jdata            <- JData$new(x, version, type, scenario, project, doc) # Create

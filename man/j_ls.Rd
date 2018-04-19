@@ -4,21 +4,21 @@
 \alias{j_ls}
 \title{List James' data}
 \usage{
-j_ls(type, version, scenario, project, collapsed = TRUE,
-  active_project_scenario_only = TRUE)
+j_ls(type, version, scenario, project, collapse = FALSE,
+  filter_active = FALSE)
 }
 \arguments{
 \item{type}{data type}
 
 \item{version}{version of data you want to filter on}
 
-\item{scenario}{scenario filter (defaults to active scenario), see also active_project_scenario_only}
+\item{scenario}{scenario filter (defaults to active scenario if filter_active = TRUE)}
 
-\item{project}{project filter (defaults to active project), see also active_project_scenario_only}
+\item{project}{project filter (defaults to active project if filter_active = TRUE)}
 
-\item{collapsed}{shows only most recent version of each data type (default TRUE)}
+\item{collapse}{show only most recent version of each data type (default FALSE)}
 
-\item{active_project_scenario_only}{if project/scenario are missing, list only data in your active project and active scenario (default TRUE)}
+\item{filter_active}{if project/scenario are missing, list only data in your active project and active scenario (default FALSE)}
 }
 \value{
 data.frame which describes the data in james.env$j_root, given the parameters
@@ -27,5 +27,5 @@ data.frame which describes the data in james.env$j_root, given the parameters
 Equivalent of R's native ls() function.
 }
 \seealso{
-\code{\link{j_init}} to initialise James. See \code{\link{j_put}} and \code{\link{j_get}} to get/put data
+\code{\link{j_activate}} to activate another project/scenario
 }
