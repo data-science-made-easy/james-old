@@ -10,10 +10,6 @@
 #'
 #' @seealso \code{\link{j_put}}, \code{\link{j_get}}, \code{\link{j_ls}}
 #'
-#' @examples
-#' .j_root <- j_init()
-#' j_ls()
-#'
 #' @export
 
 j_init <- function(file_name = paste0(Sys.getenv("HOME"), .Platform$file.sep, Sys.info()["user"], ".james"), active_scenario, active_project) {

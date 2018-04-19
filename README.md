@@ -35,14 +35,14 @@ James has only a few functions, which do most of the work for you:
 ## Easy examples:
 ``` R
 index <- j_put("hi", type = "greeting") # Store "hi" as a type of greeting
-j_ls() # see it is stored (in memory). j_save() stores it to disc, too.
-j_get(index)  # get it back
-j_put("bye", type = "greeting") # put another greeting
-j_get(type = "greeting") # And get it back
-j_ls() # shows only the last greeting
-j_ls(collapsed = FALSE) # shows both
+j_ls() # see it is stored (in memory). If you want: j_save() stores it to disc, too.
+j_get(index)  # get it back; the index is unique and persistent
+j_put("hello", type = "greeting") # put another greeting
+j_get(type = "greeting") # And get the last greeting back
+j_ls() # shows all greetings
+j_ls(collapse = TRUE) # shows only the most recent one
 j_get(type = "greeting", version = 1) # gets the first greeting back
 j_put("bye", type = "greeting", scenario = "English words", project = "language courses") # store greeting as part of a project and a scenario
 j_put("bread", type = "food", scenario = "English words", project = "language courses") # add another data type to this scenario
-j_ls() # shows most recent versions of data types for active project and scenario
+j_ls(collapse = TRUE, filter_active = TRUE) # shows most recent versions of data types for active project and scenario
 ```

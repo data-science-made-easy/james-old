@@ -20,11 +20,6 @@ JRoot object holding your data. Please assign return value to .j_root, as James 
 \description{
 Creates or opens a file and a JRoot object holding your data
 }
-\examples{
-.j_root <- j_init()
-j_ls()
-
-}
 \seealso{
 \code{\link{j_put}}, \code{\link{j_get}}, \code{\link{j_ls}}
 }

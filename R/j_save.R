@@ -6,9 +6,6 @@
 #'
 #' @seealso \code{\link{j_init}} to initialise James. See \code{\link{j_put}} and \code{\link{j_get}} to get/put data
 #'
-#' @examples
-#' example(j_get)
-#'
 #' @export
 
 j_save <- function() james.env$j_root$save()

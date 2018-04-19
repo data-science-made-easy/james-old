@@ -28,14 +28,17 @@ data, JFig or JData object (NULL if not present)
 Get data from archive
 }
 \examples{
-j_put(x = 4:12, type = "age", scenario = "Primary school", project = "Education")
-j_get(type = "age")
-j_put(x = 3:13, type = "age")
-j_ls()
-j_ls(collapsed = FALSE)
-j_get(index = 1)
-j_get(type = "age")
-j_get(type = "age", version = 1, scenario = "Primary school", project = "Education")
+index <- j_put("hi", type = "greeting") # Store "hi" as a type of greeting
+j_ls() # see it is stored (in memory). If you want: j_save() stores it to disc, too.
+j_get(index)  # get it back; the index is unique and persistent
+j_put("hello", type = "greeting") # put another greeting
+j_get(type = "greeting") # And get the last greeting back
+j_ls() # shows all greetings
+j_ls(collapse = TRUE) # shows only the most recent one
+j_get(type = "greeting", version = 1) # gets the first greeting back
+j_put("bye", type = "greeting", scenario = "English words", project = "language courses") # store greeting as part of a project and a scenario
+j_put("bread", type = "food", scenario = "English words", project = "language courses") # add another data type to this scenario
+j_ls(collapse = TRUE, filter_active = TRUE) # shows most recent versions of data types for active project and scenario
 
 }
 \seealso{
