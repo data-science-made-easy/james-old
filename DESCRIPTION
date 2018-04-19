@@ -1,6 +1,6 @@
 Package: james
 Title: Data I/O and visualisation made easy for Excel users and R programmers
-Version: 17.04
+Version: 18.04
 Author: Martijn Dijkstra
 Maintainer: Martijn Dijkstra <m.dijkstra.cpb@gmail.com>
 Authors@R: "Martijn Dijkstra <m.dijkstra.cpb@gmail.com> [aut, cre]"
