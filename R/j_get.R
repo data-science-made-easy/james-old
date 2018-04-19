@@ -20,9 +20,12 @@
 #' j_ls() # shows all greetings
 #' j_ls(collapse = TRUE) # shows only the most recent one
 #' j_get(type = "greeting", version = 1) # gets the first greeting back
-#' j_put("bye", type = "greeting", scenario = "English words", project = "language courses") # store greeting as part of a project and a scenario
-#' j_put("bread", type = "food", scenario = "English words", project = "language courses") # add another data type to this scenario
-#' j_ls(collapse = TRUE, filter_active = TRUE) # shows most recent versions of data types for active project and scenario
+#' # Store greeting as part of a project and a scenario:
+#' j_put("bye", type = "greeting", scenario = "English words", project = "language courses")
+#' # Add another data type to this scenario:
+#' j_put("bread", type = "food", scenario = "English words", project = "language courses")
+#' # Shows most recent versions of data types for active project and scenario:
+#' j_ls(collapse = TRUE, filter_active = TRUE)
 #'
 #' @importFrom utils head tail
 #' @export
