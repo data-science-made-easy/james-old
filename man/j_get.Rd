@@ -5,7 +5,7 @@
 \title{Get data from archive}
 \usage{
 j_get(index, type, version, scenario = james.env$j_root$active_scenario,
-  project = james.env$j_root$active_project, what = c("data", "fig",
+  project = james.env$j_root$active_project, what = c("data", "meta",
   "object"))
 }
 \arguments{
@@ -19,10 +19,10 @@ j_get(index, type, version, scenario = james.env$j_root$active_scenario,
 
 \item{project}{project from which you want to get the data (default is active project)}
 
-\item{what}{data type you want to get is one from c("data", "fig", "object") (default "data")}
+\item{what}{data type you want to get is one from c("data", "meta", "object") (default "data")}
 }
 \value{
-data, JFig or JData object (NULL if not present)
+data, list with meta data, or JData object (NULL if not present)
 }
 \description{
 Get data from archive

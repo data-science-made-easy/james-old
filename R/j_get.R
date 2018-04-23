@@ -5,9 +5,9 @@
 #' @param version version you want to get (default is active (c.q. newest) version)
 #' @param scenario scenario from which you want to get the data (default is active scenario)
 #' @param project project from which you want to get the data (default is active project)
-#' @param what data type you want to get is one from c("data", "fig", "object") (default "data")
+#' @param what data type you want to get is one from c("data", "meta", "object") (default "data")
 #'
-#' @return data, JFig or JData object (NULL if not present)
+#' @return data, list with meta data, or JData object (NULL if not present)
 #'
 #' @seealso \code{\link{j_put}}, \code{\link{j_ls}}, \code{\link{j_init}}
 #'
@@ -30,7 +30,7 @@
 #' @importFrom utils head tail
 #' @export
 
-j_get <- function(index, type, version, scenario = james.env$j_root$active_scenario, project = james.env$j_root$active_project, what = c("data", "fig", "object")) {
+j_get <- function(index, type, version, scenario = james.env$j_root$active_scenario, project = james.env$j_root$active_project, what = c("data", "meta", "object")) {
   james_initialise()
   
   if (missing(index)) {
@@ -48,9 +48,9 @@ j_get <- function(index, type, version, scenario = james.env$j_root$active_scena
   } else if (1 == length(index)) {
     what   <- what[1]
     object <- james.env$j_root$data_lst[[index]]
-    if ("object" == what) return(object)
     if ("data"   == what) return(object$data)
-    if ("fig"    == what) return(object$fig)
+    if ("meta"   == what) return(object$meta)
+    if ("object" == what) return(object)
     stop(paste0("j_get(..., what = '", what, "') is NOT allowed."))
   } else stop(paste0("j_get cannot return > 1 result. Please narrow your search."))
 }
