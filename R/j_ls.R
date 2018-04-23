@@ -37,7 +37,7 @@ j_ls <- function(type, version, scenario, project, collapse = FALSE, filter_acti
 
     # x_info: dim or class
     x_info <- paste(dim(x$data), collapse = "/")
-    if ("" == x_info) x_info <- class(x_info)
+    if ("" == x_info) x_info <- class(x$data)
 
     j <- 1 + nrow(df)
     df[j, "index"]       <- i
