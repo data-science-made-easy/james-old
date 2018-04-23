@@ -46,7 +46,7 @@ j_ls <- function(type, version, scenario, project, collapse = FALSE, filter_acti
     df[j, "type"]        <- x$type
     df[j, "version"]     <- x$version
     df[j, "dim|class"]   <- x_info
-    df[j, "doc"]         <- x$doc
+    df[j, "doc"]         <- x$meta$doc
   }
 
   # If "collapse", filter most recent version per project/scenario/type

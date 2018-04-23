@@ -1,15 +1,6 @@
 # R6 objects holding your data
 #' @import R6
 
-JFig <- R6Class("JFig",
-  public = list(
-    initialize = function(specs) {
-      if (!missing(specs)) self$specs <- specs
-    },
-    specs = list()
-  )
-)
-
 JData <- R6Class("JData",
   public = list(
     initialize = function(data, version, type, scenario, project, doc) {
@@ -18,18 +9,14 @@ JData <- R6Class("JData",
       self$type     <- type
       self$scenario <- scenario
       self$project  <- project
-      self$doc      <- doc
-      self$fig      <- JFig$new()
-      self$born     <- date()
+      self$meta     <- list(user = Sys.info()[["user"]], born = date(), doc = doc)
     },
-    data     = NULL,
-    version  = NULL,
+    data     = NULL, # The data
+    version  = NULL, # Version, type, scenario, project are James-related meta data
     type     = NULL,
     scenario = NULL,
     project  = NULL,
-    doc      = NULL,
-    fig      = NULL,
-    born     = NULL  # creation_date
+    meta     = NULL  # Data related meta data
   )
 )
 
