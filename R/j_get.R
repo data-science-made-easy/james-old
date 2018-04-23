@@ -1,6 +1,6 @@
 #' Get data from archive
 #'
-#' @param index unique id for your data in j_ls()
+#' @param index unique id of your data in j_ls()
 #' @param type data type you want to get
 #' @param version version you want to get (default is active (c.q. newest) version)
 #' @param scenario scenario from which you want to get the data (default is active scenario)
