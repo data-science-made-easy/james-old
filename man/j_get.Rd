@@ -9,7 +9,7 @@ j_get(index, type, version, scenario = james.env$j_root$active_scenario,
   "object"))
 }
 \arguments{
-\item{index}{unique id for your data}
+\item{index}{unique id of your data in j_ls()}
 
 \item{type}{data type you want to get}
 
