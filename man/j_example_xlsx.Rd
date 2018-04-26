@@ -10,8 +10,11 @@ j_example_xlsx(file_name = paste0(tempfile(), ".xlsx"))
 \item{file_name}{file_name where your xlsx-file should be stored (default temporary xlsx-file)}
 }
 \value{
-None
+Path to your example xlsx
 }
 \description{
 You can use this example to import, analyse, and visualise your own data
+}
+\seealso{
+\code{\link{j_import}} to import the example data
 }

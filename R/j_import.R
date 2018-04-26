@@ -7,10 +7,12 @@
 #'
 #' @return Indices of imported data in j_ls()
 #'
+#' @seealso \code{\link{j_example_xlsx}} to generate some example data to import
+#'
 #' @import stringr openxlsx
 #' @export
 
-j_import <- function(file_name, meta) {
+j_import <- function(file_name, meta = list()) {
   # Validate xlsx
   stopifnot(is_valid_xlsx(file_name))
   
@@ -55,15 +57,20 @@ j_import <- function(file_name, meta) {
       # Get add_if_duplicate, activate_project_scenario from meta, if present in 'meta', else if present in 'sheet_meta_data', else TRUE
       add_if_duplicate          <- get_param("add_if_duplicate", meta, default = TRUE)
       activate_project_scenario <- get_param("activate_project_scenario", meta, default = TRUE)
+      
+      # Get project, scenario, type
+      project <- get_param("project", sheet_meta_data, "")
+      scenario <- get_param("scenario", sheet_meta_data, "")
+      type <- get_param("type", sheet_meta_data, "")
     
       # Add data; append index
-      index <- j_put(tab, add_if_duplicate = add_if_duplicate, activate_project_scenario = activate_project_scenario)
+      index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate, activate_project_scenario = activate_project_scenario)
       
       # Record resulting index
       import_index <- c(import_index, index)
       
       # Set meta data
-      j_set_meta(index, meta)      
+      j_set_meta(index, sheet_meta_data)      
     }
   }
   
@@ -82,8 +89,8 @@ j_import <- function(file_name, meta) {
   return(import_index)
 }
 
-
-
+# file_name = j_example_xlsx(); meta = list()
+# j_import(file_name)
 
 
 

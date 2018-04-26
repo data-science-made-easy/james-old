@@ -4,10 +4,13 @@
 #'
 #' @param file_name file_name where your xlsx-file should be stored (default temporary xlsx-file)
 #'
-#' @return None
+#' @return Path to your example xlsx
+#'
+#' @seealso \code{\link{j_import}} to import the example data
 #' 
 #' @export
 
 j_example_xlsx <- function(file_name = paste0(tempfile(), ".xlsx")) {
-  file.copy(from = system.file("extdata", "james_example.xlsx", package = "james"), to = file_name)
+  success <- file.copy(from = system.file("extdata", "james_example.xlsx", package = "james"), to = file_name)
+  if (success) return(file_name) else return(FALSE)
 }

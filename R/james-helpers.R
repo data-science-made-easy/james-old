@@ -7,7 +7,7 @@
 is_valid_xlsx <- function(file_name) {
   # Validate extension
   valid_ext <- "xlsx" == tolower(tools::file_ext(file_name))
-  if (!valid_ext) return(FALSE)
+  return(valid_ext)
     
   #TODO Validate ALL(meta-tab -> a tab)
   #TODO Validate ALL(No meta-tab, but project/scenario/type are present -> does data exist in James?)
