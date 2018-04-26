@@ -15,6 +15,11 @@ This makes it easy to install `james` directly from github, using devtools:
 devtools::install_github("data-science-made-easy/james")
 ```
 
+You might need to install the package R6 first:
+``` R
+install.packages("R6")
+```
+
 Now you can load the package:
 ``` R
 library(james)
