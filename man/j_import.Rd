@@ -12,8 +12,8 @@ j_import(file_name, meta)
 \item{meta}{meta parameters used to import, e.g. meta = list(project = "A project", scenario = "Test"). Beware these meta parameters overwrite imported meta parameters if they share the same name.}
 }
 \value{
-None
+Indices of imported data in j_ls()
 }
 \description{
-j_import()
+Import each data tab as a new data frame (can be multivariate time series). You may add a tab 'meta' with meta parameters describing the corresponding data tab. The meta tab should contain a column called 'tab' which holds the name of the corresponding data tab. 'project', 'scenario' and 'type' are other examples. Moreover, it may contain meta data, which describes your figure. Use 'j_example_xlsx()' to get an example file. Remarks: a tab with name 'help' is ignored.
 }
