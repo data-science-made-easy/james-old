@@ -3,6 +3,7 @@
 export(j_activate)
 export(j_fig)
 export(j_get)
+export(j_import)
 export(j_init)
 export(j_ls)
 export(j_put)

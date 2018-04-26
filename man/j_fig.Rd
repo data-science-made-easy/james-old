@@ -4,14 +4,12 @@
 \alias{j_fig}
 \title{Easy plotting in your standard layout}
 \usage{
-j_fig(index, format = c(NA, "pdf"), file_name)
+j_fig(index, meta)
 }
 \arguments{
 \item{index}{id of data you want to plot}
 
-\item{format}{format in which you want to save your figure. Default is NA, meaning plot to screen}
-
-\item{file_name}{file name}
+\item{meta}{settings you want to use for your figure. These settings are not stored and will be used only once.}
 }
 \value{
 None

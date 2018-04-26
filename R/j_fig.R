@@ -4,7 +4,6 @@
 #'
 #' @param index id of data you want to plot
 #' @param meta settings you want to use for your figure. These settings are not stored and will be used only once.
-#' @param file_name file name
 #'
 #' @return None
 #'
