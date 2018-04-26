@@ -1,7 +1,7 @@
 # R6 objects holding your data
 #' @import R6
 
-JData <- R6Class("JData",
+JData <- R6::R6Class("JData",
   public = list(
     initialize = function(data, version, type, scenario, project, doc) {
       self$data     <- data
@@ -20,7 +20,7 @@ JData <- R6Class("JData",
   )
 )
 
-JRoot <- R6Class("JRoot",
+JRoot <- R6::R6Class("JRoot",
   public = list(
     file_name         = NULL,
     active_project    = "",
