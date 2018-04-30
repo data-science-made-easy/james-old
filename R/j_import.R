@@ -48,7 +48,12 @@ j_import <- function(file_name, meta = list()) {
       # Get meta data
       sheet_meta_data <- as.list(meta_data[meta_i,])
 
-      # Let parameter 'meta' overwrite sheet_meta_data
+      # If sheet_meta_data does not contain 'type', initialize 'type' with 'tab'
+      if (is.null(sheet_meta_data[[META$type]])) {
+        sheet_meta_data[[META$type]] = get_param(META$tab, sheet_meta_data, "")
+      }
+      
+      # Let 'meta' parameters overwrite sheet_meta_data
       for (p in names(sheet_meta_data)) sheet_meta_data[[p]] = get_param(p, meta, sheet_meta_data[[p]])
 
       # Add meta parameters that are not yet present in sheet_meta_data
@@ -59,9 +64,9 @@ j_import <- function(file_name, meta = list()) {
       activate_project_scenario <- get_param("activate_project_scenario", meta, default = TRUE)
       
       # Get project, scenario, type
-      project <- get_param("project", sheet_meta_data, "")
+      project  <- get_param("project", sheet_meta_data, "")
       scenario <- get_param("scenario", sheet_meta_data, "")
-      type <- get_param("type", sheet_meta_data, "")
+      type     <- get_param("type", sheet_meta_data, "")
     
       # Add data; append index
       index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate, activate_project_scenario = activate_project_scenario)
