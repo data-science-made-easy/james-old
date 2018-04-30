@@ -1,2 +1,2 @@
-TAB_NAME    <- list(meta = "meta", help = "help")
-META        <- list(tab = "tab")
+TAB_NAME    <- list(help = "help", meta = "meta")
+META        <- list(tab = "tab", type = "type")
