@@ -12,5 +12,5 @@
 
 j_example_xlsx <- function(file_name = paste0(tempfile(), ".xlsx")) {
   success <- file.copy(from = system.file("extdata", "james_example.xlsx", package = "james"), to = file_name)
-  if (success) return(file_name) else return(FALSE)
+  if (success) return(file_name) else return(NULL)
 }
