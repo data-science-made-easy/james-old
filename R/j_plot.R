@@ -7,9 +7,9 @@
 #'
 #' @return None
 #'
-#' @export j_fig
+#' @export j_plot
 
-j_fig <- function(index, meta) {
+j_plot <- function(index, meta) {
   x <- j_get(index, what = "data")
   m <- j_get(index, what = "meta")
   

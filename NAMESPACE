@@ -2,11 +2,11 @@
 
 export(j_activate)
 export(j_example_xlsx)
-export(j_fig)
 export(j_get)
 export(j_import)
 export(j_init)
 export(j_ls)
+export(j_plot)
 export(j_put)
 export(j_save)
 export(j_set_meta)
