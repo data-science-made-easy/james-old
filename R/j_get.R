@@ -32,7 +32,7 @@
 #' @importFrom utils head tail
 #' @export
 
-j_get <- function(index, type, version, scenario = james.env$j_root$active_scenario, project = james.env$j_root$active_project, what = c("data", "meta", "object")) {
+j_get <- function(index, type, version, scenario = james.env$j_root$scenario, project = james.env$j_root$project, what = c("data", "meta", "object")) {
   james_initialise()
 
   if (missing(index)) { #TODO use j_get_index(type, version, scenario, project)
@@ -58,25 +58,6 @@ j_get <- function(index, type, version, scenario = james.env$j_root$active_scena
     if ("object" == what) return(object)
     stop(paste0("j_get(..., what = '", what, "') is NOT allowed."))
   } else stop(paste0("j_get cannot return > 1 result. Please narrow your search."))
-}
-
-#' Get data as ts object
-#'
-#' Same as j_get() but with result converted to ts object
-#'
-#' @param index unique id of your data in j_ls()
-#' @param type data type you want to get
-#' @param version version you want to get (default is active (c.q. newest) version)
-#' @param scenario scenario from which you want to get the data (default is active scenario)
-#' @param project project from which you want to get the data (default is active project)
-#'
-#' @return index 
-
-j_get_ts <- function(index, type, version, scenario = james.env$j_root$active_scenario, project = james.env$j_root$active_project) {
-  x <- j_get(index = index, type = type, version = version, scenario = scenario, project = project)
-  x_ts <- ts(x[, -1], start = x[1, 1], end = tail(x[,1], 1))
-  
-  return(x_ts)
 }
 
 
