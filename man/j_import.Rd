@@ -20,5 +20,5 @@ Indices of imported data in j_ls()
 Import each data tab as a new data frame (can be multivariate time series). You may add a tab 'meta' with meta parameters describing the corresponding data tab. The meta tab should contain a column called 'tab' which holds the name of the corresponding data tab. 'project', 'scenario' and 'type' are other examples. Moreover, it may contain meta data, which describes your figure. Use 'j_example_xlsx()' to get an example file. Remarks: a tab with name 'help' is ignored.
 }
 \seealso{
-\code{\link{j_example_xlsx}} to generate some example data to import; \code{\link{j_put}} adds imported data to your repository
+\code{\link{j_example_xlsx}} to generate some example data to import; \code{\link{j_put}} adds imported data to your archive
 }

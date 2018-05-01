@@ -22,10 +22,10 @@ j_get(index, type, version, scenario = james.env$j_root$active_scenario,
 \item{what}{data type you want to get is one from c("data", "meta", "object") (default "data")}
 }
 \value{
-data, list with meta data, or JData object (NULL if not present)
+data, or list with meta data, or JData object (NULL if not present)
 }
 \description{
-Get data from archive
+Get data from archive. This can be (i) data, (ii) meta data or (iii) object holding both.
 }
 \examples{
 index <- j_put("hi", type = "greeting") # Store "hi" as a type of greeting
