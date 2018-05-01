@@ -19,13 +19,17 @@ j_import <- function(file_name, meta = list()) {
   sheet_names <- openxlsx::getSheetNames(file_name)
   
   sheet_i_meta <- which(TAB_NAME$meta == sheet_names)
-  meta_data  <- if (1 == length(sheet_i_meta)) openxlsx::read.xlsx(file_name, sheet = sheet_i_meta) else NULL
+  meta_data  <- if (length(sheet_i_meta)) openxlsx::read.xlsx(file_name, sheet = sheet_i_meta) else NULL
   
   #
   ## (1) Import data tabs
   #
   import_index = NULL
   for (sheet_i in 1:length(sheet_names)) {
+    # Import data tab
+    tab <- openxlsx::read.xlsx(file_name, sheet = sheet_i)
+    
+    # Get sheet name
     sheet_name <- sheet_names[sheet_i]
     
     # Skip meta data sheet and skip help sheet
@@ -35,11 +39,8 @@ j_import <- function(file_name, meta = list()) {
     # Get meta data
     sheet_meta_data_indices <- which(sheet_name == meta_data[[META$tab]])
     
-    # Import the data for each meta data entry
-    if (0 < length(sheet_meta_data_indices)) for (meta_i in sheet_meta_data_indices) {
-      # Import data tab
-      tab <- openxlsx::read.xlsx(file_name, sheet = sheet_i)
-      
+    ## (1a) Import the data for each meta data entry
+    for (meta_i in seq_along(sheet_meta_data_indices)) {
     	# Fix col names
       index_NA_colnames <- grep("(^X)(\\d+)($)", colnames(tab))
       if (length(index_NA_colnames)) colnames(tab)[index_NA_colnames] <- NA
@@ -59,9 +60,9 @@ j_import <- function(file_name, meta = list()) {
       # Add meta parameters that are not yet present in sheet_meta_data
       for (p in meta) if (!is.element(p, sheet_meta_data)) sheet_meta_data[[p]] <- meta[[p]]
       
-      # Get add_if_duplicate, activate_project_scenario from meta, if present in 'meta', else if present in 'sheet_meta_data', else TRUE
-      add_if_duplicate          <- get_param("add_if_duplicate", meta, default = TRUE)
-      activate_project_scenario <- get_param("activate_project_scenario", meta, default = TRUE)
+      # Get add_if_duplicate, activate_project_scenario from meta if present in 'sheet_meta_data', else TRUE
+      add_if_duplicate          <- get_param("add_if_duplicate", sheet_meta_data, default = TRUE)
+      activate_project_scenario <- get_param("activate_project_scenario", sheet_meta_data, default = TRUE)
       
       # Get project, scenario, type
       project  <- get_param("project", sheet_meta_data, "")
@@ -71,11 +72,31 @@ j_import <- function(file_name, meta = list()) {
       # Add data; append index
       index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate, activate_project_scenario = activate_project_scenario)
       
+      # Set meta data
+      j_set_meta(index, sheet_meta_data)            
+
       # Record resulting index
       import_index <- c(import_index, index)
+    }
+    
+    ## (1b) Import the tab also if we _don't_ have a meta data entry
+    if (0 == length(sheet_meta_data_indices)) {
+      # Get add_if_duplicate, activate_project_scenario from meta if present in 'sheet_meta_data', else TRUE
+      add_if_duplicate          <- get_param("add_if_duplicate", meta, default = TRUE)
+      activate_project_scenario <- get_param("activate_project_scenario", meta, default = TRUE)
+      
+      # Get project, scenario, type
+      project  <- get_param("project", meta, "")
+      scenario <- get_param("scenario", meta, "")
+      type     <- get_param("type", meta, sheet_name)
+      
+      index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate, activate_project_scenario = activate_project_scenario)
       
       # Set meta data
-      j_set_meta(index, sheet_meta_data)      
+      j_set_meta(index, meta)
+  
+      # Record resulting index
+      import_index <- c(import_index, index)
     }
   }
   
@@ -94,12 +115,11 @@ j_import <- function(file_name, meta = list()) {
   return(import_index)
 }
 
-# file_name = j_example_xlsx(); meta = list()
+# file_name = j_example_xlsx(multiple_tabs=F); meta = list()
 # j_import(file_name)
 
-
-
-
+# file_name = "../outside_package/data/data_wgh_bbp.xlsx"
+# j_import(file_name)
 
 
 
