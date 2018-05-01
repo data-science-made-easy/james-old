@@ -19,3 +19,4 @@ parameter from 'lst' or if non-present 'default'
 \description{
 Get appropriate parameter value
 }
+\keyword{internal}

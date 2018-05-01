@@ -15,3 +15,4 @@ Boolean indicating whether xlsx is valid
 \description{
 Check if the xlsx file is valid
 }
+\keyword{internal}

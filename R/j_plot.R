@@ -7,25 +7,27 @@
 #'
 #' @return None
 #'
+#' @importFrom stats is.ts
 #' @export j_plot
 
 j_plot <- function(index, meta) {
-  x <- j_get(index, what = "data")
+  d <- as_data_frame(j_get(index, what = "data"))
   m <- j_get(index, what = "meta")
   
-  
-  
-  # Get x-axis
-  #x_at
-  #x_at_lab
-  
-    # 1 str_replace_all(t_vec_labels, "\\\\n", "\n")
-    # 2 chartr(".", get_settings()$decimal_sep, as.character(t_vec_labels))    
-    # 3 Give x_at_lab same length as x_at
-  
+  #
+  ## X-axis
+  #
+  x_axis <- extract_x_axis(d)
+
   # Remove x-axis
-  x <- x[, -1, drop = FALSE]
+  d <- d[, -1, drop = FALSE]
+  
   
   # Use series_type from Excel or set defaults
   # ?Get color scheme
 }
+
+
+
+#index=1
+#j_plot(1)
