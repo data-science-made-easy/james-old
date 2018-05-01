@@ -33,7 +33,7 @@
 j_get <- function(index, type, version, scenario = james.env$j_root$active_scenario, project = james.env$j_root$active_project, what = c("data", "meta", "object")) {
   james_initialise()
   
-  if (missing(index)) {
+  if (missing(index)) { #TODO use j_get_index(type, version, scenario, project)
     if (missing(type)) type <- ""
     j_table <- j_ls(collapse = FALSE, filter_active = FALSE)
     if (missing(version)) { # take last

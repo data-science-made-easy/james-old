@@ -2,7 +2,7 @@
 #'
 #' Equivalent of R's native ls() function.
 #'
-#' @param type data type
+#' @param type data type (default "")
 #' @param version version of data you want to filter on
 #' @param scenario scenario filter (defaults to active scenario if filter_active = TRUE)
 #' @param project project filter (defaults to active project if filter_active = TRUE)

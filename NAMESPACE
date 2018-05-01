@@ -3,6 +3,7 @@
 export(j_activate)
 export(j_example_xlsx)
 export(j_get)
+export(j_get_index)
 export(j_import)
 export(j_init)
 export(j_ls)

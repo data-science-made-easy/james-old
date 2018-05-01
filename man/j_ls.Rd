@@ -8,7 +8,7 @@ j_ls(type, version, scenario, project, collapse = FALSE,
   filter_active = FALSE)
 }
 \arguments{
-\item{type}{data type}
+\item{type}{data type (default "")}
 
 \item{version}{version of data you want to filter on}
 

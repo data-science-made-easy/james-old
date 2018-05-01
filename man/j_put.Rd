@@ -24,10 +24,10 @@ j_put(x, type = "", doc = NA, scenario = james.env$j_root$active_scenario,
 \item{activate_project_scenario}{the given project and scenario become active after storing x (default TRUE), which sets defaults for the next time you want to get/put data}
 }
 \value{
-index if successfully added, else NULL. Both invisibly.
+index of (added) data. Both invisibly.
 }
 \description{
-Put data in archive at specified location. Beware
+Put data in archive at specified location. TODO: add all meta data with j_put
 }
 \seealso{
 \code{\link{j_get}}, \code{\link{j_ls}}, \code{\link{j_init}}

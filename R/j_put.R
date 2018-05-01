@@ -1,6 +1,6 @@
 #' Put data in archive
 #'
-#' Put data in archive at specified location. Beware
+#' Put data in archive at specified location. TODO: add all meta data with j_put
 #'
 #' @param x data you want to store
 #' @param type (choose something useful, e.g. "input")
@@ -10,7 +10,7 @@
 #' @param add_if_duplicate store if data are already present? Prevents storing duplicates, e.g. after re-running your script (default TRUE)
 #' @param activate_project_scenario the given project and scenario become active after storing x (default TRUE), which sets defaults for the next time you want to get/put data
 #'
-#' @return index if successfully added, else NULL. Both invisibly.
+#' @return index of (added) data. Both invisibly.
 #'
 #' @seealso \code{\link{j_get}}, \code{\link{j_ls}}, \code{\link{j_init}}
 #'
