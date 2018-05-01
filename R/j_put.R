@@ -7,7 +7,7 @@
 #' @param doc document your data with plain text or Markdown
 #' @param scenario the scenario (default active scenario)
 #' @param project project to which x belongs (default active project)
-#' @param add_if_duplicate (default FALSE). Prevents storing duplicates, e.g. after re-running your script.
+#' @param add_if_duplicate store if data are already present? Prevents storing duplicates, e.g. after re-running your script (default TRUE)
 #' @param activate_project_scenario the given project and scenario become active after storing x (default TRUE), which sets defaults for the next time you want to get/put data
 #'
 #' @return index if successfully added, else NULL. Both invisibly.

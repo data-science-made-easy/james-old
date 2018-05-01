@@ -4,12 +4,14 @@
 \alias{j_import}
 \title{Import data from xlsx-file}
 \usage{
-j_import(file_name, meta = list())
+j_import(file_name, meta = list(), add_if_duplicate)
 }
 \arguments{
 \item{file_name}{xlsx-file you want to import}
 
 \item{meta}{meta parameters used to import, e.g. meta = list(project = "A project", scenario = "Test"). Beware these meta parameters overwrite imported meta parameters if they share the same name.}
+
+\item{add_if_duplicate}{add data as new version if they are already present (default TRUE)? Set to FALSE prevents storing duplicates, e.g. after re-running your script. Beware, add_if_duplicate overwrites meta, meta overwrites meta tab in xlsx.}
 }
 \value{
 Indices of imported data in j_ls()
@@ -18,5 +20,5 @@ Indices of imported data in j_ls()
 Import each data tab as a new data frame (can be multivariate time series). You may add a tab 'meta' with meta parameters describing the corresponding data tab. The meta tab should contain a column called 'tab' which holds the name of the corresponding data tab. 'project', 'scenario' and 'type' are other examples. Moreover, it may contain meta data, which describes your figure. Use 'j_example_xlsx()' to get an example file. Remarks: a tab with name 'help' is ignored.
 }
 \seealso{
-\code{\link{j_example_xlsx}} to generate some example data to import
+\code{\link{j_example_xlsx}} to generate some example data to import; \code{\link{j_put}} adds imported data to your store
 }

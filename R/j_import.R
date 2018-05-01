@@ -4,17 +4,21 @@
 #'
 #' @param file_name xlsx-file you want to import
 #' @param meta meta parameters used to import, e.g. meta = list(project = "A project", scenario = "Test"). Beware these meta parameters overwrite imported meta parameters if they share the same name.
+#' @param add_if_duplicate add data as new version if they are already present (default TRUE)? Set to FALSE prevents storing duplicates, e.g. after re-running your script. Beware, add_if_duplicate overwrites meta, meta overwrites meta tab in xlsx.
 #'
 #' @return Indices of imported data in j_ls()
 #'
-#' @seealso \code{\link{j_example_xlsx}} to generate some example data to import
+#' @seealso \code{\link{j_example_xlsx}} to generate some example data to import; \code{\link{j_put}} adds imported data to your store
 #'
 #' @import stringr openxlsx
 #' @export
 
-j_import <- function(file_name, meta = list()) {
+j_import <- function(file_name, meta = list(), add_if_duplicate) {
   # Validate xlsx
   stopifnot(is_valid_xlsx(file_name))
+  
+  # Let 'add_if_duplicate' overwrite 'meta'
+  if (!missing(add_if_duplicate)) meta[[ARGS$add_if_duplicate]] <- add_if_duplicate
   
   sheet_names <- openxlsx::getSheetNames(file_name)
   
@@ -119,7 +123,7 @@ j_import <- function(file_name, meta = list()) {
 # j_import(file_name)
 
 # file_name = "../outside_package/data/data_wgh_bbp.xlsx"
-# j_import(file_name)
+# j_import(file_name, add_if_duplicate = FALSE)
 
 
 
