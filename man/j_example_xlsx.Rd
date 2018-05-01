@@ -2,12 +2,15 @@
 % Please edit documentation in R/j_example_xlsx.R
 \name{j_example_xlsx}
 \alias{j_example_xlsx}
-\title{Get example xlsx file}
+\title{Create example xlsx file}
 \usage{
-j_example_xlsx(file_name = paste0(tempfile(), ".xlsx"))
+j_example_xlsx(file_name = paste0(tempfile(), ".xlsx"),
+  multiple_tabs = TRUE)
 }
 \arguments{
-\item{file_name}{file_name where your xlsx-file should be stored (default temporary xlsx-file)}
+\item{file_name}{where your xlsx-file should be stored (default temporary xlsx-file)}
+
+\item{multiple_tabs}{creates an xlsx-file with multiple tabs if TRUE (default), including a meta tab. If FALSE, it creates an xlsx-file with only one tab}
 }
 \value{
 Path to your example xlsx

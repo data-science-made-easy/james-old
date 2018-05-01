@@ -11,7 +11,7 @@
 
 j_set_meta <- function(index, fields) {
   object = j_get(index, what = "object")
-  for (i in 1:length(fields)) {
+  for (i in seq_along(fields)) {
     object$meta[[names(fields)[i]]] <- fields[[i]]
   }
 }
