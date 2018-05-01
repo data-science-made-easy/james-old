@@ -8,7 +8,6 @@
 #' @param scenario the scenario (default active scenario)
 #' @param project project to which x belongs (default active project)
 #' @param add_if_duplicate store if data are already present? Prevents storing duplicates, e.g. after re-running your script (default TRUE)
-#' @param activate_project_scenario the given project and scenario become active after storing x (default TRUE), which sets defaults for the next time you want to get/put data
 #'
 #' @return index of (added) data. Both invisibly.
 #'
@@ -16,7 +15,7 @@
 #'
 #' @export
 
-j_put <- function(x, type = "", doc = NA, scenario = james.env$j_root$active_scenario, project = james.env$j_root$active_project, add_if_duplicate = TRUE, activate_project_scenario = TRUE) {
+j_put <- function(x, type = james.env$j_root$type, doc = NA, scenario = james.env$j_root$scenario, project = james.env$j_root$project, add_if_duplicate = TRUE) {
   james_initialise()
   
   # First check if we really want to add x
@@ -34,10 +33,9 @@ j_put <- function(x, type = "", doc = NA, scenario = james.env$j_root$active_sce
     index <- length(james.env$j_root$data_lst)
     
     # Select that project and scenario
-    if (activate_project_scenario) {
-      james.env$j_root$active_project  <- project
-      james.env$j_root$active_scenario <- scenario    
-    }
+    james.env$j_root$type     <- type
+    james.env$j_root$scenario <- scenario    
+    james.env$j_root$project  <- project
   } else {
     index <- j_get_index(type = type, scenario = scenario, project = project)
   }
@@ -45,4 +43,4 @@ j_put <- function(x, type = "", doc = NA, scenario = james.env$j_root$active_sce
   return(invisible(index))
 }
 
-#type = ""; doc = NA; scenario = james.env$j_root$active_scenario; project = james.env$j_root$active_project; add_if_duplicate = TRUE; activate_project_scenario = TRUE
+#type = ""; doc = NA; scenario = james.env$j_root$scenario; project = james.env$j_root$project; add_if_duplicate = TRUE

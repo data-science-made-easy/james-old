@@ -23,10 +23,11 @@ JData <- R6::R6Class("JData",
 JRoot <- R6::R6Class("JRoot",
   public = list(
     file_name         = NULL,
-    active_project    = "",
-    active_scenario   = "",
+    type              = "",
+    scenario          = "",
+    project           = "",
     data_lst          = list(),
-    initialize        = function(file_name, active_scenario, active_project) {
+    initialize        = function(file_name, type, scenario, project) {
       if (file.exists(file_name)) {
         j_root_file    <- readRDS(file_name)
         self$data_lst  <- j_root_file$data_lst
@@ -35,8 +36,9 @@ JRoot <- R6::R6Class("JRoot",
         self$file_name <- file_name
         self$save()
       }
-      if (!missing(active_scenario)) self$active_scenario <- active_scenario
-      if (!missing(active_project))  self$active_project <- active_project
+      if (!missing(type))     self$type     <- type
+      if (!missing(scenario)) self$scenario <- scenario
+      if (!missing(project))  self$project  <- project
     },
     save = function() {
       saveRDS(self, self$file_name)

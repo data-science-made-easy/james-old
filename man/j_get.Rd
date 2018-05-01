@@ -4,9 +4,8 @@
 \alias{j_get}
 \title{Get data from archive}
 \usage{
-j_get(index, type, version, scenario = james.env$j_root$active_scenario,
-  project = james.env$j_root$active_project, what = c("data", "meta",
-  "object"))
+j_get(index, type, version, scenario = james.env$j_root$scenario,
+  project = james.env$j_root$project, what = c("data", "meta", "object"))
 }
 \arguments{
 \item{index}{unique id of your data in j_ls()}

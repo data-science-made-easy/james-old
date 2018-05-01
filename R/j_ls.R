@@ -20,8 +20,8 @@ j_ls <- function(type, version, scenario, project, collapse = FALSE, filter_acti
   james_initialise()
   
   if (filter_active) {
-    if (missing(project))  project  <- james.env$j_root$active_project
-    if (missing(scenario)) scenario <- james.env$j_root$active_scenario
+    if (missing(project))  project  <- james.env$j_root$project
+    if (missing(scenario)) scenario <- james.env$j_root$scenario
   }
   
   # Filter on type, version, scenario, project

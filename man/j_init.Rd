@@ -5,14 +5,16 @@
 \title{Initialize James}
 \usage{
 j_init(file_name = paste0(Sys.getenv("HOME"), .Platform$file.sep,
-  Sys.info()["user"], ".james"), active_scenario, active_project)
+  Sys.info()["user"], ".james"), type, scenario, project)
 }
 \arguments{
-\item{file_name}{File holding your archive. Defaults to <username>.james in your home directory, where <username> is your username}
+\item{file_name}{file holding your archive. Defaults to <username>.james in your home directory, where <username> is your username}
 
-\item{active_scenario}{Scenario you want to work on}
+\item{type}{data type you want to work on}
 
-\item{active_project}{Project you want to work on}
+\item{scenario}{scenario you want to work on}
+
+\item{project}{project you want to work on}
 }
 \value{
 JRoot object holding your data. Please assign return value to .j_root, as James assumes all data are globally available in .j_root. See examples.

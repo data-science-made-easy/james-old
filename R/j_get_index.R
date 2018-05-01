@@ -11,7 +11,7 @@
 #' 
 #' @export
 
-j_get_index <- function(type, version, scenario = james.env$j_root$active_scenario, project = james.env$j_root$active_project) {
+j_get_index <- function(type, version, scenario = james.env$j_root$scenario, project = james.env$j_root$project) {
   if (missing(type)) type <- ""
   j_table <- j_ls(collapse = FALSE, filter_active = FALSE)
   if (missing(version)) { # take last

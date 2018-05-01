@@ -64,9 +64,8 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       # Add meta parameters that are not yet present in sheet_meta_data
       for (p in meta) if (!is.element(p, sheet_meta_data)) sheet_meta_data[[p]] <- meta[[p]]
       
-      # Get add_if_duplicate, activate_project_scenario from meta if present in 'sheet_meta_data', else TRUE
+      # Get add_if_duplicate from meta if present in 'sheet_meta_data', else TRUE
       add_if_duplicate          <- get_param("add_if_duplicate", sheet_meta_data, default = TRUE)
-      activate_project_scenario <- get_param("activate_project_scenario", sheet_meta_data, default = TRUE)
       
       # Get project, scenario, type
       project  <- get_param("project", sheet_meta_data, "")
@@ -74,7 +73,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       type     <- get_param("type", sheet_meta_data, "")
     
       # Add data; append index
-      index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate, activate_project_scenario = activate_project_scenario)
+      index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
       
       # Set meta data
       j_set_meta(index, sheet_meta_data)            
@@ -85,16 +84,15 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
     
     ## (1b) Import the tab also if we _don't_ have a meta data entry
     if (0 == length(sheet_meta_data_indices)) {
-      # Get add_if_duplicate, activate_project_scenario from meta if present in 'sheet_meta_data', else TRUE
+      # Get add_if_duplicate from meta if present in 'sheet_meta_data', else TRUE
       add_if_duplicate          <- get_param("add_if_duplicate", meta, default = TRUE)
-      activate_project_scenario <- get_param("activate_project_scenario", meta, default = TRUE)
       
       # Get project, scenario, type
       project  <- get_param("project", meta, "")
       scenario <- get_param("scenario", meta, "")
       type     <- get_param("type", meta, sheet_name)
       
-      index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate, activate_project_scenario = activate_project_scenario)
+      index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
       
       # Set meta data
       j_set_meta(index, meta)

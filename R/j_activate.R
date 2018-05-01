@@ -2,6 +2,7 @@
 #'
 #' j_ls() lists only data from the active project and scenario. If you change project and/or scenario, you can use this function to activate it/them. Use unique(j_ls(active_project_scenario_only=F)[c("project", "scenario")]) to list all unique combinations of the two.
 #'
+#' @param type the data type you want to activate
 #' @param scenario the scenario you want to activate
 #' @param project the project you want to activate
 #'
@@ -9,7 +10,8 @@
 #' 
 #' @export
 
-j_activate <- function(scenario = james.env$j_root$active_scenario, project = james.env$j_root$active_project) {
-  james.env$j_root$active_scenario <- scenario
-  james.env$j_root$active_project  <- project
+j_activate <- function(type = james.env$j_root$type, scenario = james.env$j_root$scenario, project = james.env$j_root$project) {
+  james.env$j_root$type     <- type
+  james.env$j_root$scenario <- scenario
+  james.env$j_root$project  <- project
 }

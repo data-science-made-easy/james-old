@@ -4,8 +4,8 @@
 \alias{j_get_index}
 \title{Get index}
 \usage{
-j_get_index(type, version, scenario = james.env$j_root$active_scenario,
-  project = james.env$j_root$active_project)
+j_get_index(type, version, scenario = james.env$j_root$scenario,
+  project = james.env$j_root$project)
 }
 \arguments{
 \item{type}{data type (default "")}

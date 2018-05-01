@@ -4,9 +4,9 @@
 \alias{j_put}
 \title{Put data in archive}
 \usage{
-j_put(x, type = "", doc = NA, scenario = james.env$j_root$active_scenario,
-  project = james.env$j_root$active_project, add_if_duplicate = TRUE,
-  activate_project_scenario = TRUE)
+j_put(x, type = james.env$j_root$type, doc = NA,
+  scenario = james.env$j_root$scenario, project = james.env$j_root$project,
+  add_if_duplicate = TRUE)
 }
 \arguments{
 \item{x}{data you want to store}
@@ -20,8 +20,6 @@ j_put(x, type = "", doc = NA, scenario = james.env$j_root$active_scenario,
 \item{project}{project to which x belongs (default active project)}
 
 \item{add_if_duplicate}{store if data are already present? Prevents storing duplicates, e.g. after re-running your script (default TRUE)}
-
-\item{activate_project_scenario}{the given project and scenario become active after storing x (default TRUE), which sets defaults for the next time you want to get/put data}
 }
 \value{
 index of (added) data. Both invisibly.
