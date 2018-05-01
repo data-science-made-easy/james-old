@@ -7,7 +7,6 @@
 #'
 #' @return None
 #'
-#' @importFrom stats is.ts
 #' @export j_plot
 
 j_plot <- function(index, meta) {
