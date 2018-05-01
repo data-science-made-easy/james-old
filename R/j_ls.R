@@ -29,6 +29,7 @@ j_ls <- function(type, version, scenario, project, collapse = FALSE, filter_acti
   colnames(df)[6] <- "dim|class" # Fixes dim.class
   for (i in seq_along(james.env$j_root$data_lst)) {
     x <- james.env$j_root$data_lst[[i]]
+    if (!is.element(CLASS$jdata, class(x))) next; # This entry was deleted with j_del()
 
     if (!missing(type)     && type != x$type)         next
     if (!missing(version)  && version != x$version)   next
@@ -59,5 +60,6 @@ j_ls <- function(type, version, scenario, project, collapse = FALSE, filter_acti
       if (1 < length(index)) df <- df[-head(index, -1), ]
     }
   }
+  
   df
 }

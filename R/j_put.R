@@ -44,3 +44,5 @@ j_put <- function(x, type = "", doc = NA, scenario = james.env$j_root$active_sce
   
   return(invisible(index))
 }
+
+#type = ""; doc = NA; scenario = james.env$j_root$active_scenario; project = james.env$j_root$active_project; add_if_duplicate = TRUE; activate_project_scenario = TRUE

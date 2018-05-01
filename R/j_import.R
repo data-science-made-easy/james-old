@@ -8,7 +8,7 @@
 #'
 #' @return Indices of imported data in j_ls()
 #'
-#' @seealso \code{\link{j_example_xlsx}} to generate some example data to import; \code{\link{j_put}} adds imported data to your store
+#' @seealso \code{\link{j_example_xlsx}} to generate some example data to import; \code{\link{j_put}} adds imported data to your repository
 #'
 #' @import stringr openxlsx
 #' @export

@@ -37,10 +37,13 @@ j_get <- function(index, type, version, scenario = james.env$j_root$active_scena
     if (missing(type)) type <- ""
     j_table <- j_ls(collapse = FALSE, filter_active = FALSE)
     if (missing(version)) { # take last
-      index <- tail(which(type == j_table$type & scenario == j_table$scenario & project == j_table$project), 1)
+      line_number <- tail(which(type == j_table$type & scenario == j_table$scenario & project == j_table$project), 1)
     } else {
-      index <- which(type == j_table$type & scenario == j_table$scenario & project == j_table$project & version == j_table$version)
-    }      
+      line_number <- which(type == j_table$type & scenario == j_table$scenario & project == j_table$project & version == j_table$version)
+    }
+    
+    # Translate line_number in index
+    index <- j_table$index[line_number] 
   }
   
   if (0 == length(index)) {
