@@ -39,7 +39,7 @@ j_put <- function(x, type = "", doc = NA, scenario = james.env$j_root$active_sce
       james.env$j_root$active_scenario <- scenario    
     }
   } else {
-    index <- NULL
+    index <- j_get_index(type = type, scenario = scenario, project = project)
   }
   
   return(invisible(index))
