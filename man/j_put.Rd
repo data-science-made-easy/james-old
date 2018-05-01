@@ -4,20 +4,19 @@
 \alias{j_put}
 \title{Put data in archive}
 \usage{
-j_put(x, type = james.env$j_root$type, doc = NA,
-  scenario = james.env$j_root$scenario, project = james.env$j_root$project,
-  add_if_duplicate = TRUE)
+j_put(x, type = james.env$j_root$type, scenario = james.env$j_root$scenario,
+  project = james.env$j_root$project, doc = NA, add_if_duplicate = TRUE)
 }
 \arguments{
 \item{x}{data you want to store}
 
 \item{type}{(choose something useful, e.g. "input")}
 
-\item{doc}{document your data with plain text or Markdown}
-
 \item{scenario}{the scenario (default active scenario)}
 
 \item{project}{project to which x belongs (default active project)}
+
+\item{doc}{document your data with plain text or Markdown}
 
 \item{add_if_duplicate}{store if data are already present? Prevents storing duplicates, e.g. after re-running your script (default TRUE)}
 }

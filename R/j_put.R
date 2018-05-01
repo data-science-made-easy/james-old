@@ -15,7 +15,7 @@
 #'
 #' @export
 
-j_put <- function(x, type = james.env$j_root$type, doc = NA, scenario = james.env$j_root$scenario, project = james.env$j_root$project, add_if_duplicate = TRUE) {
+j_put <- function(x, type = james.env$j_root$type, scenario = james.env$j_root$scenario, project = james.env$j_root$project, doc = NA, add_if_duplicate = TRUE) {
   james_initialise()
   
   # First check if we really want to add x
@@ -28,7 +28,7 @@ j_put <- function(x, type = james.env$j_root$type, doc = NA, scenario = james.en
     index            <- which(type == lst$type & scenario == lst$scenario & project == lst$project)
     version          <- 1 + length(index) # New version
     jdata            <- JData$new(x, version, type, scenario, project, doc) # Create
-    if (!is.null(x2_object)) jdata$meta <- x2_object$meta # Re-use meta
+    # TODO What here? if (!is.null(x2_object)) jdata$meta <- x2_object$meta # Re-use meta
     james.env$j_root$data_lst <- append(james.env$j_root$data_lst, jdata) # Add
     index <- length(james.env$j_root$data_lst)
     
