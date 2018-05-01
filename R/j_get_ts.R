@@ -10,12 +10,17 @@
 #'
 #' @return index
 #'
-#' @importFrom stats ts
+#' @importFrom stats ts is.ts
 #' @export
 
 j_get_ts <- function(index, type, version, scenario = james.env$j_root$scenario, project = james.env$j_root$project) {
   x <- j_get(index = index, type = type, version = version, scenario = scenario, project = project)
-  x_ts <- ts(x[, -1], start = x[1, 1], end = tail(x[,1], 1))
+  
+  if (is.ts(x)) {
+    x_ts <- x
+  } else { # convert
+    x_ts <- ts(x[, -1], start = x[1, 1], end = tail(x[,1], 1))
+  }  
   
   return(x_ts)
 }
