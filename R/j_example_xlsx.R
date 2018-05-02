@@ -13,9 +13,9 @@
 
 j_example_xlsx <- function(file_name = paste0(tempfile(), ".xlsx"), multiple_tabs = TRUE) {
   if (multiple_tabs) {    
-    success <- file.copy(from = system.file("extdata", "james_example_multiple_tabs.xlsx", package = "james"), to = file_name)
+    success <- file.copy(from = system.file("extdata", "james-example-multiple-tabs.xlsx", package = "james"), to = file_name)
   } else {
-    success <- file.copy(from = system.file("extdata", "james_example_one_tab.xlsx", package = "james"), to = file_name)
+    success <- file.copy(from = system.file("extdata", "james-example-one-tab.xlsx", package = "james"), to = file_name)
   }
   
   if (success) return(file_name) else return(NULL)
