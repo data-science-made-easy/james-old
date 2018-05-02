@@ -20,10 +20,9 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
   # Let 'add_if_duplicate' overwrite 'meta'
   if (!missing(add_if_duplicate)) meta[[ARGS$add_if_duplicate]] <- add_if_duplicate
   
-  sheet_names <- openxlsx::getSheetNames(file_name)
-  
-  sheet_i_meta <- which(TAB_NAME$meta == sheet_names)
-  meta_data  <- if (length(sheet_i_meta)) openxlsx::read.xlsx(file_name, sheet = sheet_i_meta) else NULL
+  sheet_names   <- openxlsx::getSheetNames(file_name)  
+  sheet_i_meta  <- which(TAB_NAME$meta == sheet_names)
+  meta_data     <- if (length(sheet_i_meta)) openxlsx::read.xlsx(file_name, sheet = sheet_i_meta) else NULL
   
   #
   ## (1) Import data tabs
@@ -50,8 +49,8 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       if (length(index_NA_colnames)) colnames(tab)[index_NA_colnames] <- NA
   		colnames(tab) <- str_replace_all(colnames(tab), "\\.", " ")
       
-      # Get meta data
-      sheet_meta_data <- as.list(meta_data[meta_i,])
+      # Get meta data and recursively import 'meta' data in 'import' field
+      sheet_meta_data <- #TODO HERE as.list(meta_data[meta_i,])      
 
       # If sheet_meta_data does not contain 'type', initialize 'type' with 'tab'
       if (is.null(sheet_meta_data[[META$type]])) {
@@ -65,7 +64,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       for (p in meta) if (!is.element(p, sheet_meta_data)) sheet_meta_data[[p]] <- meta[[p]]
       
       # Get add_if_duplicate from meta if present in 'sheet_meta_data', else TRUE
-      add_if_duplicate          <- get_param("add_if_duplicate", sheet_meta_data, default = TRUE)
+      add_if_duplicate <- get_param("add_if_duplicate", sheet_meta_data, default = TRUE)
       
       # Get project, scenario, type
       project  <- get_param("project", sheet_meta_data, "")
@@ -107,7 +106,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
   #
   index_meta_only <- which("" == stringr::str_trim(meta_data[[META$tab]]))
   for (i in seq_along(index_meta_only)) {
-    index <- j_ls(type = meta$type, scenario = meta$scenario, project = meta$project, collapse = TRUE, filter_active = FALSE)$index
+    index <- j_ls(type = meta$type, scenario = meta$scenario, project = meta$project, collapse = TRUE, filter_active = FALSE)$index # TODO We now have a function to look up index
     j_set_meta(index, meta)
     
     # Record resulting index
