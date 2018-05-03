@@ -50,7 +50,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
   		colnames(tab) <- str_replace_all(colnames(tab), "\\.", " ")
       
       # Get meta data and recursively import 'meta' data in 'import' field
-      sheet_meta_data <- j_import_settings(meta = meta_data[meta_i,]) # returns list
+      sheet_meta_data <- j_import_settings(meta = meta_data[sheet_meta_data_indices[meta_i],]) # returns list
 
       # If sheet_meta_data does not contain 'type', initialize 'type' with 'tab'
       if (is.null(sheet_meta_data[[META$type]])) {
