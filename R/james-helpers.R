@@ -42,22 +42,6 @@ as_data_frame <- function(d) {
   }
 }
 
-#' Extract x-axis information from d
-#' @param d retrieve x-axis
-#' @keywords internal
-extract_x_axis <- function(d) {
-  # TODO Replace \n by newline, dot by comma, etc...
-  if (is_really_character(d[, 1])) {
-    x_at <- 1:nrow(d)
-    x_at_lab <- d[, 1]
-  } else {
-    x_at <- as.numeric(d[, 1])
-    x_at_lab <- NULL
-  }
-  
-  list(x_at = x_at, x_at_lab = x_at_lab)
-}
-
 #' Indicate whether all values in vec are really char
 #' @param vec vector
 #' @import utils

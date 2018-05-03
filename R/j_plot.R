@@ -28,13 +28,20 @@ j_plot <- function(index, meta) {
   
   
   # Use series_type from Excel or set defaults
-  
-  
-  
-  
 }
 
-
-
-#index=1
-#j_plot(1)
+#' Extract x-axis information from d
+#' @param d retrieve x-axis
+#' @keywords internal
+extract_x_axis <- function(d) {
+  # TODO Replace \n by newline, dot by comma, etc...
+  if (is_really_character(d[, 1])) {
+    x_at <- 1:nrow(d)
+    x_at_lab <- d[, 1]
+  } else {
+    x_at <- as.numeric(d[, 1])
+    x_at_lab <- NULL
+  }
+  
+  list(x_at = x_at, x_at_lab = x_at_lab)
+}
