@@ -28,7 +28,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
   ## (1) Import data tabs
   #
   import_index = NULL
-  for (sheet_i in 1:length(sheet_names)) {
+  for (sheet_i in seq_along(sheet_names)) {
     # Import data tab
     tab <- openxlsx::read.xlsx(file_name, sheet = sheet_i)
     
@@ -50,7 +50,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
   		colnames(tab) <- str_replace_all(colnames(tab), "\\.", " ")
       
       # Get meta data and recursively import 'meta' data in 'import' field
-      sheet_meta_data <- #TODO HERE as.list(meta_data[meta_i,])      
+      sheet_meta_data <- j_import_settings(meta = meta_data[meta_i,]) # returns list
 
       # If sheet_meta_data does not contain 'type', initialize 'type' with 'tab'
       if (is.null(sheet_meta_data[[META$type]])) {
@@ -61,7 +61,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       for (p in names(sheet_meta_data)) sheet_meta_data[[p]] = get_param(p, meta, sheet_meta_data[[p]])
 
       # Add meta parameters that are not yet present in sheet_meta_data
-      for (p in meta) if (!is.element(p, sheet_meta_data)) sheet_meta_data[[p]] <- meta[[p]]
+      for (p in names(meta)) if (!is.element(p, sheet_meta_data)) sheet_meta_data[[p]] <- meta[[p]]
       
       # Get add_if_duplicate from meta if present in 'sheet_meta_data', else TRUE
       add_if_duplicate <- get_param("add_if_duplicate", sheet_meta_data, default = TRUE)
@@ -94,7 +94,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
       
       # Set meta data
-      j_set_meta(index, meta)
+      j_set_meta(index, j_import_settings(meta = meta))
   
       # Record resulting index
       import_index <- c(import_index, index)

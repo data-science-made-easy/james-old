@@ -4,14 +4,19 @@
 \alias{j_import_settings}
 \title{Import settings}
 \usage{
-j_import_settings(file_name)
+j_import_settings(file_name, meta)
 }
 \arguments{
-\item{file_name}{xlsx-file you want to import}
+\item{file_name}{xlsx-file with settings you want to import}
+
+\item{meta}{list with meta data}
 }
 \value{
-Indices of imported data in j_ls()
+list with meta data
 }
 \description{
-Import settings
+Recursively import settings from xlsx-files and add them to meta.
+}
+\details{
+Gives a lower prio to a deeper import. \code{meta} gets highest prio. All of these come on top of the base settings, which are available in the package. Currently only first tab is imported for each of the files (may change later on).
 }

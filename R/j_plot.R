@@ -21,9 +21,17 @@ j_plot <- function(index, meta) {
   # Remove x-axis
   d <- d[, -1, drop = FALSE]
   
+  # x,y-lim
+  x_lim <- range(x_axis$x_at)
+  y_lim <- range(d)
+  
+  
   
   # Use series_type from Excel or set defaults
-  # ?Get color scheme
+  
+  
+  
+  
 }
 
 
