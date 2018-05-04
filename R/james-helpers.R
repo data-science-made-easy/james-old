@@ -68,7 +68,12 @@ combine_lists <- function(high_prio, low_prio) {
   lst <- low_prio
   
   for (i in seq_along(high_prio)) {
-    lst[[names(high_prio)[i]]] <- high_prio[[i]]
+    var <- names(high_prio)[i]
+    value <- high_prio[[i]]
+    
+    # Only use NA to overwrite if var was non-existent
+    if (!is.na(value) || is.null(lst[[var]]))
+      lst[[var]] <- value
   }
   
   return(lst)
