@@ -72,7 +72,6 @@ combine_lists <- function(high_prio, low_prio) {
     value <- high_prio[[i]]
     
     # Only use NA to overwrite if var was non-existent
-    print(paste(var, value))
     if (is.null(value) || !is.na(value) || is.null(lst[[var]]))
       lst[[var]] <- value
   }
