@@ -6,6 +6,9 @@
 \usage{
 strings_to_vectors(meta)
 }
+\arguments{
+\item{meta}{list with meta data}
+}
 \description{
 keywords internal
 }

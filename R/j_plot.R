@@ -7,6 +7,8 @@
 #'
 #' @return None
 #'
+#' @importFrom grDevices cm dev.off pdf
+#' @importFrom graphics abline axis barplot legend mtext par plot
 #' @export j_plot
 
 j_plot <- function(index, meta = list()) {
@@ -56,7 +58,7 @@ j_plot <- function(index, meta = list()) {
   #
   ## Init PDF?
   #
-  if (!is.null(meta$pdf)) pdf(meta$pdf, title = file_name, width = meta$pdf_width / cm(1), height = meta$pdf_height / cm(1), pointsize = meta$pointsize)
+  if (!is.null(meta$pdf)) pdf(meta$pdf, title = meta$pdf, width = meta$pdf_width / cm(1), height = meta$pdf_height / cm(1), pointsize = meta$pointsize)
   
   set_margins(meta)
   

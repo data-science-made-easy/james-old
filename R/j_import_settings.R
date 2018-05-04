@@ -40,7 +40,7 @@ j_import_settings <- function(file_name, meta) {
   # import overwrites nested_import
   
   # meta overwrites import
-  meta <- combine_lists(high = meta, low = meta_base)
+  meta <- combine_lists(high_prio = meta, low_prio = meta_base)
 
   #
   ## Return
