@@ -63,6 +63,7 @@ as_native_vec <- function(str) {
     return(as.numeric(vec))
 }
 
+#' @keywords internal
 combine_lists <- function(high_prio, low_prio) {
   lst <- low_prio
   
@@ -73,9 +74,27 @@ combine_lists <- function(high_prio, low_prio) {
   return(lst)
 }
 
+#' Helper import to list
+#' @keywords internal
+df_as_list <- function(df) {
+  meta <- list()
+  for (i in seq_len(nrow(df))) {
+    var_name <- df[i, 1]
+    var_value <- as_native_vec(df[i, 2])
+    if (!all(is.na(var_value))) meta[[var_name]] <- var_value
+  }
+  return(meta)
+}
 
-
-
+#' @keywords internal
+df_as_matrix <- function(df) {
+  mat <- NULL
+  for (i in seq_len(ncol(df))) {
+    mat <- cbind(mat, df[, i])
+  }
+  colnames(mat) <- colnames(df)
+  return(mat)
+}
 
 
 
