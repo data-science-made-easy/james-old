@@ -4,7 +4,7 @@ Time series data management and visualisation made easy for Excel users and R pr
 # Get James in R
 First download [R](https://cran.r-project.org/) or [RStudio](https://www.rstudio.com).
 
-Open `R` (or `RStudio`) and install `devtools` and `R6` if not yet done before:
+Open `R` (or `RStudio`) and install `devtools` if not yet done before:
 ``` R
 if (!is.element("devtools", installed.packages())) install.packages("devtools", repos = "http://cran.us.r-project.org")
 if (!is.element("R6", installed.packages())) install.packages("R6", repos = "http://cran.us.r-project.org")
@@ -12,8 +12,9 @@ if (!is.element("R6", installed.packages())) install.packages("R6", repos = "htt
 
 This makes it easy to install `james` directly from github, using devtools:
 ``` R
-devtools::install_github("data-science-made-easy/james")
+devtools::install_git(url = "https://github.com/data-science-made-easy/james", branch = "release")
 ```
+Remark: omit branch if you want the cutting-edge development version.
 
 You might need to install the package R6 first:
 ``` R
