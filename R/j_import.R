@@ -52,17 +52,19 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       # Get meta data and recursively import 'meta' data in 'import' field
       sheet_meta_data <- j_import_settings(meta = meta_data[sheet_meta_data_indices[meta_i],]) # returns list
 
+      # Parse strings to vectors of native values (i.e. numeric where posible)
+      sheet_meta_data <- strings_to_vectors(sheet_meta_data)
+      
+      # Remove NA's
+      sheet_meta_data <- sheet_meta_data[which(!is.na(sheet_meta_data))]
+
       # If sheet_meta_data does not contain 'type', initialize 'type' with 'tab'
       if (is.null(sheet_meta_data[[META$type]])) {
         sheet_meta_data[[META$type]] = get_param(META$tab, sheet_meta_data, "")
       }
       
-      # Let 'meta' parameters overwrite sheet_meta_data
-      for (p in names(sheet_meta_data)) sheet_meta_data[[p]] = get_param(p, meta, sheet_meta_data[[p]])
-
-      # Add meta parameters that are not yet present in sheet_meta_data
-      for (p in names(meta)) if (!is.element(p, sheet_meta_data)) sheet_meta_data[[p]] <- meta[[p]]
-      
+      sheet_meta_data <- combine_lists(high_prio = meta, low_prio = sheet_meta_data)
+            
       # Get add_if_duplicate from meta if present in 'sheet_meta_data', else TRUE
       add_if_duplicate <- get_param("add_if_duplicate", sheet_meta_data, default = TRUE)
       
@@ -75,7 +77,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
       
       # Set meta data
-      j_set_meta(index, sheet_meta_data)            
+      j_set_meta(index, sheet_meta_data)
 
       # Record resulting index
       import_index <- c(import_index, index)
@@ -116,11 +118,12 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
   return(import_index)
 }
 
-# file_name = j_example_xlsx(multiple_tabs=F); meta = list()
-# j_import(file_name)
 
-# file_name = "../outside_package/data/data_wgh_bbp.xlsx"
-# j_import(file_name, add_if_duplicate = FALSE)
+
+
+
+
+
 
 
 

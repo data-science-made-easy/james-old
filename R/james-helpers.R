@@ -63,6 +63,19 @@ as_native_vec <- function(str) {
     return(as.numeric(vec))
 }
 
+#' keywords internal
+#' @param meta list with meta data
+strings_to_vectors <- function(meta) {
+  for (i in seq_along(meta)) {
+    val <- meta[[i]]
+    if ("character" == class(val)) {
+      meta[[i]] <- as_native_vec(val)
+    }
+  }
+  
+  return(meta)
+}
+
 #' @keywords internal
 combine_lists <- function(high_prio, low_prio) {
   lst <- low_prio
@@ -101,9 +114,13 @@ df_as_matrix <- function(df) {
   return(mat)
 }
 
-
-
-
+#' @keywords internal
+is_yes <- function(val) {
+  if (is.null(val))
+    return(FALSE)
+  else
+    return(is.element(val, YES))
+}
 
 
 

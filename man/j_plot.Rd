@@ -4,7 +4,7 @@
 \alias{j_plot}
 \title{Easy plotting in your standard layout}
 \usage{
-j_plot(index, meta)
+j_plot(index, meta = list())
 }
 \arguments{
 \item{index}{id of data you want to plot}

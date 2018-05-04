@@ -48,18 +48,6 @@ j_import_settings <- function(file_name, meta) {
   return(meta)
 }
 
-#' Helper import to list
-#' @keywords internal
-df_as_list <- function(df) {
-  meta <- list()
-  for (i in seq_len(nrow(df))) {
-    var_name <- df[i, 1]
-    var_value <- as_native_vec(df[i, 2])
-    if (!all(is.na(var_value))) meta[[var_name]] <- var_value
-  }
-  return(meta)
-}
-
 
 
 
