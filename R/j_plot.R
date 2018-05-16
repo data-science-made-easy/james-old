@@ -63,10 +63,10 @@ j_plot <- function(index, meta = list()) {
   set_margins(meta)
   
   # Do the magic
-  barplot(t(d), horiz = swap_xy(meta), beside = any_series_beside, names.arg = meta$y_at_lab, las = 1, col = NA, border = NA, axes = FALSE, xlim = meta$x_lim)
+  barplot(t(d), horiz = swap_xy(meta), beside = any_series_beside, names.arg = NULL, las = 1, col = NA, border = NA, axes = FALSE, xlim = meta$x_lim)
   add_axis_and_titles(meta)
   add_help_lines(meta)
-  barplot(t(d), horiz = swap_xy(meta), beside = any_series_beside, names.arg = meta$y_at_lab, las = 1, col = meta$ts_col[1:ncol(d)], border = NA, axes = FALSE, add = TRUE, xlim = meta$x_lim)
+  barplot(t(d), horiz = swap_xy(meta), beside = any_series_beside, names.arg = meta$y_at_lab, las = 1, col = meta$ts_col[1:ncol(d)], border = NA, axes = FALSE, add = TRUE, xlim = meta$x_lim, cex.names = meta$cex_axis_y)
   
   add_legend(meta)
   #
@@ -92,7 +92,7 @@ add_axis_and_titles <- function(meta) {
   # title
   mtext(text = meta$title, side = 3, outer = T, adj = 0, at = 0.06, line = -2, font = 2, cex = meta$title_pt)
   # x-axis
-  axis(1, at = meta$x_at, labels = meta$x_at_lab, lwd = 0, lwd.ticks = 0, xpd = TRUE, line = meta$v_shift_x_axis)
+  axis(1, at = meta$x_at, labels = meta$x_at_lab, lwd = 0, lwd.ticks = 0, xpd = TRUE, line = meta$v_shift_x_axis, cex.axis = meta$cex_axis_x)
 }
 
 #' @keywords internal
