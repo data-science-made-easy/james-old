@@ -10,5 +10,5 @@ j_rm_last()
 None
 }
 \description{
-Remove object that was last put
+Last line in j_ls() will be removed. No undo possible.
 }
