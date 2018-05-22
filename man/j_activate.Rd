@@ -18,5 +18,5 @@ j_activate(type = james.env$j_root$type,
 None
 }
 \description{
-j_ls() lists only data from the active project and scenario. If you change project and/or scenario, you can use this function to activate it/them. Use unique(j_ls(active_project_scenario_only=F)[c("project", "scenario")]) to list all unique combinations of the two.
+Activate a certain project and scenario
 }
