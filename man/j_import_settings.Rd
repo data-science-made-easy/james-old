@@ -4,10 +4,10 @@
 \alias{j_import_settings}
 \title{Import settings}
 \usage{
-j_import_settings(file_name, meta)
+j_import_settings(file_name, meta = list())
 }
 \arguments{
-\item{file_name}{xlsx-file with settings you want to import}
+\item{file_name}{xlsx-file with settings you want to import (if not specified, a file with defaults in package will be imported)}
 
 \item{meta}{list with meta data}
 }
@@ -15,8 +15,8 @@ j_import_settings(file_name, meta)
 list with meta data
 }
 \description{
-Recursively import settings from xlsx-files and add them to meta.
+Import settings from xlsx-file and add them to meta.
 }
 \details{
-Gives a lower prio to a deeper import. \code{meta} gets highest prio. All of these come on top of the base settings, which are available in the package. Currently only first tab is imported for each of the files (may change later on).
+\code{meta} gets highest prio. Settings in \code{file_name} get lower prio. If you don't specify \code{file_name}, James will use james-settings.xlsx (in current directory). Side effect: if this file is non-existent, James will put a copy of its default version there.
 }

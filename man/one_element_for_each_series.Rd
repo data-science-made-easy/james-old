@@ -2,11 +2,11 @@
 % Please edit documentation in R/j_plot.R
 \name{one_element_for_each_series}
 \alias{one_element_for_each_series}
-\title{Meta may have variables of length 1 or length > n_items. This function makes all lists have length n_items.}
+\title{Meta may have variables of length 1 or length > meta$n_series. This function makes all lists have length meta$n_series.}
 \usage{
 one_element_for_each_series(meta)
 }
 \description{
-Meta may have variables of length 1 or length > n_items. This function makes all lists have length n_items.
+Meta may have variables of length 1 or length > meta$n_series. This function makes all lists have length meta$n_series.
 }
 \keyword{internal}

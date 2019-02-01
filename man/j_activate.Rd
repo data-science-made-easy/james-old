@@ -5,7 +5,8 @@
 \title{Activate a certain project and scenario}
 \usage{
 j_activate(type = james.env$j_root$type,
-  scenario = james.env$j_root$scenario, project = james.env$j_root$project)
+  scenario = james.env$j_root$scenario,
+  project = james.env$j_root$project)
 }
 \arguments{
 \item{type}{the data type you want to activate}

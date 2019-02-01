@@ -4,7 +4,7 @@
 \alias{extract_x_axis}
 \title{Extract x-axis information from d}
 \usage{
-extract_x_axis(d)
+extract_x_axis(meta)
 }
 \arguments{
 \item{d}{data}

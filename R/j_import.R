@@ -47,7 +47,8 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
     	# Fix col names
       index_NA_colnames <- grep("(^X)(\\d+)($)", colnames(tab))
       if (length(index_NA_colnames)) colnames(tab)[index_NA_colnames] <- NA
-  		colnames(tab) <- str_replace_all(colnames(tab), "\\.", " ")
+      # colnames(tab) <- stringr::str_replace_all(colnames(tab), "\\.(?!\\.|$)", " ")
+  		colnames(tab) <- stringr::str_replace_all(colnames(tab), "\\.(?![0-9\\.]|$)", " ")
       
       # Get meta data and recursively import 'meta' data in 'import' field
       sheet_meta_data <- j_import_settings(meta = meta_data[sheet_meta_data_indices[meta_i],]) # returns list
@@ -58,7 +59,15 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       # Remove NA's
       sheet_meta_data <- sheet_meta_data[which(!is.na(sheet_meta_data))]
 
-      # If sheet_meta_data does not contain 'type', initialize 'type' with 'tab'
+      # If col 1 contains LABELS instead of NUMBERS:
+      tab_copy <- tab # For the case where tab is imported >1 times (as first column is overwritten)
+      if (is.character(tab[1,1])) {
+        sheet_meta_data$x_at      <- 1:nrow(tab)          
+        sheet_meta_data$x_at_lab  <- tab[,1]
+        tab_copy[,1]              <- sheet_meta_data$x_at
+      }
+
+      # TODO HACK: If sheet_meta_data does not contain 'type', initialize 'type' with 'tab'
       if (is.null(sheet_meta_data[[META$type]])) {
         sheet_meta_data[[META$type]] = get_param(META$tab, sheet_meta_data, "")
       }
@@ -74,7 +83,19 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       type     <- get_param("type", sheet_meta_data, "")
     
       # Add data; append index
-      index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
+      index <- j_put(tab_copy, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
+      
+      if (is.null(sheet_meta_data[[META$name]])) {
+        sheet_meta_data[[META$name]] <- get_param(META$tab, sheet_meta_data, "")
+        this_version <- j_get(index, what = "object")$version
+        if (1 < this_version) sheet_meta_data[[META$name]] <- paste0(sheet_meta_data[[META$name]], "_", this_version)
+      }
+      if (is.null(sheet_meta_data[[META$pdf]])) {
+        sheet_meta_data[[META$pdf]] <- paste0(sheet_meta_data[[META$dir_pdf]], .Platform$file.sep, sheet_meta_data[[META$name]], ".pdf")
+      }
+      if (is.null(sheet_meta_data[[META$png]])) {
+        sheet_meta_data[[META$png]] <- paste0(sheet_meta_data[[META$dir_png]], .Platform$file.sep, sheet_meta_data[[META$name]], ".png")
+      }
       
       # Set meta data
       j_set_meta(index, sheet_meta_data)
@@ -86,7 +107,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
     ## (1b) Import the tab also if we _don't_ have a meta data entry
     if (0 == length(sheet_meta_data_indices)) {
       # Get add_if_duplicate from meta if present in 'sheet_meta_data', else TRUE
-      add_if_duplicate          <- get_param("add_if_duplicate", meta, default = TRUE)
+      add_if_duplicate  <- get_param("add_if_duplicate", meta, default = TRUE)
       
       # Get project, scenario, type
       project  <- get_param("project", meta, "")
@@ -117,8 +138,6 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
   
   return(import_index)
 }
-
-
 
 
 

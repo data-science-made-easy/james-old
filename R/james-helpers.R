@@ -52,8 +52,19 @@ is_really_character <- function(vec) {
   } else return(FALSE)
 }
 
+has_value <- function(x) {
+  if (0 == length(x)) # NB 0 == length(NULL)
+    return(FALSE)
+  x <- paste(x, collapse="")
+  if (is.na(x))
+    return(TRUE)
+  return("" != str_trim(x))
+}
+
 #' @keywords internal
-as_char_vec <- function(str, sep = SETTINGS$sep) str_trim(unlist(str_split(str, sep)))
+as_char_vec <- function(str, sep = SETTINGS$sep) {
+  if (!is.na(str) && !is.null(str) && str == sep) return(str) else return(stringr::str_trim(unlist(stringr::str_split(str, sep))))
+}
 as_numeric_vec <- function(str) as.numeric(as_char_vec(str))
 as_native_vec <- function(str) {
   vec <- as_char_vec(str)
@@ -115,6 +126,14 @@ df_as_matrix <- function(df) {
 }
 
 #' @keywords internal
+is_no <- function(val) {
+  if (is.null(val))
+    return(FALSE)
+  else
+    return(is.element(val, NO))
+}
+
+#' @keywords internal
 is_yes <- function(val) {
   if (is.null(val))
     return(FALSE)
@@ -122,7 +141,9 @@ is_yes <- function(val) {
     return(is.element(val, YES))
 }
 
-
+is_series_type_mark <- function(series_type) {
+  SERIES_TYPE_MARK == str_sub(series_type, 1, nchar(SERIES_TYPE_MARK))  
+}
 
 
 

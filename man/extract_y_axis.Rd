@@ -4,7 +4,7 @@
 \alias{extract_y_axis}
 \title{Extract pretty y-axis information from d}
 \usage{
-extract_y_axis(d, meta)
+extract_y_axis(meta)
 }
 \arguments{
 \item{d}{data}

@@ -4,8 +4,10 @@
 \alias{j_put}
 \title{Put data in archive}
 \usage{
-j_put(x, type = james.env$j_root$type, scenario = james.env$j_root$scenario,
-  project = james.env$j_root$project, doc = NA, add_if_duplicate = TRUE)
+j_put(x, type = james.env$j_root$type,
+  scenario = james.env$j_root$scenario,
+  project = james.env$j_root$project, doc = NA,
+  add_if_duplicate = TRUE)
 }
 \arguments{
 \item{x}{data you want to store}
