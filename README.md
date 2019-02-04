@@ -2,27 +2,16 @@
 Time series data management and visualisation made easy for Excel users and R programmers.
 
 # Get James in R
-First download [R](https://cran.r-project.org/) or [RStudio](https://www.rstudio.com).
+First download [RStudio](https://www.rstudio.com) or [R](https://cran.r-project.org/).
 
-Open `R` (or `RStudio`) and install the package `devtools` if not yet done before.
+Open it, and install the package `devtools` if not yet done before.
 ``` R
 if (!is.element("devtools", installed.packages())) install.packages("devtools", repos = "http://cran.us.r-project.org")
 ```
 
-This makes it easy to install `james` directly from github, using devtools:
+Install `james` directly from github and load the package:
 ``` R
-devtools::install_git(url = "https://github.com/data-science-made-easy/james", branch = "release")
-```
-Remark: omit branch if you want the cutting-edge development version.
-
-You might need to install the package R6 first:
-``` R
-install.packages("R6")
-```
-
-Now you can load the package:
-``` R
-library(james)
+devtools::install_github("data-science-made-easy/james")
 ```
 
 Congratulations, you now have the cutting-edge development version of `james`!
@@ -35,7 +24,7 @@ James has only a few functions, which do most of the work for you:
 - `j_get()` gets a data set from the storage
 - `j_save()` stores your data to disc for later use
 
-> Note: This creates a file `<your user name>.james` in your home directory, which saves all your data in RDS-format to disc. Please see the ‘R Internals’ manual for details.
+> Note: 'j_save()' creates a file `<your user name>.james` in your home directory, which saves all your data in RDS-format to disc. Please see the ‘R Internals’ manual for details.
 
 ## Easy examples:
 ``` R
