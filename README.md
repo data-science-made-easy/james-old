@@ -23,7 +23,7 @@ To get an impression of what is possible, you can call `j_start(path = getwd())`
 
 ``` R
 rm(list = ls())
-if (is.element("cpb_lib", installed.packages())) cpb_lib::use_cpb_lib()
+if (is.element("cpblib", installed.packages())) cpb_lib::use_cpblib()
 library(james)
 
 j_start()
