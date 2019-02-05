@@ -17,11 +17,33 @@ devtools::install_github("data-science-made-easy/james")
 Congratulations, you now have the cutting-edge development version of `james`!
 
 # Use James
+
+## Getting started
+To get an impression of what is possible, you can call `j_start(path = getwd())`:
+
+``` R
+rm(list = ls())
+if (is.element("cpb_lib", installed.packages())) cpb_lib::use_cpb_lib()
+library(james)
+
+j_start()
+```
+
+Doing so will generate several files in the specified path (defaults to your working directory):
+
+- `james-example-multiple-tabs.xlsx` with several examples in Excel
+- `james-for-xlsx.R` contains example code to make figures of the previous file
+- `james-in-your-analysis-pipeline.R` shows how you can connect James to your analysis pipeline in R
+- `james-settings.xlsx` has global settings which you may override
+
+## Details
 James has only a few functions, which do most of the work for you:
 
 - `j_ls()` lists the 'working version' your data (details below)
 - `j_put()` puts a data set in the storage
 - `j_get()` gets a data set from the storage
+- `j_plot()` plots your data (for see examples in `james-in-your-analysis-pipeline.R`, which you may generate with `j_start()`)
+- `j_clean()` cleans your in-memory database
 - `j_save()` stores your data to disc for later use
 
 > Note: 'j_save()' creates a file `<your user name>.james` in your home directory, which saves all your data in RDS-format to disc. Please see the ‘R Internals’ manual for details.

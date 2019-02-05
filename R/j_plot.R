@@ -228,8 +228,7 @@ create_pdf <- function(meta) {
     this_height <- meta$pdf_height / cm(1)
   }
 
-  meta<<- meta
-  pdf(meta$pdf, title = meta$name, width = this_width, height = this_height, pointsize = if (is_class_ppower(meta)) 12 else meta$pointsize)
+  pdf(meta$pdf, title = as.character(meta$name), width = this_width, height = this_height, pointsize = if (is_class_ppower(meta)) 12 else meta$pointsize)
 }
 
 plot_pie <- function(meta) {
@@ -355,6 +354,7 @@ pre_process_meta <- function(meta) {
 
   # Put x,y-axis (as in data) info in meta
   meta <- extract_x_axis(meta) # set x_at, x_at_lab (can be text), original x-values, and x_lim
+
   # Now we are ready for y-data
   if (!is_class_ppower(meta))
     meta <- extract_y_axis(meta) # set y_at, and y_lim  
@@ -375,7 +375,7 @@ pre_process_meta <- function(meta) {
 
   # Fix colours
   meta <- pre_process_spike_colors(meta)
-    
+      
   index_bar <- c(meta$bar_next_index, meta$bar_top_index)
   meta$pch[index_bar]            <- 15
   meta$pch[meta$fan_index]       <- 15
@@ -384,7 +384,7 @@ pre_process_meta <- function(meta) {
   meta$pch[meta$dot_small_index] <- 16
   meta$pch[meta$mark_index]      <- as.numeric(str_sub(meta$series_type[meta$mark_index], 1 + nchar(SERIES_TYPE_MARK)))
   meta$pch[meta$line_index]      <- NA 
-  
+
   return(meta)
 }
 
@@ -722,20 +722,12 @@ set_series_specific_legend <- function(meta) {
 #' @param d data
 #' @keywords internal
 extract_x_axis <- function(meta) {
-  meta <<- meta
-  
-  # if (is.character(tab[1,1])) {
-  #   sheet_meta_data$x_at      <- 1:nrow(tab)
-  #   sheet_meta_data$x_at_lab  <- tab[,1]
-  #   tab_copy[,1]              <- sheet_meta_data$x_at
-  # }
-  
   # Extract x_at
   if (is.null(meta$x_at)) {
     if (!is.null(meta$x_lim)) { # Get x_at from x_lim
       meta$x_at <- pretty(meta$x_lim)
     } else {
-      if (is_really_character(meta$d[, 1])) { # If characters present
+      if (is_really_character(meta$d0[, 1])) { # If characters present
         meta$x_at <- 1:nrow(meta$d)
       } else { # If just numeric data
         meta$x_at <- pretty(as.numeric(meta$d0[, 1]))
@@ -760,7 +752,8 @@ extract_x_axis <- function(meta) {
   
   # Set original x-values
   if (is.null(meta$x)) {
-    meta$x <- if (is_really_character(meta$d0[, 1])) meta$x <- meta$d0[, 1] else meta$x <- as.numeric(meta$d0[, 1])
+    # if (is_really_character(meta$d0[, 1])) meta$x <- meta$d0[, 1] else meta$x <- as.numeric(meta$d0[, 1])
+    if (is_really_character(meta$d0[, 1])) meta$x <- meta$x_at else meta$x <- as.numeric(meta$d0[, 1])
   }
   
   return(meta)
