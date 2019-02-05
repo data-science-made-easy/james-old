@@ -14,15 +14,19 @@
 j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   # Get meta data
   meta <- combine_lists(high_prio = meta, low_prio = j_get(index, what = "meta"))
-  if (!is_yes(meta$create)) return(invisible("No plot (!is_yes(meta$create))"))
+  if (is_no(meta$create)) return(invisible("No plot (is_no(meta$create))"))
 
   # Get data
   # Add data to meta data as 'd0'; strip x-axis and add as 'd'
   meta$d0 <- as_data_frame(j_get(index, what = "data"))
   meta <- pre_process_meta(meta) # d0 = as_data_frame(j_get(index, what = "data"))
 
+  file_base_name <- get_param("name", meta, get_param("tab", meta, "unknown"))
+  if (!has_value(meta$pdf)) meta$pdf <- paste0(meta$dir_pdf, file_base_name, ".pdf")
+  if (!has_value(meta$png)) meta$png <- paste0(meta$dir_png, file_base_name, ".png")
+
   # Init PDF?
-  if (!is_no(meta$pdf)) {
+  if (!is_no(meta$pdf)) { #TODO solve differently
     if (!file.exists(meta$dir_pdf)) dir.create(meta$dir_pdf, showWarnings = FALSE)
     if (!file.exists(meta$dir_png)) dir.create(meta$dir_png, showWarnings = FALSE)
     create_pdf(meta) # Init the PDF
@@ -135,12 +139,12 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
     dev.off()
     
     # Create PNG
+    if (!has_value(meta$png)) meta$png <- paste0(get_param("name", meta, str_sub(meta$pdf, end = -5)), ".png")
     if ("unix" == .Platform$OS.type) { # Create PNG
       system(paste("sips -s format png", meta$pdf, "--out", meta$png))
     } else { # assume CPB/Windows environment
       system(paste0(meta$ghostscript_executable, ' -dNOPAUSE -dBATCH -r', meta$ghostscript_resolution, ' -sDEVICE=png16m -sOutputFile="', meta$png, '" "', meta$pdf, '"'))
-      # system(sprintf('%s -dNOPAUSE -dBATCH -r%d -sDEVICE=png16m -sOutputFile="%s" "%s"', "s:/Applicaties/CPB/GS/bin/gswin64.exe", 2400, obj$meta$png, obj$meta$pdf))
-    }
+    }      
   }
 }
 
@@ -224,8 +228,8 @@ create_pdf <- function(meta) {
     this_height <- meta$pdf_height / cm(1)
   }
 
-  file_name <- if (is.null(meta$pdf)) paste0(meta$tab, ".pdf") else meta$pdf
-  pdf(file_name, title = file_name, width = this_width, height = this_height, pointsize = if (is_class_ppower(meta)) 12 else meta$pointsize)
+  meta<<- meta
+  pdf(meta$pdf, title = meta$name, width = this_width, height = this_height, pointsize = if (is_class_ppower(meta)) 12 else meta$pointsize)
 }
 
 plot_pie <- function(meta) {
@@ -300,7 +304,6 @@ is_class_ppower <- function(meta) CLASS_PPOWER == meta$class
 is_class_pie    <- function(meta) CLASS_PIE    == meta$class
 
 pre_process_spike_colors <- function(meta) {
-  print(meta$tab)
   any_fan <- any(meta$series_type %in% SERIES_TYPE_FAN)
   if (meta$n_two_columns) {
     col_new <- rep(NA, ncol(meta$d))
@@ -335,12 +338,6 @@ pre_process_spike_colors <- function(meta) {
     }
     meta$col_default <- col_new
   }
-  if (is_yes(meta$create)) meta <<- meta
-    # # Fix cols for mark
-  # if (meta$n_marks) for (i in seq_along(meta$mark_index)) {
-  #   n_NA <- length(which(is.na(meta$col_default[1:meta$mark_index[i]]))) - 2 # Fix for added NA's for bar^2
-  #   meta$col_default <- append(meta$col_default, meta$mark_col, n_NA + meta$mark_index[i])
-  # }
   
   return(meta)
 }
@@ -351,11 +348,13 @@ pre_process_meta <- function(meta) {
   meta <- one_element_for_each_series(meta)
   meta <- count_series_types(meta)
   meta <- set_class(meta)
-  # Put x,y-axis (as in data) info in meta
-  meta <- extract_x_axis(meta) # set x_at, x_at_lab (can be text), original x-values, and x_lim
+
   # Remove x-axis from data
   meta$d <- df_as_matrix(meta$d0[, -1, drop = FALSE])
   colnames(meta$d) <- colnames(meta$d0)[-1] # HACK To fix issue with duplicate names
+
+  # Put x,y-axis (as in data) info in meta
+  meta <- extract_x_axis(meta) # set x_at, x_at_lab (can be text), original x-values, and x_lim
   # Now we are ready for y-data
   if (!is_class_ppower(meta))
     meta <- extract_y_axis(meta) # set y_at, and y_lim  
@@ -723,6 +722,14 @@ set_series_specific_legend <- function(meta) {
 #' @param d data
 #' @keywords internal
 extract_x_axis <- function(meta) {
+  meta <<- meta
+  
+  # if (is.character(tab[1,1])) {
+  #   sheet_meta_data$x_at      <- 1:nrow(tab)
+  #   sheet_meta_data$x_at_lab  <- tab[,1]
+  #   tab_copy[,1]              <- sheet_meta_data$x_at
+  # }
+  
   # Extract x_at
   if (is.null(meta$x_at)) {
     if (!is.null(meta$x_lim)) { # Get x_at from x_lim
@@ -778,7 +785,7 @@ extract_y_axis <- function(meta) {
   y_max <- max(hide_y2(meta$d, meta), na.rm = T)
   if (is_yes(meta$y2) && is.element(ncol(meta$d), meta$bar_top_index)) {
     # IF y2 is "bar=", then temporarily replace that by bar--, in this function, for ease of computation
-    stop("Please don't use bar= for last time series if you want second y-axis!")
+    stop("Please don't use bar= (but bar--) for last time series if you want second y-axis!")
   }
   if (0 < meta$n_bar_top) {
     vec_neg <- NULL
@@ -794,9 +801,14 @@ extract_y_axis <- function(meta) {
   }
   
   y_lim_auto <- c(y_min, y_max)
+  # Include hline_bold in y_lim
   if (!is.null(meta$hline_bold))
     y_lim_auto <- range(c(meta$hline_bold, y_lim_auto))
   # TODO If user specifies hline_dash, then include this in y_lim too!
+
+  # Overwrite y_lim if manually set
+  if (!is.null(meta$y_lim))
+    y_lim_auto <- meta$y_lim
   
   # Extract y_at
   if (is.null(meta$y_at)) {

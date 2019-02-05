@@ -59,14 +59,6 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       # Remove NA's
       sheet_meta_data <- sheet_meta_data[which(!is.na(sheet_meta_data))]
 
-      # If col 1 contains LABELS instead of NUMBERS:
-      tab_copy <- tab # For the case where tab is imported >1 times (as first column is overwritten)
-      if (is.character(tab[1,1])) {
-        sheet_meta_data$x_at      <- 1:nrow(tab)          
-        sheet_meta_data$x_at_lab  <- tab[,1]
-        tab_copy[,1]              <- sheet_meta_data$x_at
-      }
-
       # TODO HACK: If sheet_meta_data does not contain 'type', initialize 'type' with 'tab'
       if (is.null(sheet_meta_data[[META$type]])) {
         sheet_meta_data[[META$type]] = get_param(META$tab, sheet_meta_data, "")
@@ -83,7 +75,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       type     <- get_param("type", sheet_meta_data, "")
     
       # Add data; append index
-      index <- j_put(tab_copy, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
+      index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
       
       if (is.null(sheet_meta_data[[META$name]])) {
         sheet_meta_data[[META$name]] <- get_param(META$tab, sheet_meta_data, "")

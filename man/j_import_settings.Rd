@@ -4,11 +4,9 @@
 \alias{j_import_settings}
 \title{Import settings}
 \usage{
-j_import_settings(file_name, meta = list())
+j_import_settings(meta = list())
 }
 \arguments{
-\item{file_name}{xlsx-file with settings you want to import (if not specified, a file with defaults in package will be imported)}
-
 \item{meta}{list with meta data}
 }
 \value{
