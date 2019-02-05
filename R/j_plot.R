@@ -589,11 +589,11 @@ add_axis_gridlines_and_userlines <- function(meta) {
   text(x = meta$x_at, par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction, labels = correct_decimal_separator(if (is.null(meta$x_at_lab)) meta$x_at else meta$x_at_lab, meta), srt = meta$x_axis_rotate_lab, pos = 1, xpd = TRUE, cex.axis = meta$size_axis_x)
   
   # y-axis
-  axis(2, at = meta$y_at, labels = correct_decimal_separator(if (is.null(meta$y_at_lab)) meta$y_at else meta$y_at_lab, meta), las = 2, lwd = 0, lwd.ticks = 0, xpd = TRUE, cex.axis = meta$size_axis_x)
+  axis(2, at = meta$y_at, labels = correct_decimal_separator(if (is.null(meta$y_at_lab)) meta$y_at else meta$y_at_lab, meta), las = 2, lwd = 0, lwd.ticks = 0, xpd = TRUE, cex.axis = meta$size_axis_y)
   
   # y2_axis + label
   if (is_yes(meta$y2)) {
-    axis(4, at = meta$y_at, labels = correct_decimal_separator(meta$y2_labels, meta), las = 2, lwd = 0, lwd.ticks = 0, xpd = TRUE, cex.axis = meta$size_axis_x)
+    axis(4, at = meta$y_at, labels = correct_decimal_separator(meta$y2_labels, meta), las = 2, lwd = 0, lwd.ticks = 0, xpd = TRUE, cex.axis = meta$size_axis_y)
     mtext(text = restore_sep(meta$y2_lab), side = 3, outer = T, adj = 1, at = 0.94, line = -4, font = 3, cex = meta$size_labels)
   }
   
