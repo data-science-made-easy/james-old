@@ -98,6 +98,9 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
     plot_line_dot(i_type, meta)
   }
   
+  # HLINE's
+  add_lines_user(meta)  
+  
   # MARKS
   for (i_type in meta$mark_index) {
     plot_line_dot(i_type, meta)
@@ -599,9 +602,6 @@ add_axis_gridlines_and_userlines <- function(meta) {
   
   # Grid lines
   abline(h = meta$y_at, lwd = meta$lwd_grid_lines, col = meta$col_grid_lines)
-  
-  # hline's
-  add_lines_user(meta)
 }
 
 add_lines_user <- function(meta) {
