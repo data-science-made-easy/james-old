@@ -589,7 +589,14 @@ add_axis_gridlines_and_userlines <- function(meta) {
   # x-axis, labels
   if (!has_value(meta$x_at_lab)) meta$x_at_lab <- meta$x_at
   # axis(1, at = meta$x_at, labels = meta$x_at_lab, las = 1, lwd = 0, lwd.ticks = 0, xpd = TRUE, cex.axis = meta$size_axis_x, line = meta$v_shift_x_axis)
-  text(x = meta$x_at, par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction, labels = correct_decimal_separator(if (is.null(meta$x_at_lab)) meta$x_at else meta$x_at_lab, meta), srt = meta$x_axis_rotate_lab, pos = 1, xpd = TRUE, cex.axis = meta$size_axis_x)
+  if (!has_value(meta$x_axis_rotate_lab)) {
+    text(x = meta$x_at, par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction, labels = correct_decimal_separator(if (is.null(meta$x_at_lab)) meta$x_at else meta$x_at_lab, meta), srt = meta$x_axis_rotate_lab, pos = 1, xpd = TRUE, cex = meta$size_axis_x)
+  } else {
+    print(meta$x_at)
+    print(par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction)
+    print(meta$x_axis_rotate_lab)
+    text(x = meta$x_at, par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction, labels = correct_decimal_separator(if (is.null(meta$x_at_lab)) meta$x_at else meta$x_at_lab, meta), srt = meta$x_axis_rotate_lab, adj = 1, xpd = TRUE, cex = meta$size_axis_x)
+  }
   
   # y-axis
   axis(2, at = meta$y_at, labels = correct_decimal_separator(if (is.null(meta$y_at_lab)) meta$y_at else meta$y_at_lab, meta), las = 2, lwd = 0, lwd.ticks = 0, xpd = TRUE, cex.axis = meta$size_axis_y)
