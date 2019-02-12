@@ -60,6 +60,9 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   if (is_class_pie(meta))
     plot_pie(meta)
 
+  # HLINE's
+  add_lines_user(meta)  
+
   # FANS
   if (0 < meta$n_fan)
     plot_fans(meta)
@@ -97,9 +100,6 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   for (i_type in meta$dot_index) {
     plot_line_dot(i_type, meta)
   }
-  
-  # HLINE's
-  add_lines_user(meta)  
   
   # MARKS
   for (i_type in meta$mark_index) {
@@ -709,7 +709,7 @@ set_series_specific_legend <- function(meta) {
   if (is_class_pie(meta)) {
     meta$pch <- rep(15, length(meta$series_names))
     index_NA <- which(is.na(meta$series_names))
-    if (index_NA) {
+    if (length(index_NA)) {
       meta$lwd_ts[index_NA] <- NA
       meta$pch[index_NA]    <- NA
     }
