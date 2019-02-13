@@ -149,7 +149,7 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
       system(paste0(meta$ghostscript_executable, ' -dNOPAUSE -dBATCH -r', meta$ghostscript_resolution, ' -sDEVICE=png16m -sOutputFile="', meta$png, '" "', meta$pdf, '"'))
     }
     
-    print(paste("James created", meta$pdf, "and", meta$png)), 
+    print(paste("James created", meta$pdf, "and", meta$png))
   }
 }
 
