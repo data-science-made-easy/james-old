@@ -49,7 +49,7 @@ James has only a few functions, which do most of the work for you:
 
 > Note: 'j_save()' creates a file `<your user name>.james` in your home directory, which saves all your data in RDS-format to disc. Please see the ‘R Internals’ manual for details.
 
-## Easy examples:
+## Trivial examples:
 ``` R
 index <- j_put("hi", type = "greeting") # Store "hi" as a type of greeting
 j_ls() # see it is stored (in memory). If you want: j_save() stores it to disc, too.
