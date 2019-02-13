@@ -147,7 +147,9 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
       system(paste("sips -s format png", meta$pdf, "--out", meta$png))
     } else { # assume CPB/Windows environment
       system(paste0(meta$ghostscript_executable, ' -dNOPAUSE -dBATCH -r', meta$ghostscript_resolution, ' -sDEVICE=png16m -sOutputFile="', meta$png, '" "', meta$pdf, '"'))
-    }      
+    }
+    
+    print(paste("James created", meta$pdf, "and", meta$png)), 
   }
 }
 
@@ -592,9 +594,6 @@ add_axis_gridlines_and_userlines <- function(meta) {
   if (!has_value(meta$x_axis_rotate_lab)) {
     text(x = meta$x_at, par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction, labels = correct_decimal_separator(if (is.null(meta$x_at_lab)) meta$x_at else meta$x_at_lab, meta), srt = meta$x_axis_rotate_lab, pos = 1, xpd = TRUE, cex = meta$size_axis_x)
   } else {
-    print(meta$x_at)
-    print(par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction)
-    print(meta$x_axis_rotate_lab)
     text(x = meta$x_at, par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction, labels = correct_decimal_separator(if (is.null(meta$x_at_lab)) meta$x_at else meta$x_at_lab, meta), srt = meta$x_axis_rotate_lab, adj = 1, xpd = TRUE, cex = meta$size_axis_x)
   }
   
