@@ -146,7 +146,11 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
     if ("unix" == .Platform$OS.type) { # Create PNG
       system(paste("sips -s format png", meta$pdf, "--out", meta$png))
     } else { # assume CPB/Windows environment
-      system(paste0(meta$ghostscript_executable, ' -dNOPAUSE -dBATCH -r', meta$ghostscript_resolution, ' -sDEVICE=png16m -sOutputFile="', meta$png, '" "', meta$pdf, '"'))
+      if (file.exists(meta$ghostscript_executable)) {
+        system(paste0(meta$ghostscript_executable, ' -dNOPAUSE -dBATCH -r', meta$ghostscript_resolution, ' -sDEVICE=png16m -sOutputFile="', meta$png, '" "', meta$pdf, '"'))
+      } else {
+        meta$png <- "NO PNG (please check meta$ghostscript_executable in james-settings.xlsx)"
+      }
     }
     
     print(paste("James created", meta$pdf, "and", meta$png))
