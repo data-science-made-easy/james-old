@@ -584,9 +584,13 @@ correct_decimal_separator <- function(numeric_vec, meta) {
 add_axis_gridlines_and_userlines <- function(meta) {
   # x-axis
   # x-axis,extra ticks:
-  x_at_ticks_tmp <- meta$x_at
-  if (has_value(meta$x_at_lab)) if (length(which(is.na(meta$x_at_lab)))) x_at_ticks_tmp <- x_at_ticks_tmp[-which(is.na(meta$x_at_lab))] # Remove thicks that have no user specified x_at_lab
-  x_ticks_set <- unique(c(x_at_ticks_tmp, as_numeric_vec(meta$x_ticks)))
+  if (has_value(meta$x_ticks)) {
+    x_ticks_set <- meta$x_ticks
+  } else {
+    x_at_ticks_tmp <- meta$x_at
+    if (has_value(meta$x_at_lab)) if (length(which(is.na(meta$x_at_lab)))) x_at_ticks_tmp <- x_at_ticks_tmp[-which(is.na(meta$x_at_lab))] # Remove thicks that have no user specified x_at_lab
+    x_ticks_set <- unique(x_at_ticks_tmp)
+  }
   axis(1, at = x_ticks_set, labels = NA, cex.axis = meta$size_axis_x, lwd = 0, lwd.ticks = meta$x_axis_ticks_lwd, line = meta$v_shift_x_axis, tck = meta$x_axis_ticks_length, xpd = T)
   # x-axis, labels
   if (!has_value(meta$x_at_lab)) meta$x_at_lab <- meta$x_at
@@ -613,6 +617,7 @@ add_axis_gridlines_and_userlines <- function(meta) {
 add_lines_user <- function(meta) {
   abline(h = meta$hline_bold, v = meta$vline_bold, lwd = meta$lwd_hline_bold, col = "#000000")          # bold
   abline(h = meta$hline_dash, v = meta$vline_dash, lwd = meta$lwd_hline_dash, col = "#000000", lty = 2) # dash
+  abline(v = meta$vline_grid, lwd = meta$lwd_grid_lines, col = meta$col_grid_lines)                     # grid
 }
 
 #' @keywords internal
