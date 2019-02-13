@@ -15,7 +15,8 @@
 #'
 #' @export
 
-j_put <- function(x, type = james.env$j_root$type, scenario = james.env$j_root$scenario, project = james.env$j_root$project, doc = NA, add_if_duplicate = TRUE) {
+j_put <- function(x, type = "", scenario = "", project = "", doc = NA, add_if_duplicate = TRUE) {
+  # j_put <- function(x, type = james.env$j_root$type, scenario = james.env$j_root$scenario, project = james.env$j_root$project, doc = NA, add_if_duplicate = TRUE) {
   james_initialise()
   
   # First check if we really want to add x

@@ -4,9 +4,7 @@
 \alias{j_put}
 \title{Put data in archive}
 \usage{
-j_put(x, type = james.env$j_root$type,
-  scenario = james.env$j_root$scenario,
-  project = james.env$j_root$project, doc = NA,
+j_put(x, type = "", scenario = "", project = "", doc = NA,
   add_if_duplicate = TRUE)
 }
 \arguments{
