@@ -15,10 +15,14 @@
 #'
 #' @export
 
-j_put <- function(x, type = "", scenario = "", project = "", doc = NA, add_if_duplicate = TRUE) {
-  # j_put <- function(x, type = james.env$j_root$type, scenario = james.env$j_root$scenario, project = james.env$j_root$project, doc = NA, add_if_duplicate = TRUE) {
+j_put <- function(x, type = james.env$j_root$type, scenario = james.env$j_root$scenario, project = james.env$j_root$project, doc = NA, add_if_duplicate = TRUE) {
   james_initialise()
   
+  # Fix args
+  if (is.null(type)) type = if (!is.null(james.env$j_root$type)) james.env$j_root$type else ""
+  if (is.null(scenario)) scenario = if (!is.null(james.env$j_root$scenario)) james.env$j_root$scenario else ""
+  if (is.null(project)) project = if (!is.null(james.env$j_root$project)) james.env$j_root$project else ""
+    
   # First check if we really want to add x
   x2_object <- j_get(type = type, scenario = scenario, project = project, what = "object")
   add_x     <- add_if_duplicate || is.null(x2_object)
