@@ -32,6 +32,11 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
     # Import data tab
     tab <- openxlsx::read.xlsx(file_name, sheet = sheet_i)
     
+    # Get right colnames
+    tab_column_names        <- openxlsx::read.xlsx(file_name, sheet = sheet_i, colNames = FALSE)[1, ]
+    names(tab_column_names) <- NULL
+    tab_column_names        <- unlist(tab_column_names)
+    
     # Get sheet name
     sheet_name <- sheet_names[sheet_i]
     
@@ -45,10 +50,9 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
     ## (1a) Import the data for each meta data entry
     for (meta_i in seq_along(sheet_meta_data_indices)) {
     	# Fix col names
+  		colnames(tab) <- tab_column_names #stringr::str_replace_all(colnames(tab), "\\.(?![0-9\\.]|$)", " ")
       index_NA_colnames <- grep("(^X)(\\d+)($)", colnames(tab))
       if (length(index_NA_colnames)) colnames(tab)[index_NA_colnames] <- NA
-      # colnames(tab) <- stringr::str_replace_all(colnames(tab), "\\.(?!\\.|$)", " ")
-  		colnames(tab) <- stringr::str_replace_all(colnames(tab), "\\.(?![0-9\\.]|$)", " ")
       
       # Get meta data and recursively import 'meta' data in 'import' field
       sheet_meta_data <- j_import_settings(meta = meta_data[sheet_meta_data_indices[meta_i],]) # returns list
