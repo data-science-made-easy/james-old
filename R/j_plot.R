@@ -560,11 +560,6 @@ add_help_lines <- function(meta) {
   # abline(v = meta$x_at, lwd = meta$lwd_help_lines)
 }
 
-# Importing meta data auto-generates vectors where possible. 'restore_vec' can undo so.
-restore_sep <- function(vec) {
-  paste(vec, collapse = paste0(SETTINGS$sep, " "))
-}
-
 add_titles <- function(meta) {
   # title
   mtext(text = restore_sep(meta$title), side = 3, outer = T, adj = 0, at = 0.06, line = -2, font = 2, cex = meta$size_title)
@@ -575,13 +570,6 @@ add_titles <- function(meta) {
   
   # y-axis label left
   mtext(text = restore_sep(meta$y_lab), side = 3, outer = T, adj = 0, at = 0.06, line = -4, font = 3, cex = meta$size_labels)
-}
-
-correct_decimal_separator <- function(numeric_vec, meta) {
-  if (is.character(numeric_vec) || "." == meta$decimal_sep)
-    return(numeric_vec)
-  else
-    return(str_replace(c(numeric_vec), "\\.", meta$decimal_sep))
 }
 
 #' @keywords internal
@@ -598,21 +586,24 @@ add_axis_gridlines_and_userlines <- function(meta) {
   axis(1, at = x_ticks_set, labels = NA, cex.axis = meta$size_axis_x, lwd = 0, lwd.ticks = meta$x_axis_ticks_lwd, line = meta$v_shift_x_axis, tck = meta$x_axis_ticks_length, xpd = T)
   # x-axis, labels
   if (!has_value(meta$x_at_lab)) meta$x_at_lab <- meta$x_at
-  # axis(1, at = meta$x_at, labels = meta$x_at_lab, las = 1, lwd = 0, lwd.ticks = 0, xpd = TRUE, cex.axis = meta$size_axis_x, line = meta$v_shift_x_axis)
   user_wants_rotated_labels <- has_value(meta$x_axis_rotate_lab)
   if (user_wants_rotated_labels) user_wants_rotated_labels <- 0 != meta$x_axis_rotate_lab
-  if (!user_wants_rotated_labels) { # TODO REPLACE "if (is.null(meta$x_at_lab)) meta$x_at else meta$x_at_lab, meta" with "meta$x_at_lab" in following
-    text(x = meta$x_at, par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction, labels = correct_decimal_separator(if (is.null(meta$x_at_lab)) meta$x_at else meta$x_at_lab, meta), pos = 1, xpd = TRUE, cex = meta$size_axis_x)
+  if (!has_value(meta$x_at_lab)) meta$x_at_lab <- fix_numbers(meta$x_at, meta$x_n_decimals, meta$decimal_sep)
+  if (!user_wants_rotated_labels) {
+    text(x = meta$x_at, par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction, labels = meta$x_at_lab, pos = 1, xpd = TRUE, cex = meta$size_axis_x)
   } else {
-    text(x = meta$x_at, par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction, labels = correct_decimal_separator(if (is.null(meta$x_at_lab)) meta$x_at else meta$x_at_lab, meta), srt = meta$x_axis_rotate_lab, adj = 1, xpd = TRUE, cex = meta$size_axis_x)
+    text(x = meta$x_at, par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction, labels = meta$x_at_lab, srt = meta$x_axis_rotate_lab, adj = 1, xpd = TRUE, cex = meta$size_axis_x)
   }
   
   # y-axis
-  axis(2, at = meta$y_at, labels = correct_decimal_separator(if (is.null(meta$y_at_lab)) meta$y_at else meta$y_at_lab, meta), las = 2, lwd = 0, lwd.ticks = 0, xpd = TRUE, cex.axis = meta$size_axis_y)
+  if (!has_value(meta$y_at_lab)) {
+    meta$y_at_lab <- fix_numbers(meta$y_at, meta$y_n_decimals, meta$decimal_sep)
+  }
+  axis(2, at = meta$y_at, labels = meta$y_at_lab, las = 2, lwd = 0, lwd.ticks = 0, xpd = TRUE, cex.axis = meta$size_axis_y)
   
   # y2_axis + label
   if (is_yes(meta$y2)) {
-    axis(4, at = meta$y_at, labels = correct_decimal_separator(meta$y2_labels, meta), las = 2, lwd = 0, lwd.ticks = 0, xpd = TRUE, cex.axis = meta$size_axis_y)
+    axis(4, at = meta$y_at, labels = meta$y2_at_lab, las = 2, lwd = 0, lwd.ticks = 0, xpd = TRUE, cex.axis = meta$size_axis_y)
     mtext(text = restore_sep(meta$y2_lab), side = 3, outer = T, adj = 1, at = 0.94, line = -4, font = 3, cex = meta$size_labels)
   }
   
@@ -882,9 +873,9 @@ extract_y2_axis <- function(meta) {
   y2_beta   <- y1_range[1] - y2_alpha * y2_range[1]
   meta$d[, n_col] <- y2_alpha * meta$d[, n_col] + y2_beta
 
-  # User sets manual values
-  if (is.null(meta$y2_labels))
-    meta$y2_labels <- meta$y2_at
+  # Use auto generated labels if user did not specify
+  if (is.null(meta$y2_at_lab))
+    meta$y2_at_lab <- fix_numbers(meta$y2_at, meta$y_n_decimals, meta$decimal_sep)
 
   return(meta)
 }

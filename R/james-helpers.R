@@ -145,6 +145,61 @@ is_series_type_mark <- function(series_type) {
   SERIES_TYPE_MARK == str_sub(series_type, 1, nchar(SERIES_TYPE_MARK))  
 }
 
+# Importing meta data auto-generates vectors where possible. 'restore_vec' can undo so.
+restore_sep <- function(vec) {
+  paste(vec, collapse = paste0(SETTINGS$sep, " "))
+}
+
+n_digits <- function(vec){
+  if (1 < length(vec)) {
+    return(sapply(vec, n_digits))
+  } else {
+    if (vec == round(vec))
+      return(0)
+    else return
+      nchar(as.character(gsub("(.*)(\\.)|([0]*$)","", vec)))    
+  }
+}
+
+#' @keywords internal
+# (1) set desired number of significant decimals; if no desire is set, ensure all have _same_ number of decimals
+# (2) correct decimal separator
+fix_numbers <- function(vec, n_decimals, decimal_sep) {
+  vec <- as.numeric(vec)
+  
+  if (!has_value(n_decimals))
+    n_decimals <- max(n_digits(vec)) # Get max from data
+
+  # Set n_decimals
+  vec <- format(round(vec, n_decimals), nsmall = n_decimals)
+
+  # Fix separator
+  if ("." != decimal_sep)
+    vec <- str_replace(c(vec), "\\.", decimal_sep)
+  
+  return(vec)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
