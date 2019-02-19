@@ -237,7 +237,7 @@ create_pdf <- function(meta) {
     this_height <- meta$pdf_height / cm(1)
   }
 
-  pdf(meta$pdf, title = as.character(meta$name), width = this_width, height = this_height, pointsize = if (is_class_ppower(meta)) 12 else meta$pointsize)
+  pdf(meta$pdf, title = as.character(get_param("name", meta, "")), width = this_width, height = this_height, pointsize = if (is_class_ppower(meta)) 12 else meta$pointsize)
 }
 
 plot_pie <- function(meta) {

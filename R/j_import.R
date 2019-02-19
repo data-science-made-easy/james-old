@@ -110,6 +110,11 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       scenario <- get_param("scenario", meta, "")
       type     <- get_param("type", meta, sheet_name)
       
+      # Fix col names
+  		colnames(tab) <- tab_column_names #stringr::str_replace_all(colnames(tab), "\\.(?![0-9\\.]|$)", " ")
+      index_NA_colnames <- grep("(^X)(\\d+)($)", colnames(tab))
+      if (length(index_NA_colnames)) colnames(tab)[index_NA_colnames] <- NA
+            
       index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
       
       # Set meta data
