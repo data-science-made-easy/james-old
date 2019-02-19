@@ -644,6 +644,15 @@ add_legend <- function(meta) {
   if (1 < legend_n_columns) {
     series_names[!is.na(series_names)] <- paste(series_names[!is.na(series_names)], paste0(rep(" ", meta$legend_distance_columns), collapse = ""))
   }
+  
+  if (has_value(meta$legend_order)) {
+    index                         <- meta$legend_order
+    series_names                  <- series_names[index]
+    meta$lwd_ts                   <- meta$lwd_ts[index]
+    meta$col_default              <- meta$col_default[index]
+    meta$pch                      <- meta$pch[index]
+    meta$legend_symbol_size       <- meta$legend_symbol_size[index]     
+  }
 
   # Do the magic
   legend(meta$legend_x, meta$legend_y, legend = series_names, text.font = 3, lwd = meta$lwd_ts, col = meta$col_default, pch = meta$pch, pt.cex = meta$legend_symbol_size, bty = "n", x.intersp = meta$legend_space_symbol_text, seg.len = meta$legend_line_length, ncol = legend_n_columns)
@@ -659,6 +668,7 @@ one_element_for_each_series <- function(meta) {
   if (1 == length(meta$lwd_ts)) meta$lwd_ts <- rep(meta$lwd_ts, n_columns) #rep(meta$lwd_ts, n_columns) # Fix lwd
   if (1 == length(meta$legend_symbol_size)) meta$legend_symbol_size <- rep(meta$legend_symbol_size, n_columns)
   if (1 == length(meta$legend_mark_size)) meta$legend_mark_size <- rep(meta$legend_mark_size, n_columns)
+    
   return(meta)
 }
 
