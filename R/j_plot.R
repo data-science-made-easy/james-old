@@ -601,7 +601,7 @@ add_axis_gridlines_and_userlines <- function(meta) {
   # axis(1, at = meta$x_at, labels = meta$x_at_lab, las = 1, lwd = 0, lwd.ticks = 0, xpd = TRUE, cex.axis = meta$size_axis_x, line = meta$v_shift_x_axis)
   user_wants_rotated_labels <- has_value(meta$x_axis_rotate_lab)
   if (user_wants_rotated_labels) user_wants_rotated_labels <- 0 != meta$x_axis_rotate_lab
-  if (!user_wants_rotated_labels) {
+  if (!user_wants_rotated_labels) { # TODO REPLACE "if (is.null(meta$x_at_lab)) meta$x_at else meta$x_at_lab, meta" with "meta$x_at_lab" in following
     text(x = meta$x_at, par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction, labels = correct_decimal_separator(if (is.null(meta$x_at_lab)) meta$x_at else meta$x_at_lab, meta), pos = 1, xpd = TRUE, cex = meta$size_axis_x)
   } else {
     text(x = meta$x_at, par("usr")[3] + (par("usr")[4] - par("usr")[3]) * meta$v_shift_x_axis_label_fraction, labels = correct_decimal_separator(if (is.null(meta$x_at_lab)) meta$x_at else meta$x_at_lab, meta), srt = meta$x_axis_rotate_lab, adj = 1, xpd = TRUE, cex = meta$size_axis_x)
