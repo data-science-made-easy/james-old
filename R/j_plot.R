@@ -585,7 +585,6 @@ add_axis_gridlines_and_userlines <- function(meta) {
   }
   axis(1, at = x_ticks_set, labels = NA, cex.axis = meta$size_axis_x, lwd = 0, lwd.ticks = meta$x_axis_ticks_lwd, line = meta$v_shift_x_axis, tck = meta$x_axis_ticks_length, xpd = T)
   # x-axis, labels
-  if (!has_value(meta$x_at_lab)) meta$x_at_lab <- meta$x_at
   user_wants_rotated_labels <- has_value(meta$x_axis_rotate_lab)
   if (user_wants_rotated_labels) user_wants_rotated_labels <- 0 != meta$x_axis_rotate_lab
   if (!has_value(meta$x_at_lab)) meta$x_at_lab <- fix_numbers(meta$x_at, meta$x_n_decimals, meta$decimal_sep)
