@@ -22,12 +22,12 @@ Congratulations, you now have the cutting-edge development version of `james`!
 To get an impression of what is possible, you can call `j_start(path = getwd())`:
 
 ``` R
-setwd('/path/to/your/data') # Please note the '/' instead of '\'
-rm(list = ls())
-cpblib::use_cpblib()
-library(james)
+setwd('/path/to/your/data') # set work dir
+rm(list = ls())             # clean workspace
+cpblib::use_cpblib()        # set library path
+library(james)              # load James
 
-j_start()
+j_start()                   # generate example files
 ```
 
 Doing so will generate several files in the specified path (defaults to your working directory):
