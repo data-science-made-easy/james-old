@@ -22,7 +22,7 @@ Congratulations, you now have the cutting-edge development version of `james`!
 To get an impression of what is possible, you can call `j_start(path = getwd())`:
 
 ``` R
-setwd('/path/to/your/data') # set work dir
+setwd('/path/to/your/data') # set working directory
 rm(list = ls())             # clean workspace
 cpblib::use_cpblib()        # set library path
 library(james)              # load James
