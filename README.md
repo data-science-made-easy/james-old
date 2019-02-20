@@ -40,7 +40,7 @@ Doing so will generate several files in the specified path (defaults to your wor
 ## Details
 James has only a few functions, which do most of the work for you:
 
-- `j_ls()` lists the 'working version' your data (details below)
+- `j_ls()` lists the 'working version' of your data (details below)
 - `j_put()` puts a data set in the storage
 - `j_get()` gets a data set from the storage
 - `j_plot()` plots your data (for see examples in `james-in-your-analysis-pipeline.R`, which you may generate with `j_start()`)
