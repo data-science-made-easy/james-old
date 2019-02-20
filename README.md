@@ -1,7 +1,7 @@
 # James
 Time series data management and visualisation made easy for Excel users and R programmers.
 
-# Get James in R
+# Geting James in R
 First download [RStudio](https://www.rstudio.com) or [R](https://cran.r-project.org/).
 
 Open it, and install the package `devtools` if not yet done before.
@@ -16,7 +16,7 @@ devtools::install_github("data-science-made-easy/james")
 
 Congratulations, you now have the cutting-edge development version of `james`!
 
-# Use James
+# Using James
 
 ## Getting started
 To get an impression of what is possible, you can call `j_start(path = getwd())`:
