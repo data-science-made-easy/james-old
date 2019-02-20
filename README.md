@@ -24,7 +24,7 @@ To get an impression of what is possible, you can call `j_start(path = getwd())`
 ``` R
 #setwd('/your/path')
 rm(list = ls())
-if (is.element("cpblib", installed.packages())) cpblib::use_cpblib()
+cpblib::use_cpblib()
 library(james)
 
 j_start()
