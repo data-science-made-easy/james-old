@@ -881,6 +881,10 @@ extract_y_axis <- function(meta) {
   # Extract y_lim
   if (is.null(meta$y_lim)) {
     meta$y_lim <- range(meta$y_at)
+  } else {
+    # Make y_lim fit y_at
+    if (meta$y_lim[2] < max(meta$y_at)) meta$y_lim[2] <- max(meta$y_at)
+    if (min(meta$y_at) < meta$y_lim[1]) meta$y_lim[1] <- min(meta$y_at)
   }
 
   # Extract y2 (right y-axis)
