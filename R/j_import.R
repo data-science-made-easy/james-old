@@ -106,9 +106,10 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       add_if_duplicate  <- get_param("add_if_duplicate", meta, default = TRUE)
       
       # Get project, scenario, type
-      project  <- get_param("project", meta, "")
-      scenario <- get_param("scenario", meta, "")
-      type     <- get_param("type", meta, sheet_name)
+      project   <- get_param("project", meta, "")
+      scenario  <- get_param("scenario", meta, "")
+      type      <- get_param("type", meta, sheet_name)
+      meta$name <- type
       
       # Fix col names
   		colnames(tab) <- tab_column_names #stringr::str_replace_all(colnames(tab), "\\.(?![0-9\\.]|$)", " ")
