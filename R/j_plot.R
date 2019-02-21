@@ -19,6 +19,7 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   # Get data
   # Add data to meta data as 'd0'; strip x-axis and add as 'd'
   meta$d0 <- as_data_frame(j_get(index, what = "data"))
+
   meta <- pre_process_meta(meta) # d0 = as_data_frame(j_get(index, what = "data"))
 
   file_base_name <- get_param("name", meta, get_param("tab", meta, "unknown"))
@@ -34,7 +35,7 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
 
   # Set margins
   set_margins(meta)
-  
+
   #
   ## Plot (start in background and continue to foreground)
   #
@@ -51,7 +52,7 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   }
 
   # Axis and titles
-  if (!is_class_ppower(meta) && !is_class_pie(meta))
+  if (!is_class_ppower(meta) && !is_class_pie(meta)) #  && !is_class_heatmap(meta)
     add_axis_gridlines_and_userlines(meta)
   if (!is_class_ppower(meta))
     add_titles(meta)
@@ -59,9 +60,12 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   # PIE
   if (is_class_pie(meta))
     plot_pie(meta)
+  
+  if (is_class_heatmap(meta))
+    plot_heatmap(meta)
 
   # HLINE's
-  add_lines_user(meta)  
+  add_lines_user(meta)
 
   # FANS
   if (0 < meta$n_fan)
@@ -254,6 +258,20 @@ plot_pie <- function(meta) {
   pie(meta$d[, 1], labels = slice_value, clockwise = TRUE, border = FALSE, col = this_col)
 }
 
+get_heatmap_col <- function(val, meta) {
+  rgb(colorRamp(meta$col_heatmap)((val - meta$z_lim[1]) / diff(meta$z_lim)), maxColorValue=255)
+}
+
+plot_heatmap <- function(meta) {
+  d <- meta$d
+  d <- d[nrow(d):1, ] # flip for handy plotting
+  delta <- 1/2
+
+  for (i in 1:nrow(d)) for (j in 1:ncol(d)) {
+    rect(xleft = j - delta, ybottom = i - delta, xright = j + delta, ytop = i + delta, border = NA, col = get_heatmap_col(d[i, j], meta))
+  }
+}
+
 plot_fans <- function(meta) {
   index <- meta$fan_index
   for (i in seq_along(index)) {
@@ -305,11 +323,15 @@ set_class <- function(meta) {
     meta$class <- CLASS_PPOWER
   if (SERIES_TYPE_PIE == meta$series_type[1])
     meta$class <- CLASS_PIE
+  if (SERIES_TYPE_HEATMAP == meta$series_type[1])
+    meta$class <- CLASS_HEATMAP
   return(meta)
 }
 
-is_class_ppower <- function(meta) CLASS_PPOWER == meta$class
-is_class_pie    <- function(meta) CLASS_PIE    == meta$class
+is_class_default <- function(meta) CLASS_DEFAULT == meta$class
+is_class_ppower  <- function(meta) CLASS_PPOWER  == meta$class
+is_class_pie     <- function(meta) CLASS_PIE     == meta$class
+is_class_heatmap <- function(meta) CLASS_HEATMAP == meta$class
 
 pre_process_spike_colors <- function(meta) {
   any_fan <- any(meta$series_type %in% SERIES_TYPE_FAN)
@@ -360,6 +382,19 @@ pre_process_meta <- function(meta) {
   # Remove x-axis from data
   meta$d <- df_as_matrix(meta$d0[, -1, drop = FALSE])
   colnames(meta$d) <- colnames(meta$d0)[-1] # HACK To fix issue with duplicate names
+
+  if (is_class_heatmap(meta)) {
+    rownames(meta$d) <- meta$d0[, 1]
+    meta$x_at  <- 1:ncol(meta$d)
+    meta$x_at_lab <- colnames(meta$d)
+    meta$y_at  <- 1:nrow(meta$d)
+    meta$y_at_lab <- rev(rownames(meta$d))
+    meta$x_lim <- c(.5, ncol(meta$d) + .5)
+    meta$y_lim <- c(.5, nrow(meta$d) + .5)
+    if (!has_value(meta$z_lim)) meta$z_lim <- range(meta$d)
+
+    return(meta)
+  }
 
   # Put x,y-axis (as in data) info in meta
   meta <- extract_x_axis(meta) # set x_at, x_at_lab (can be text), original x-values, and x_lim
@@ -606,26 +641,39 @@ add_axis_gridlines_and_userlines <- function(meta) {
     mtext(text = restore_sep(meta$y2_lab), side = 3, outer = T, adj = 1, at = 0.94, line = -4, font = 3, cex = meta$size_labels)
   }
   
-  # Grid lines
-  abline(h = meta$y_at, lwd = meta$lwd_grid_lines, col = meta$col_grid_lines)
+  if (is_class_heatmap(meta)) {
+    # Small ticks, like on x-axis
+    axis(2, at = meta$y_at, labels = NA, cex.axis = meta$size_axis_x, lwd = 0, lwd.ticks = meta$x_axis_ticks_lwd, line = meta$v_shift_x_axis, tck = meta$x_axis_ticks_length, xpd = T)
+  } else {
+    # Grid lines
+    abline(h = meta$y_at, lwd = meta$lwd_grid_lines, col = meta$col_grid_lines)    
+  }
 }
 
 add_lines_user <- function(meta) {
   abline(h = meta$hline_bold, v = meta$vline_bold, lwd = meta$lwd_hline_bold, col = "#000000")          # bold
   abline(h = meta$hline_dash, v = meta$vline_dash, lwd = meta$lwd_hline_dash, col = "#000000", lty = 2) # dash
-  abline(v = meta$vline_grid, lwd = meta$lwd_grid_lines, col = meta$col_grid_lines)                     # grid
+  abline(v = meta$vline_grid, lwd = meta$lwd_grid_lines, col = meta$col_grid_lines)                     # grid vertical
 }
 
 #' @keywords internal
 add_legend <- function(meta) {
   # Return if nothing to do
-  if (all(is.na(meta$series_names))) return()
+  if (all(is.na(meta$series_names)) && !is_class_heatmap(meta)) return()
 
   # Set margins
   opar <- par()
   on.exit(suppressWarnings(par(opar)))
   par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE)
   plot(0:1, 0:1, type = "n", bty = "n", xaxt = "n", yaxt = "n")
+
+  if (is_class_heatmap(meta)) {
+    meta$n_series <- 1
+    meta$lwd_ts <- c(0, 0, 0)
+    meta$series_names <- c(get_param("z_lab", meta, ""), meta$z_lim[1], meta$z_lim[2])
+    meta$pch <- c(NA, 15, 15)
+    meta$col_default <- c(NA, meta$col_heatmap)
+  }
 
   # Set series specific legend
   meta <- set_series_specific_legend(meta)
@@ -740,7 +788,7 @@ set_series_specific_legend <- function(meta) {
 #' @keywords internal
 extract_x_axis <- function(meta) {
   # Extract x_at
-  if (is.null(meta$x_at)) {
+  if (is.null(meta[["x_at"]])) {
     if (!is.null(meta$x_lim)) { # Get x_at from x_lim
       meta$x_at <- pretty(meta$x_lim)
     } else {
@@ -821,7 +869,7 @@ extract_y_axis <- function(meta) {
     y_lim_auto <- meta$y_lim
   
   # Extract y_at
-  if (is.null(meta$y_at)) {
+  if (is.null(meta[["y_at"]])) {
     y_at <- pretty(y_lim_auto)
     if (max(y_at) < y_max) # highest grid line always above data
       y_at <- c(y_at, tail(y_at, 1) + diff(y_at)[1])

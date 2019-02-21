@@ -26,9 +26,11 @@ SERIES_TYPE_FAN           <- "fan"
 SERIES_TYPE_BARH          <- "barh"
 SERIES_TYPE_PPOWER        <- "ppower"
 SERIES_TYPE_PIE           <- "pie"
+SERIES_TYPE_HEATMAP       <- "heatmap"
 SERIES_TYPE_TWO_COLUMNS   <- c(SERIES_TYPE_BAR_AIR, SERIES_TYPE_FAN, SERIES_TYPE_WHISKER)
 CLASS_DEFAULT             <- "class_default"
 CLASS_BAR                 <- "class_bar"
 CLASS_FAN                 <- "class_fan"
 CLASS_PPOWER              <- SERIES_TYPE_PPOWER
 CLASS_PIE                 <- SERIES_TYPE_PIE
+CLASS_HEATMAP             <- SERIES_TYPE_HEATMAP
