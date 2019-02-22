@@ -64,8 +64,8 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   if (is_class_heatmap(meta))
     plot_heatmap(meta)
 
-  # HLINE's
-  add_lines_user(meta)
+  # HLINE_BOLD
+  abline(h = meta$hline_bold, v = meta$vline_bold, lwd = meta$lwd_hline_bold, col = "#000000")
 
   # FANS
   if (0 < meta$n_fan)
@@ -86,15 +86,11 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
     if (0 == which(i_type == meta$whisker_index) %% 2) next
     plot_bar_next(i_type, meta)
   }
-  # if (0 < meta$n_barv) { # bold ref-line after plotting last bar #TODO Do only once!
-  #   add_lines_user(meta)
-  # }
   
-  # DOTS (small)
-  for (i_type in meta$dot_small_index) {
-    plot_line_dot(i_type, meta)
+  if (0 < meta$n_barv) { # bold ref-line after plotting last bar #TODO Do only once!
+    abline(h = meta$hline_bold, v = meta$vline_bold, lwd = meta$lwd_hline_bold, col = "#000000")
   }
-    
+  
   # LINES
   for (i_type in meta$lines_index) {
     plot_line_dot(i_type, meta)
@@ -104,6 +100,14 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   for (i_type in meta$dot_index) {
     plot_line_dot(i_type, meta)
   }
+
+  # DOTS (small)
+  for (i_type in meta$dot_small_index) {
+    plot_line_dot(i_type, meta)
+  }
+
+  # USER LINES
+  add_lines_user(meta)
   
   # MARKS
   for (i_type in meta$mark_index) {
@@ -651,7 +655,7 @@ add_axis_gridlines_and_userlines <- function(meta) {
 }
 
 add_lines_user <- function(meta) {
-  abline(h = meta$hline_bold, v = meta$vline_bold, lwd = meta$lwd_hline_bold, col = "#000000")          # bold
+  abline(v = meta$vline_bold, lwd = meta$lwd_hline_bold, col = "#000000")          # bold
   abline(h = meta$hline_dash, v = meta$vline_dash, lwd = meta$lwd_hline_dash, col = "#000000", lty = 2) # dash
   abline(v = meta$vline_grid, lwd = meta$lwd_grid_lines, col = meta$col_grid_lines)                     # grid vertical
 }
