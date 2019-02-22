@@ -90,6 +90,11 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   if (0 < meta$n_barv) { # bold ref-line after plotting last bar #TODO Do only once!
     abline(h = meta$hline_bold, v = meta$vline_bold, lwd = meta$lwd_hline_bold, col = "#000000")
   }
+
+  # DOTS (small)
+  for (i_type in meta$dot_small_index) {
+    plot_line_dot(i_type, meta)
+  }
   
   # LINES
   for (i_type in meta$lines_index) {
@@ -98,11 +103,6 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
 
   # DOTS (big)
   for (i_type in meta$dot_index) {
-    plot_line_dot(i_type, meta)
-  }
-
-  # DOTS (small)
-  for (i_type in meta$dot_small_index) {
     plot_line_dot(i_type, meta)
   }
 
@@ -143,7 +143,7 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
     add_legend(meta)
   
   # Add 'draft' if meta$edit has value
-  if (has_value(meta$edit)) add_draft()
+  if (has_value(meta$draft)) add_draft()
   
   # Close PDF + create PNG
   if (!is_no(meta$pdf)) {
@@ -313,7 +313,6 @@ add_text_labels <- function(meta) {
 }
 
 add_draft <- function() {
-  # mtext(text = "DRAFT", side = 3, adj = 1, font = 4, col = "red", cex = 1) # adj = -.09
   title(main="DRAFT ", outer=T, adj=1, line = -1, col.main = "red", font.main = 4)
 }
 
