@@ -14,4 +14,6 @@ j_set_meta <- function(index, fields) {
   for (i in seq_along(fields)) {
     object$meta[[names(fields)[i]]] <- fields[[i]]
   }
+  
+  object$meta[["error"]] <- j_validate(index)
 }
