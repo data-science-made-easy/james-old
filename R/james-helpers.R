@@ -174,6 +174,10 @@ fix_numbers <- function(vec, n_decimals, decimal_sep) {
   # Set n_decimals
   vec <- format(round(vec, n_decimals), nsmall = n_decimals)
 
+  # BUG: 'format' adds whitespace for non-negative numbers iff other numbers have '-' sign
+  # Fix that by removing added whitespace
+  vec <- trimws(vec)
+
   # Fix separator
   if ("." != decimal_sep)
     vec <- str_replace(c(vec), "\\.", decimal_sep)
