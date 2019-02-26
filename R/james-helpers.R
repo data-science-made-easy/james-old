@@ -5,9 +5,10 @@
 #' @keywords internal
 #' @return Boolean indicating whether xlsx is valid
 
-is_valid_xlsx <- function(file_name) {
+is_valid_extension <- function(file_name) {
   # Validate extension
-  valid_ext <- "xlsx" == tolower(tools::file_ext(file_name))
+  extension <- tolower(tools::file_ext(file_name))
+  valid_ext <- "xlsx" == extension || "csv" == extension
   return(valid_ext)
     
   #TODO Validate ALL(meta-tab -> a tab)

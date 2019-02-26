@@ -15,12 +15,14 @@
 
 j_import <- function(file_name, meta = list(), add_if_duplicate) {
   # Validate xlsx
-  stopifnot(is_valid_xlsx(file_name))
+  stopifnot(is_valid_extension(file_name))
+  
+  is_csv <- "csv" == tolower(tools::file_ext(file_name))
   
   # Let 'add_if_duplicate' overwrite 'meta'
   if (!missing(add_if_duplicate)) meta[[ARGS$add_if_duplicate]] <- add_if_duplicate
   
-  sheet_names   <- openxlsx::getSheetNames(file_name)  
+  sheet_names   <- if (is_csv) NULL else openxlsx::getSheetNames(file_name)  
   sheet_i_meta  <- which(TAB_NAME$meta == sheet_names)
   meta_data     <- if (length(sheet_i_meta)) openxlsx::read.xlsx(file_name, sheet = sheet_i_meta) else NULL
   
@@ -134,6 +136,30 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
     index <- j_ls(type = meta$type, scenario = meta$scenario, project = meta$project, collapse = TRUE, filter_active = FALSE)$index # TODO We now have a function to look up index
     j_set_meta(index, meta)
     
+    # Record resulting index
+    import_index <- c(import_index, index)
+  }
+  
+  if (is_csv) {
+    # Get project, scenario, type
+    tab <- as.matrix(read.csv(file_name, stringsAsFactors = F))
+    
+    # Fix col headers
+    colnames(tab) <- as.vector(read.csv(file_name, header = F, stringsAsFactors = F)[1,])
+    
+    project   <- get_param("project", meta, "")
+    scenario  <- get_param("scenario", meta, "")
+    type      <- get_param("type", meta, str_sub(basename(file_name), end = -2 -nchar(tools::file_ext(file_name))))
+    meta$name <- type
+    
+    # Get add_if_duplicate from meta if present in 'sheet_meta_data', else TRUE
+    add_if_duplicate  <- get_param("add_if_duplicate", meta, default = TRUE)
+    
+    index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
+
+    # Set meta
+    j_set_meta(index, j_import_settings(meta = meta))
+
     # Record resulting index
     import_index <- c(import_index, index)
   }

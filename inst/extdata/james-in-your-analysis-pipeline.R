@@ -11,7 +11,7 @@ j_plot_data(data = mat, meta = list(name = "hello-world", title = "Hello world!"
 
 # Import data
 j_clean()
-j_import("james-example-one-tab.xlsx")
+j_import("james-example.csv")
 
 # Check import
 j_ls()

@@ -1,6 +1,6 @@
 #' @export j_start
 j_start <- function(path = getwd()) {
-  for (this_file in c("james-settings.xlsx", "james-in-your-analysis-pipeline.R", "james-for-xlsx.R", "james-example.xlsx", "james-example-one-tab.xlsx")) {
+  for (this_file in c("james-settings.xlsx", "james-in-your-analysis-pipeline.R", "james-for-xlsx.R", "james-example.xlsx", "james-example.csv")) {
     dest <- paste0(path, .Platform$file.sep, this_file)
     file.copy(from = system.file("extdata", this_file, package = "james"), to = dest)
     print(paste("Created", dest))

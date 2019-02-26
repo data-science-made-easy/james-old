@@ -25,7 +25,7 @@ j_import_settings <- function(meta = list()) {
   #
   
   # Import base settings
-  stopifnot(is_valid_xlsx(JAMES_SETTINGS))
+  stopifnot(is_valid_extension(JAMES_SETTINGS))
   meta_base <- df_as_list(openxlsx::read.xlsx(JAMES_SETTINGS, sheet = 1, colNames = TRUE))
 
   #
