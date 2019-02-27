@@ -10,8 +10,8 @@ j_validate(index)
 \item{index}{unique id of your data in j_ls()}
 }
 \value{
-error message or NULL if none
+non
 }
 \description{
-Validate meta data
+Set meta$warning or meta$error
 }

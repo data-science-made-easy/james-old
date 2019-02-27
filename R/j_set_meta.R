@@ -15,5 +15,6 @@ j_set_meta <- function(index, fields) {
     object$meta[[names(fields)[i]]] <- fields[[i]]
   }
   
-  object$meta[["error"]] <- j_validate(index)
+  if (!all(names(fields) %in% c("error", "warning")))
+    j_validate(index)
 }
