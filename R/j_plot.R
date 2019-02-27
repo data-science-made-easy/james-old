@@ -376,11 +376,21 @@ pre_process_spike_colors <- function(meta) {
 }
 
 pre_process_meta <- function(meta) {
-  # TODO Use 'get/set' instead of extract, etc...
   # Make all variables in meta of proper length, matching number of series
   meta <- one_element_for_each_series(meta)
   meta <- count_series_types(meta)
   meta <- set_class(meta)
+
+  # TODO Fix this ugly hack
+  if (is_class_heatmap(meta)) {
+    if (is.null(colnames(meta$d0))) colnames(meta$d0) <- 1:ncol(meta$d0)
+    if (is.null(rownames(meta$d0))) rownames(meta$d0) <- 1:nrow(meta$d0)
+    if (is.na(colnames(meta$d0)[1])) {
+      rownames(meta$d0) <- meta$d0[, 1]
+    } else {
+      meta$d0 <- cbind(rownames(meta$d0), meta$d0)
+    }
+  }
 
   # Remove x-axis from data
   meta$d <- df_as_matrix(meta$d0[, -1, drop = FALSE])
