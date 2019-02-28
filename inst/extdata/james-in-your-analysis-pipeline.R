@@ -6,18 +6,17 @@ library(james)
 mat <- cbind(2000:2009, random = runif(10), increasing = 1:10)
 
 # Create the plot
-j_clean()
 j_plot_data(data = mat, meta = list(name = "hello-world", title = "Hello world!", series_type = c("bar--", "line"), hline_bold = 0))
 
 # Import data
-j_clean()
-j_import("james-example.csv")
+# You may also first clean James' db with j_clean(). Use j_ls() to list its content.
+index <- j_import("james-example.csv")
 
 # Check import
 j_ls()
-j_get(1)
+j_get(index)
 
 # Set some meta data
-j_set_meta(1, list(title = "Imported data"))
-j_set_meta(1, list(sub_title = "Just an example", hline_bold = 0))
-j_plot(1)
+j_set_meta(index, list(title = "Imported data"))
+j_set_meta(index, list(sub_title = "Just an example", hline_bold = 0))
+j_plot(index)
