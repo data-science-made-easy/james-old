@@ -1,5 +1,5 @@
 rm(list = ls())
-if (is.element("cpblib", installed.packages())) cpblib::use_cpblib()
+cpblib::use_cpblib()
 library(james)
 
 j_clean()
