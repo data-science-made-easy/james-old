@@ -681,12 +681,6 @@ add_legend <- function(meta) {
   plot(0:1, 0:1, type = "n", bty = "n", xaxt = "n", yaxt = "n")
 
   if (is_class_heatmap(meta)) {
-    # meta$n_series <- 1
-    # meta$lwd_ts <- c(0, 0, 0)
-    # meta$series_names <- c(get_param("z_lab", meta, ""), meta$z_lim[1], meta$z_lim[2])
-    # meta$pch <- c(NA, 15, 15)
-    # meta$col_default <- c(NA, meta$col_heatmap)
-    
     # Write z_lab label
     text(.03 + meta$legend_x, -.045 + meta$legend_y, get_param("z_lab", meta, ""), font = 3, pos = 4)
     # Gradient
@@ -711,11 +705,6 @@ add_legend <- function(meta) {
     text(x_left, y_z_lim, meta$z_lim[1], font = 3, pos = 4)
     text(x_left + gradient_width + dx, y_z_lim, meta$z_lim[2], font = 3, pos = 2)
     
-    meta$n_series <- 1
-    meta$lwd_ts <- c(0, 0, 0)
-    meta$series_names <- c(get_param("z_lab", meta, ""), meta$z_lim[1], meta$z_lim[2])
-    meta$pch <- c(NA, 15, 15)
-    meta$col_default <- c(NA, meta$col_heatmap)
     return()
   }
 
