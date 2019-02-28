@@ -681,11 +681,42 @@ add_legend <- function(meta) {
   plot(0:1, 0:1, type = "n", bty = "n", xaxt = "n", yaxt = "n")
 
   if (is_class_heatmap(meta)) {
+    # meta$n_series <- 1
+    # meta$lwd_ts <- c(0, 0, 0)
+    # meta$series_names <- c(get_param("z_lab", meta, ""), meta$z_lim[1], meta$z_lim[2])
+    # meta$pch <- c(NA, 15, 15)
+    # meta$col_default <- c(NA, meta$col_heatmap)
+    
+    # Write z_lab label
+    text(.03 + meta$legend_x, -.045 + meta$legend_y, get_param("z_lab", meta, ""), font = 3, pos = 4)
+    # Gradient
+    n_col <- 100
+    gradient <- colorRampPalette(meta$col_heatmap)(n_col)
+    gradient_width <- .5
+    x_left <- .05 + meta$legend_x
+    dx = .01
+    y  = .008
+    dy = .04
+    for (i in 1:n_col) {
+      x <- x_left + gradient_width * i / n_col
+      rect(x, y, x + dx, y + dy, col = gradient[i], border = NA)
+    }
+
+    # vertical lines
+    # lines(c(x_left, x_left) + gradient_width * 1 / n_col, c(y + dy, y - dy), lwd = meta$x_axis_ticks_lwd, col = "grey")
+    # lines(c(x_left, x_left) + gradient_width + dx, c(y + dy, y - dy), lwd = meta$x_axis_ticks_lwd, col = "grey")
+    
+    # Min/max
+    y_z_lim <- y + dy / 2.3
+    text(x_left, y_z_lim, meta$z_lim[1], font = 3, pos = 4)
+    text(x_left + gradient_width + dx, y_z_lim, meta$z_lim[2], font = 3, pos = 2)
+    
     meta$n_series <- 1
     meta$lwd_ts <- c(0, 0, 0)
     meta$series_names <- c(get_param("z_lab", meta, ""), meta$z_lim[1], meta$z_lim[2])
     meta$pch <- c(NA, 15, 15)
     meta$col_default <- c(NA, meta$col_heatmap)
+    return()
   }
 
   # Set series specific legend
