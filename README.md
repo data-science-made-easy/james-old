@@ -37,6 +37,12 @@ Doing so will generate several files in the specified path (defaults to your wor
 - `james-in-your-analysis-pipeline.R` shows how you can connect James to your analysis pipeline in R
 - `james-settings.xlsx` has global settings which you may override
 
+> If you don't work in the CPB-environment, you may want to remove `cpblib::use_cpblib()` from the R files (to prevent an error message), or install a mockup of the package:
+
+``` R
+devtools::install_github("data-science-made-easy/cpblib")
+```
+
 ## Details
 James has only a few functions, which do most of the work for you:
 
