@@ -1,7 +1,7 @@
 YES         <- c("y", "Y", "yes", "Yes", "YES")
 NO          <- c("n", "N", "no", "No", "NO")
 SETTINGS    <- list(sep = ",") # Separator in xlsx-fields
-TAB_NAME    <- list(help = "help", meta = "meta")
+TAB_NAME    <- list(help = "help", meta = "meta", constants = "constants")
 META        <- list(tab = "tab", dir_pdf = "dir_pdf", dir_png = "dir_png", name = "name", pdf = "pdf", png = "png", id = "id", type = "type", import = "import", series_type = "series_type", swap_xy = "swap_xy") # Define columns in Excel
 JAMES_SETTINGS <- "james-settings.xlsx"
 ARGS        <- list(add_if_duplicate = "add_if_duplicate")

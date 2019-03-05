@@ -22,9 +22,11 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
   # Let 'add_if_duplicate' overwrite 'meta'
   if (!missing(add_if_duplicate)) meta[[ARGS$add_if_duplicate]] <- add_if_duplicate
   
-  sheet_names   <- if (is_csv) NULL else openxlsx::getSheetNames(file_name)  
-  sheet_i_meta  <- which(TAB_NAME$meta == sheet_names)
-  meta_data     <- if (length(sheet_i_meta)) openxlsx::read.xlsx(file_name, sheet = sheet_i_meta) else NULL
+  sheet_names       <- if (is_csv) NULL else openxlsx::getSheetNames(file_name)  
+  sheet_i_constants <- which(TAB_NAME$constants == sheet_names)
+  constants         <- if (length(sheet_i_constants)) openxlsx::read.xlsx(file_name, sheet = sheet_i_constants) else NULL
+  sheet_i_meta      <- which(TAB_NAME$meta == sheet_names)
+  meta_data         <- if (length(sheet_i_meta)) openxlsx::read.xlsx(file_name, sheet = sheet_i_meta) else NULL
   
   #
   ## (1) Import data tabs
@@ -43,7 +45,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
     sheet_name <- sheet_names[sheet_i]
     
     # Skip meta data sheet and skip help sheet
-    if (TAB_NAME$meta == sheet_name || TAB_NAME$help == sheet_name)
+    if (TAB_NAME$meta == sheet_name || TAB_NAME$help == sheet_name || TAB_NAME$constants == sheet_name)
       next;
     
     # Get meta data
