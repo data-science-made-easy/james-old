@@ -614,7 +614,7 @@ add_titles <- function(meta) {
   mtext(text = restore_sep(meta$sub_title), side = 3, outer = T, adj = 0, at = 0.06, line = -3, font = 2, cex = meta$size_title/2)
   
   # x-lab
-  mtext(text = restore_sep(meta$x_lab), side = 1, adj = 1, font = 3, line = .9, cex = meta$size_labels)
+  mtext(text = restore_sep(meta$x_lab), side = 1, adj = 1, font = 3, line = meta$v_shift_x_lab, cex = meta$size_labels)
   
   # y-axis label left
   mtext(text = restore_sep(meta$y_lab), side = 3, outer = T, adj = 0, at = 0.06, line = -4, font = 3, cex = meta$size_labels)
