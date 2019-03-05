@@ -24,7 +24,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
   
   sheet_names       <- if (is_csv) NULL else openxlsx::getSheetNames(file_name)  
   sheet_i_constants <- which(TAB_NAME$constants == sheet_names)
-  constants         <- if (length(sheet_i_constants)) openxlsx::read.xlsx(file_name, sheet = sheet_i_constants) else NULL
+  constants         <- if (length(sheet_i_constants)) df_as_list(openxlsx::read.xlsx(file_name, sheet = sheet_i_constants, colNames = TRUE)) else NULL
   sheet_i_meta      <- which(TAB_NAME$meta == sheet_names)
   meta_data         <- if (length(sheet_i_meta)) openxlsx::read.xlsx(file_name, sheet = sheet_i_meta) else NULL
   
@@ -54,12 +54,13 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
     ## (1a) Import the data for each meta data entry
     for (meta_i in seq_along(sheet_meta_data_indices)) {
     	# Fix col names
-  		colnames(tab) <- tab_column_names #stringr::str_replace_all(colnames(tab), "\\.(?![0-9\\.]|$)", " ")
+  		colnames(tab) <- tab_column_names
       index_NA_colnames <- grep("(^X)(\\d+)($)", colnames(tab))
       if (length(index_NA_colnames)) colnames(tab)[index_NA_colnames] <- NA
       
       # Get meta data and recursively import 'meta' data in 'import' field
-      sheet_meta_data <- j_import_settings(meta = meta_data[sheet_meta_data_indices[meta_i],]) # returns list
+      sheet_meta_data <- combine_lists(high_prio = meta_data[sheet_meta_data_indices[meta_i],], low_prio = constants)
+      sheet_meta_data <- j_import_settings(meta = sheet_meta_data) # fill with unset global parameters
 
       # Parse strings to vectors of native values (i.e. numeric where posible)
       sheet_meta_data <- strings_to_vectors(sheet_meta_data)
