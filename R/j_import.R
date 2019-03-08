@@ -27,7 +27,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
   constants         <- if (length(sheet_i_constants)) df_as_list(openxlsx::read.xlsx(file_name, sheet = sheet_i_constants, colNames = TRUE)) else NULL
   sheet_i_meta      <- which(TAB_NAME$meta == sheet_names)
   meta_data         <- if (length(sheet_i_meta)) openxlsx::read.xlsx(file_name, sheet = sheet_i_meta) else NULL
-  
+
   #
   ## (1) Import data tabs
   #
@@ -59,7 +59,8 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       if (length(index_NA_colnames)) colnames(tab)[index_NA_colnames] <- NA
       
       # Get meta data and recursively import 'meta' data in 'import' field
-      sheet_meta_data <- combine_lists(high_prio = meta_data[sheet_meta_data_indices[meta_i],], low_prio = constants)
+      sheet_meta_data <- combine_lists(high_prio = meta_data[sheet_meta_data_indices[meta_i],], low_prio = constants) # fig meta overwrites constants
+      sheet_meta_data <- combine_lists(high_prio = meta, low_prio = sheet_meta_data) # arg meta overwrites previous (need info to settings file path now)
       sheet_meta_data <- j_import_settings(meta = sheet_meta_data) # fill with unset global parameters
 
       # Parse strings to vectors of native values (i.e. numeric where posible)
@@ -73,6 +74,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
         sheet_meta_data[[META$type]] = get_param(META$tab, sheet_meta_data, "")
       }
       
+      # arg meta overwrites rest
       sheet_meta_data <- combine_lists(high_prio = meta, low_prio = sheet_meta_data)
             
       # Get add_if_duplicate from meta if present in 'sheet_meta_data', else TRUE

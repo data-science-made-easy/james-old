@@ -90,6 +90,8 @@ strings_to_vectors <- function(meta) {
 
 #' @keywords internal
 combine_lists <- function(high_prio, low_prio) {
+  if (0 == length(low_prio)) return(high_prio)
+  
   lst <- low_prio
   
   for (i in seq_along(high_prio)) {

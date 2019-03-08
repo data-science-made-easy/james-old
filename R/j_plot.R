@@ -544,7 +544,11 @@ plot_bar_next <- function(i, meta) {
     y_low  <- meta$d[, i]
     y_high <- meta$d[, i+1]
   } else { # bar--
-    y_low  <- 0
+    if (has_value(meta$y_lim)) {
+      y_low  <- max(0, meta$y_lim[1])
+    } else {
+      y_low  <- 0
+    }
     y_high <- meta$d[, i]
   }
   if (is.element(i, meta$whisker_index)) { # whisker
@@ -736,7 +740,7 @@ add_legend <- function(meta) {
   }
 
   # Do the magic
-  legend(meta$legend_x, meta$legend_y, legend = series_names, text.font = 3, lwd = meta$lwd_ts, col = meta$col_default, pch = meta$pch, pt.cex = meta$legend_symbol_size, bty = "n", x.intersp = meta$legend_space_symbol_text, seg.len = meta$legend_line_length, ncol = legend_n_columns)
+  legend(meta$legend_x, meta$legend_y, legend = series_names, text.font = 3, lwd = meta$lwd_ts, col = meta$col_default, pch = meta$pch, pt.cex = meta$legend_symbol_size, bty = "n", x.intersp = meta$legend_space_symbol_text, seg.len = meta$legend_line_length, ncol = legend_n_columns, cex = meta$legend_text_size)
 }
 
 #' Meta may have variables of length 1 or length > meta$n_series. This function makes all lists have length meta$n_series.
@@ -844,7 +848,9 @@ extract_x_axis <- function(meta) {
   if (is.null(meta$x_lim)) {
     meta$x_lim <- range(meta$x_at)
     if (0 < meta$n_barv) {
-      meta$x_lim <- meta$x_lim + c(-1, 1) * 0.1 * diff(range(meta$x_lim))
+      meta$x_lim[1] <- meta$x_lim[1] - mean(diff(meta$x_at))[1] / 2
+      meta$x_lim[2] <- meta$x_lim[2] + mean(diff(meta$x_at))[1] / 2
+      # meta$x_lim <- meta$x_lim + c(-1, 1) * 0.1 * diff(range(meta$x_lim))
     }
   }
   

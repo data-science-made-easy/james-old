@@ -12,32 +12,24 @@
 #' @export j_import_settings
 
 j_import_settings <- function(meta = list()) {
-  # Validate xlsx
-
+  settings_file_name <- get_param(META$settings_file, meta, JAMES_SETTINGS)
+  
   # Import from which file?
-  if (!file.exists(JAMES_SETTINGS)) {
-    file.copy(from = system.file("extdata", JAMES_SETTINGS, package = "james"), to = JAMES_SETTINGS)
-    print(paste("James created", JAMES_SETTINGS))
+  if (!file.exists(settings_file_name)) {
+    # Check writability
+    if (-1 == file.access(dirname(settings_file_name), mode = 2)) {
+      stop(paste("No write permission for", settings_file_name))
+    } else {
+      file.copy(from = system.file("extdata", JAMES_SETTINGS, package = "james"), to = settings_file_name)
+      print(paste("James created", settings_file_name))      
+    }
   }
 
-  #
-  ## Import
-  #
-  
-  # Import base settings
-  stopifnot(is_valid_extension(JAMES_SETTINGS))
-  meta_base <- df_as_list(openxlsx::read.xlsx(JAMES_SETTINGS, sheet = 1, colNames = TRUE))
-
-  #
-  ## Combine
-  #
-  
+  # Validate xlsx
+  stopifnot(is_valid_extension(settings_file_name))
+  meta_base <- df_as_list(openxlsx::read.xlsx(settings_file_name, sheet = 1, colNames = TRUE))
   # meta overwrites import
   meta <- combine_lists(high_prio = meta, low_prio = meta_base)
-
-  #
-  ## Return
-  #  
   return(meta)
 }
 
