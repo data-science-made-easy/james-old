@@ -109,10 +109,12 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   # USER LINES
   add_lines_user(meta)
   
-  # MARKS
+  # MARK LINES
   for (i_type in meta$mark_index) {
     plot_line_dot(i_type, meta)
   }
+  
+  if (has_value(meta$custom_plot)) add_custom_plot(meta)
   
   # HELP LINES
   add_help_lines(meta)
@@ -263,7 +265,11 @@ plot_pie <- function(meta) {
 }
 
 get_heatmap_col <- function(val, meta) {
-  rgb(colorRamp(meta$col_heatmap)((val - meta$z_lim[1]) / diff(meta$z_lim)), maxColorValue=255)
+  index_NA <- which(is.na(val))
+  val[index_NA] <- meta$z_lim[1]
+  col_vec <- rgb(colorRamp(meta$col_heatmap)((val - meta$z_lim[1]) / diff(meta$z_lim)), maxColorValue=255)
+  col_vec[index_NA] <- NA
+  return(col_vec)
 }
 
 plot_heatmap <- function(meta) {
@@ -314,6 +320,14 @@ add_text_labels <- function(meta) {
 
 add_draft <- function() {
   title(main="DRAFT ", outer=T, adj=1, line = -1, col.main = "red", font.main = 4)
+}
+
+add_custom_plot <- function(meta) {
+  meta <<- meta
+  commands <- paste(meta$custom_plot, collapse = ", ")
+  print(commands)
+  print(paste(meta$col_fan_line, '88', collapse = ''))
+  eval(parse(text = commands))
 }
 
 is_line_type <- function(this_type) {
@@ -404,7 +418,7 @@ pre_process_meta <- function(meta) {
     meta$y_at_lab <- rev(rownames(meta$d))
     meta$x_lim <- c(.5, ncol(meta$d) + .5)
     meta$y_lim <- c(.5, nrow(meta$d) + .5)
-    if (!has_value(meta$z_lim)) meta$z_lim <- range(meta$d)
+    if (!has_value(meta$z_lim)) meta$z_lim <- range(meta$d, na.rm = TRUE)
 
     return(meta)
   }
@@ -615,7 +629,7 @@ add_help_lines <- function(meta) {
 add_titles <- function(meta) {
   # title
   mtext(text = restore_sep(meta$title), side = 3, outer = T, adj = 0, at = 0.06, line = -2, font = 2, cex = meta$size_title)
-  mtext(text = restore_sep(meta$sub_title), side = 3, outer = T, adj = 0, at = 0.06, line = -3, font = 2, cex = meta$size_title/2)
+  mtext(text = restore_sep(meta$subtitle), side = 3, outer = T, adj = 0, at = 0.06, line = -3, font = 2, cex = meta$size_title/2)
   
   # x-lab
   mtext(text = restore_sep(meta$x_lab), side = 1, adj = 1, font = 3, line = meta$v_shift_x_lab, cex = meta$size_labels)
@@ -701,8 +715,14 @@ add_legend <- function(meta) {
     }
 
     # vertical lines
-    # lines(c(x_left, x_left) + gradient_width * 1 / n_col, c(y + dy, y - dy), lwd = meta$x_axis_ticks_lwd, col = "grey")
-    # lines(c(x_left, x_left) + gradient_width + dx, c(y + dy, y - dy), lwd = meta$x_axis_ticks_lwd, col = "grey")
+    x_dash <- seq(from = x_left + gradient_width * 1 / n_col, to = x_left + gradient_width + dx, length.out = 5)
+    for (i in seq_along(x_dash)) {
+      lines(c(x_dash[i], x_dash[i]), c(y + dy, y + dy + dy / 2), lwd = meta$x_axis_ticks_lwd, col = "grey") # above
+      lines(c(x_dash[i], x_dash[i]), c(y + 0, y - dy / 2), lwd = meta$x_axis_ticks_lwd, col = "grey")       # below
+    }
+    
+    # lines(c(x_left, x_left) + gradient_width * 1 / n_col, c(y + dy, y - dy), lwd = meta$x_axis_ticks_lwd, col = "red")
+    # lines(c(x_left, x_left) + gradient_width + dx, c(y + dy, y - dy), lwd = meta$x_axis_ticks_lwd, col = "red")
     
     # Min/max
     y_z_lim <- y + dy / 2.3
