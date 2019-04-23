@@ -636,6 +636,7 @@ add_titles <- function(meta) {
   
   # y-axis label left
   mtext(text = restore_sep(meta$y_lab), side = 3, outer = T, adj = 0, at = 0.06, line = -4, font = 3, cex = meta$size_labels)
+  # mtext(text = restore_sep(meta$y_lab), side = 3, outer = T, adj = 0, at = 0.06, line = meta$v_shift_y_lab, font = 3, cex = meta$size_labels)
 }
 
 #' @keywords internal
