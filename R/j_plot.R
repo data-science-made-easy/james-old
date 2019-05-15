@@ -45,6 +45,15 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
     plot(NA, axes = FALSE, ann = FALSE, xlim = meta$x_lim, ylim = meta$y_lim) 
   }
   
+  # Shading
+  if (!is.null(meta$v_shading)) {
+    v_shading_vec <- as_char_vec(paste(meta$v_shading, collapse = ","), ";")
+    for (i in seq_along(v_shading_vec)) {
+      v_shading_vec_numeric <- as_numeric_vec(v_shading_vec[i])
+      rect(v_shading_vec_numeric[1], par("usr")[3], v_shading_vec_numeric[2], par("usr")[4], col = meta$col_shading, border = NA)
+    }
+  }
+  
   # Future
   if (!is.null(meta$future)) {
     rect(meta$future, par("usr")[3], par("usr")[2], par("usr")[4], col = meta$col_future, border = NA)
@@ -260,8 +269,16 @@ plot_pie <- function(meta) {
     slice_value <- slice_value[-index_empty]
   }
   
-  par(new=T)
-  pie(meta$d[, 1], labels = slice_value, clockwise = TRUE, border = FALSE, col = this_col)
+  # Remove labels if user wants so
+  if (!is_yes(meta$pie_show_value)) slice_value <- NA
+  
+  par(new = T)
+  pie(meta$d[, 1], labels = slice_value, radius = meta$pie_radius, clockwise = TRUE, border = FALSE, col = this_col)
+  
+  if (is_yes(meta$pie_donut)) {
+    par(new = T)
+    pie(1, labels = NA, radius = meta$donut_radius, border = FALSE, col = meta$col_bg)
+  }
 }
 
 get_heatmap_col <- function(val, meta) {
@@ -325,8 +342,8 @@ add_draft <- function() {
 add_custom_plot <- function(meta) {
   meta <<- meta
   commands <- paste(meta$custom_plot, collapse = ", ")
-  print(commands)
-  print(paste(meta$col_fan_line, '88', collapse = ''))
+  #print(commands)
+  #print(paste(meta$col_fan_line, '88', collapse = ''))
   eval(parse(text = commands))
 }
 
@@ -691,7 +708,7 @@ add_lines_user <- function(meta) {
 #' @keywords internal
 add_legend <- function(meta) {
   # Return if nothing to do
-  if (all(is.na(meta$series_names)) && !is_class_heatmap(meta)) return()
+  if ((all(is.na(meta$series_names)) && !is_class_heatmap(meta)) || !is_yes(meta$legend_show)) return()
 
   # Set margins
   opar <- par()

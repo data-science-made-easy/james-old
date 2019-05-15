@@ -4,7 +4,8 @@
 \alias{j_import}
 \title{Import data from xlsx-file}
 \usage{
-j_import(file_name, meta = list(), add_if_duplicate)
+j_import(file_name, meta = list(), add_if_duplicate,
+  publish_only = FALSE)
 }
 \arguments{
 \item{file_name}{xlsx-file you want to import}

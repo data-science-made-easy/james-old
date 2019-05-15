@@ -13,7 +13,7 @@
 #' @import stringr openxlsx
 #' @export
 
-j_import <- function(file_name, meta = list(), add_if_duplicate) {
+j_import <- function(file_name, meta = list(), add_if_duplicate, publish_only = FALSE) {
   # Validate xlsx
   stopifnot(is_valid_extension(file_name))
   
@@ -85,65 +85,71 @@ j_import <- function(file_name, meta = list(), add_if_duplicate) {
       scenario <- get_param("scenario", sheet_meta_data, "")
       type     <- get_param("type", sheet_meta_data, "")
     
+      # DON'T IMPORT IF publish_only and !publish
+      import_this <- TRUE
+      if (publish_only && !is_yes(sheet_meta_data[[META$publish]])) import_this <- FALSE
+        
       # Add data; append index
-      index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
+      if (import_this) {
+        index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
       
-      if (is.null(sheet_meta_data[[META$name]])) {
-        sheet_meta_data[[META$name]] <- get_param(META$tab, sheet_meta_data, "")
-        this_version <- j_get(index, what = "object")$version
-        if (1 < this_version) sheet_meta_data[[META$name]] <- paste0(sheet_meta_data[[META$name]], "_", this_version)
-      }
-      if (is.null(sheet_meta_data[[META$pdf]])) {
-        sheet_meta_data[[META$pdf]] <- paste0(sheet_meta_data[[META$dir_pdf]], .Platform$file.sep, sheet_meta_data[[META$name]], ".pdf")
-      }
-      if (is.null(sheet_meta_data[[META$png]])) {
-        sheet_meta_data[[META$png]] <- paste0(sheet_meta_data[[META$dir_png]], .Platform$file.sep, sheet_meta_data[[META$name]], ".png")
-      }
+        if (is.null(sheet_meta_data[[META$name]])) {
+          sheet_meta_data[[META$name]] <- get_param(META$tab, sheet_meta_data, "")
+          this_version <- j_get(index, what = "object")$version
+          if (1 < this_version) sheet_meta_data[[META$name]] <- paste0(sheet_meta_data[[META$name]], "_", this_version)
+        }
+        if (is.null(sheet_meta_data[[META$pdf]])) {
+          sheet_meta_data[[META$pdf]] <- paste0(sheet_meta_data[[META$dir_pdf]], .Platform$file.sep, sheet_meta_data[[META$name]], ".pdf")
+        }
+        if (is.null(sheet_meta_data[[META$png]])) {
+          sheet_meta_data[[META$png]] <- paste0(sheet_meta_data[[META$dir_png]], .Platform$file.sep, sheet_meta_data[[META$name]], ".png")
+        }
       
-      # Set meta data
-      j_set_meta(index, sheet_meta_data)
+        # Set meta data
+        j_set_meta(index, sheet_meta_data)
 
-      # Record resulting index
-      import_index <- c(import_index, index)
+        # Record resulting index
+        import_index <- c(import_index, index)        
+      }
     }
     
-    ## (1b) Import the tab also if we _don't_ have a meta data entry
-    if (0 == length(sheet_meta_data_indices)) {
-      # Get add_if_duplicate from meta if present in 'sheet_meta_data', else TRUE
-      add_if_duplicate  <- get_param("add_if_duplicate", meta, default = TRUE)
-      
-      # Get project, scenario, type
-      project   <- get_param("project", meta, "")
-      scenario  <- get_param("scenario", meta, "")
-      type      <- get_param("type", meta, sheet_name)
-      meta$name <- type
-      
-      # Fix col names
-  		colnames(tab) <- tab_column_names #stringr::str_replace_all(colnames(tab), "\\.(?![0-9\\.]|$)", " ")
-      index_NA_colnames <- grep("(^X)(\\d+)($)", colnames(tab))
-      if (length(index_NA_colnames)) colnames(tab)[index_NA_colnames] <- NA
-            
-      index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
-      
-      # Set meta data
-      j_set_meta(index, j_import_settings(meta = meta))
-  
-      # Record resulting index
-      import_index <- c(import_index, index)
-    }
+    # ## (1b) Import the tab also if we _don't_ have a meta data entry
+    # if (0 == length(sheet_meta_data_indices)) {
+    #   # Get add_if_duplicate from meta if present in 'sheet_meta_data', else TRUE
+    #   add_if_duplicate  <- get_param("add_if_duplicate", meta, default = TRUE)
+    #
+    #   # Get project, scenario, type
+    #   project   <- get_param("project", meta, "")
+    #   scenario  <- get_param("scenario", meta, "")
+    #   type      <- get_param("type", meta, sheet_name)
+    #   meta$name <- type
+    #
+    #   # Fix col names
+    #       colnames(tab) <- tab_column_names #stringr::str_replace_all(colnames(tab), "\\.(?![0-9\\.]|$)", " ")
+    #   index_NA_colnames <- grep("(^X)(\\d+)($)", colnames(tab))
+    #   if (length(index_NA_colnames)) colnames(tab)[index_NA_colnames] <- NA
+    #
+    #   index <- j_put(tab, project = project, scenario = scenario, type = type, add_if_duplicate = add_if_duplicate)
+    #
+    #   # Set meta data
+    #   j_set_meta(index, j_import_settings(meta = meta))
+    #
+    #   # Record resulting index
+    #   import_index <- c(import_index, index)
+    # }
   }
   
+  # #
+  # ## (2) Import all meta data which don't refer to a data tab
+  # #
+  # index_meta_only <- which("" == stringr::str_trim(meta_data[[META$tab]]))
+  # for (i in seq_along(index_meta_only)) {
+  #   index <- j_ls(type = meta$type, scenario = meta$scenario, project = meta$project, collapse = TRUE, filter_active = FALSE)$index # TODO We now have a function to look up index
+  #   j_set_meta(index, meta)
   #
-  ## (2) Import all meta data which don't refer to a data tab
-  #
-  index_meta_only <- which("" == stringr::str_trim(meta_data[[META$tab]]))
-  for (i in seq_along(index_meta_only)) {
-    index <- j_ls(type = meta$type, scenario = meta$scenario, project = meta$project, collapse = TRUE, filter_active = FALSE)$index # TODO We now have a function to look up index
-    j_set_meta(index, meta)
-    
-    # Record resulting index
-    import_index <- c(import_index, index)
-  }
+  #   # Record resulting index
+  #   import_index <- c(import_index, index)
+  # }
   
   if (is_csv) {
     # Get project, scenario, type
