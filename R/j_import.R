@@ -13,7 +13,7 @@
 #' @import stringr openxlsx
 #' @export
 
-j_import <- function(file_name, meta = list(), add_if_duplicate, publish_only = FALSE) {
+j_import <- function(file_name, meta = list(), add_if_duplicate, publish_only = FALSE, publish_data_only = FALSE) {
   # Validate xlsx
   stopifnot(is_valid_extension(file_name))
   
@@ -87,7 +87,12 @@ j_import <- function(file_name, meta = list(), add_if_duplicate, publish_only = 
     
       # DON'T IMPORT IF publish_only and !publish
       import_this <- TRUE
-      if (publish_only && !is_yes(sheet_meta_data[[META$publish]])) import_this <- FALSE
+      if (publish_only) { # Skip if we don't want to publish this figure
+        if (!is_yes(sheet_meta_data[[META$publish]])) import_this <- FALSE
+      }
+      if (publish_data_only) { # Skip if we don't want to include this figure's data in the data file
+        if (!is_yes(sheet_meta_data[[META$publish_data]])) import_this <- FALSE
+      }
         
       # Add data; append index
       if (import_this) {

@@ -137,7 +137,7 @@ is_no <- function(val) {
 }
 
 #' @keywords internal
-is_yes <- function(val) {
+is_yes <- function(val) { # TODO if val is c("y", NULL), the NULL is ignored. And that's a clear bug!
   if (is.null(val))
     return(FALSE)
   else

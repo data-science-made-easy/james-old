@@ -61,10 +61,14 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   }
 
   # Axis and titles
-  if (!is_class_ppower(meta) && !is_class_pie(meta)) #  && !is_class_heatmap(meta)
+  if (!is_class_ppower(meta) && !is_class_pie(meta) && !is_class_graph(meta)) #  && !is_class_heatmap(meta)
     add_axis_gridlines_and_userlines(meta)
   if (!is_class_ppower(meta))
     add_titles(meta)
+
+  # GRAPH
+  if (is_class_graph(meta))
+    plot_graph(meta)
 
   # PIE
   if (is_class_pie(meta))
@@ -259,6 +263,50 @@ create_pdf <- function(meta) {
   pdf(meta$pdf, title = as.character(get_param("name", meta, "")), width = this_width, height = this_height, pointsize = if (is_class_ppower(meta)) 12 else meta$pointsize)
 }
 
+plot_graph <- function(meta) {
+  edge <- meta$d
+  rownames(edge) <- meta$d0[,1]
+  
+  # Prune zero's
+  index.zero <- which(colSums(edge) == 0 & rowSums(edge) == 0)
+  if (length(index.zero)) edge <- edge[-index.zero, -index.zero]
+
+  node <- colnames(edge)
+  stopifnot(node == rownames(edge))
+
+  edge_lty  <- NULL
+  n_nodes   <- length(node)
+  for (i in 1:n_nodes) for (j in 1:n_nodes) {
+    lty <- edge[i, j]
+    if (is.element(lty, 1:3)) {
+      edge_lty <- c(edge_lty, lty)
+      edge[i, j] <- 1
+    } else {
+      edge[i, j] <- 0
+    }
+  }
+
+  net <- graph_from_adjacency_matrix(as.matrix(edge))
+
+  E(net)$arrow.size <- meta$graph_arrow_size
+  E(net)$color <- meta$graph_edge_color
+  # V(net)$label.font <- 1
+  E(net)$lwd = 3
+  E(net)$lty <- edge_lty
+  E(net)$curved <- meta$graph_edge_curved
+  V(net)$label.color <- "black"
+  V(net)$frame.color <- meta$graph_node_color
+  V(net)$color <- meta$graph_node_color
+  V(net)$label.cex <- meta$size_graph
+  V(net)$size <- meta$graph_node_size
+  this_mai <- par()$mai
+  this_mai[c(2,4)] <- 0
+  if (is_yes(meta$graph_set_margins_to_zero)) this_mai <- c(0,0,0,0)
+  par(mai = this_mai)
+  par(new = T)
+  plot(net, rescale = TRUE)
+}
+
 plot_pie <- function(meta) {
   # Fix col and pie values (slice area)
   this_col <- meta$col_default[1:nrow(meta$d)]
@@ -340,7 +388,7 @@ add_draft <- function() {
 }
 
 add_custom_plot <- function(meta) {
-  meta <<- meta
+  # meta <<- meta
   commands <- paste(meta$custom_plot, collapse = ", ")
   #print(commands)
   #print(paste(meta$col_fan_line, '88', collapse = ''))
@@ -357,6 +405,8 @@ set_class <- function(meta) {
     meta$class <- CLASS_PPOWER
   if (SERIES_TYPE_PIE == meta$series_type[1])
     meta$class <- CLASS_PIE
+  if (SERIES_TYPE_GRAPH == meta$series_type[1])
+    meta$class <- CLASS_GRAPH
   if (SERIES_TYPE_HEATMAP == meta$series_type[1])
     meta$class <- CLASS_HEATMAP
   return(meta)
@@ -365,6 +415,7 @@ set_class <- function(meta) {
 is_class_default <- function(meta) CLASS_DEFAULT == meta$class
 is_class_ppower  <- function(meta) CLASS_PPOWER  == meta$class
 is_class_pie     <- function(meta) CLASS_PIE     == meta$class
+is_class_graph   <- function(meta) CLASS_GRAPH   == meta$class
 is_class_heatmap <- function(meta) CLASS_HEATMAP == meta$class
 
 pre_process_spike_colors <- function(meta) {
@@ -383,19 +434,23 @@ pre_process_spike_colors <- function(meta) {
     # Next fill colors for other types
     index_NA <- which(is.na(col_new))
     if (length(index_NA)) {
+      i_col_vec <- c(fan_line = 1, whisker = 1, mark = 1, rest = 1)
       i_col <- 1
       for (i in seq_along(col_new)) {
         if (is.na(col_new[i])) {
           index_same_name <- which(meta$series_names[i] == meta$series_names) # Check i has corresponding column (should have same color)
           if (any(meta$series_type[index_same_name] %in% SERIES_TYPE_FAN_LINE)) {
-            col_new[index_same_name] <- meta$col_fan_line
+            col_new[index_same_name] <- meta$col_fan_line[i_col_vec[["fan_line"]]]
+            i_col_vec[["fan_line"]] <- 1 + i_col_vec[["fan_line"]]
           } else if (any(meta$series_type[index_same_name] %in% SERIES_TYPE_WHISKER)) {
-            col_new[index_same_name] <- meta$col_whisker
+            col_new[index_same_name] <- meta$col_whisker[i_col_vec[["whisker"]]]
+            i_col_vec[["whisker"]] <- 1 + i_col_vec[["whisker"]]
           } else if (any(index_same_name %in% meta$mark_index)) {
-            col_new[index_same_name] <- meta$col_mark
+            col_new[index_same_name] <- meta$col_mark[i_col_vec[["mark"]]]
+            i_col_vec[["mark"]] <- 1 + i_col_vec[["mark"]]
           } else {
-            col_new[index_same_name] <- if (any_fan) meta$col_default_with_fan[i_col] else meta$col_default[i_col]         
-            i_col <- 1 + i_col 
+            col_new[index_same_name] <- if (any_fan) meta$col_default_with_fan[i_col_vec[["rest"]]] else meta$col_default[i_col_vec[["rest"]]]
+            i_col_vec[["rest"]] <- 1 + i_col_vec[["rest"]]
           }
         }
       }
@@ -586,7 +641,7 @@ plot_bar_next <- function(i, meta) {
     # for (index in seq_along(meta$x_at)) {
     #   arrows(x0 = meta$x_at[index], y0 = y_low[index], x1 = meta$x_at[index], y_high[index], code = 3, col = meta$col_whisker)
     # }
-    arrows(x0 = meta$x_at, y0 = y_low, x1 = meta$x_at, y_high, code = 3, col = meta$col_whisker, angle = 90, length = meta$whisker_edge_length)
+    arrows(x0 = meta$x_at, y0 = y_low, x1 = meta$x_at, y_high, code = 3, col = meta$col_default[i], angle = 90, length = meta$whisker_edge_length)
   } else { # bar
     rect(x_bar_left, y_low, x_bar_right, y_high, col = meta$col_default[i], border = NA)
   }
@@ -708,7 +763,7 @@ add_lines_user <- function(meta) {
 #' @keywords internal
 add_legend <- function(meta) {
   # Return if nothing to do
-  if ((all(is.na(meta$series_names)) && !is_class_heatmap(meta)) || !is_yes(meta$legend_show)) return()
+  if ((all(is.na(meta$series_names)) && !is_class_heatmap(meta)) || is_no(meta$legend_show)) return()
 
   # Set margins
   opar <- par()
@@ -750,6 +805,26 @@ add_legend <- function(meta) {
     return()
   }
 
+  if (is_class_graph(meta)) {
+    meta$col_default <- 1
+    if (!has_value(meta$legend_names)) return()
+    n_series <- length(meta$legend_names)
+
+    this_lty <- 1:n_series
+    
+    # Find optimal number of columns if not specified
+    legend_n_columns <- meta$legend_n_columns # TODO This code is a duplicate of code below... Pls fix
+    if (!has_value(legend_n_columns)) {
+      legend_n_columns <- if (n_series < 3) 1 else 2
+      if (6 < n_series)
+        legend_n_columns <- 3
+    }
+
+    legend(meta$legend_x, meta$legend_y, legend = meta$legend_names, text.font = 3, lwd = meta$lwd_ts, col = meta$col_default, lty = this_lty, bty = "n", x.intersp = meta$legend_space_symbol_text, seg.len = meta$legend_line_length_graph, ncol = legend_n_columns, cex = meta$legend_text_size)
+
+    return()
+  }
+
   # Set series specific legend
   meta <- set_series_specific_legend(meta)
 
@@ -763,13 +838,22 @@ add_legend <- function(meta) {
     
   # Fix distance between columns
   series_names <- meta$series_names
-  nseries <- length(series_names)
   if (1 < legend_n_columns) {
     series_names[!is.na(series_names)] <- paste(series_names[!is.na(series_names)], paste0(rep(" ", meta$legend_distance_columns), collapse = ""))
   }
   
   if (has_value(meta$legend_order)) {
     index                         <- meta$legend_order
+    series_names                  <- series_names[index]
+    meta$lwd_ts                   <- meta$lwd_ts[index]
+    meta$col_default              <- meta$col_default[index]
+    meta$pch                      <- meta$pch[index]
+    meta$legend_symbol_size       <- meta$legend_symbol_size[index]     
+  }
+
+  if (is.numeric(meta$legend_show)) { # TODO This does same as legend_order <- please remove one of two
+    index                         <- 1:length(series_names)
+    index                         <- index[meta$legend_show]
     series_names                  <- series_names[index]
     meta$lwd_ts                   <- meta$lwd_ts[index]
     meta$col_default              <- meta$col_default[index]
@@ -832,7 +916,7 @@ set_series_specific_legend <- function(meta) {
   # Whisker specifics
   if (meta$n_whisker) {
     meta$pch[meta$whisker_index] <- NA
-    meta$col_default[meta$whisker_index] <- meta$col_whisker
+    # meta$col_default[meta$whisker_index] <- meta$col_whisker
   }
   
   # Remove 'fan-' and 'bar^ duplicates'
@@ -840,7 +924,7 @@ set_series_specific_legend <- function(meta) {
   if (length(index_duplicated)) {
     meta$series_names       <- meta$series_names[-index_duplicated]
     meta$lwd_ts             <- meta$lwd_ts[-index_duplicated]
-    meta$col_default             <- meta$col_default[-index_duplicated]
+    meta$col_default        <- meta$col_default[-index_duplicated]
     meta$pch                <- meta$pch[-index_duplicated]
     meta$legend_symbol_size <- meta$legend_symbol_size[-index_duplicated]
   }
