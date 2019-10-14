@@ -7,6 +7,7 @@
 #'
 #' @return None
 #'
+#' @importFrom igraph graph_from_adjacency_matrix E V
 #' @importFrom grDevices cm dev.off pdf
 #' @importFrom graphics abline axis barplot legend mtext par plot
 #' @export j_plot
@@ -286,19 +287,19 @@ plot_graph <- function(meta) {
     }
   }
 
-  net <- graph_from_adjacency_matrix(as.matrix(edge))
+  net <- igraph::graph_from_adjacency_matrix(as.matrix(edge))
 
-  E(net)$arrow.size <- meta$graph_arrow_size
-  E(net)$color <- meta$graph_edge_color
+  igraph::E(net)$arrow.size <- meta$graph_arrow_size
+  igraph::E(net)$color <- meta$graph_edge_color
   # V(net)$label.font <- 1
-  E(net)$lwd = 3
-  E(net)$lty <- edge_lty
-  E(net)$curved <- meta$graph_edge_curved
-  V(net)$label.color <- "black"
-  V(net)$frame.color <- meta$graph_node_color
-  V(net)$color <- meta$graph_node_color
-  V(net)$label.cex <- meta$size_graph
-  V(net)$size <- meta$graph_node_size
+  igraph::E(net)$lwd = 3
+  igraph::E(net)$lty <- edge_lty
+  igraph::E(net)$curved <- meta$graph_edge_curved
+  igraph::V(net)$label.color <- "black"
+  igraph::V(net)$frame.color <- meta$graph_node_color
+  igraph::V(net)$color <- meta$graph_node_color
+  igraph::V(net)$label.cex <- meta$size_graph
+  igraph::V(net)$size <- meta$graph_node_size
   this_mai <- par()$mai
   this_mai[c(2,4)] <- 0
   if (is_yes(meta$graph_set_margins_to_zero)) this_mai <- c(0,0,0,0)
@@ -310,7 +311,7 @@ plot_graph <- function(meta) {
 plot_pie <- function(meta) {
   # Fix col and pie values (slice area)
   this_col <- meta$col_default[1:nrow(meta$d)]
-  slice_value <- if (has_value(meta$slice_value)) meta$slice_value else paste0(round(meta$d[, 1]), meta$pie_unit)
+  slice_value <- if (has_value(meta$slice_value)) meta$slice_value else paste0(round(meta$d[, 1]), str_replace_all(meta$pie_unit, "\\\\s", " "))
   index_empty <- which(is.na(meta$x_at_lab))
   if (length(index_empty)) {
     this_col[index_empty] <- NA # No colour if no name
