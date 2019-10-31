@@ -64,7 +64,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate, publish_only = 
       sheet_meta_data <- j_import_settings(meta = sheet_meta_data) # fill with unset global parameters
 
       # Parse strings to vectors of native values (i.e. numeric where posible)
-      sheet_meta_data <- strings_to_vectors(sheet_meta_data)
+      sheet_meta_data <- strings_to_vectors(sheet_meta_data, skip_fields = "tab")
       
       # Remove NA's
       sheet_meta_data <- sheet_meta_data[which(!is.na(sheet_meta_data))]
@@ -165,7 +165,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate, publish_only = 
     
     project   <- get_param("project", meta, "")
     scenario  <- get_param("scenario", meta, "")
-    type      <- get_param("type", meta, str_sub(basename(file_name), end = -2 -nchar(tools::file_ext(file_name))))
+    type      <- get_param("type", meta, stringr::str_sub(basename(file_name), end = -2 -nchar(tools::file_ext(file_name))))
     meta$name <- type
     
     # Get add_if_duplicate from meta if present in 'sheet_meta_data', else TRUE

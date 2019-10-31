@@ -26,9 +26,13 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   file_base_name <- get_param("name", meta, get_param("tab", meta, "unknown"))
   if (!has_value(meta$pdf)) meta$pdf <- paste0(meta$dir_pdf, file_base_name, ".pdf")
   if (!has_value(meta$png)) meta$png <- paste0(meta$dir_png, file_base_name, ".png")
+  if (!has_value(meta$svg)) meta$svg <- paste0(meta$dir_svg, file_base_name, ".svg")
 
-  # Init PDF?
-  if (!is_no(meta$pdf)) { #TODO solve differently
+  # Init SVG or PDF/PNG?
+  if (is_yes(meta$create_svg)) {
+    if (!file.exists(meta$dir_svg)) dir.create(meta$dir_svg, showWarnings = FALSE)
+    create_svg(meta) # Init the SVG
+  } else if (!is_no(meta$pdf)) { #TODO solve differently
     if (!file.exists(meta$dir_pdf)) dir.create(meta$dir_pdf, showWarnings = FALSE)
     if (!file.exists(meta$dir_png)) dir.create(meta$dir_png, showWarnings = FALSE)
     create_pdf(meta) # Init the PDF
@@ -96,9 +100,11 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   for (i_type in meta$bar_top_index) {
     meta <- plot_bar_top(i_type, meta) # Also update offsets for bar='s
   }
+
   for (i_type in meta$whisker_index) {
     if (0 == which(i_type == meta$whisker_index) %% 2) next
-    plot_bar_next(i_type, meta)
+    # plot_bar_next(i_type, meta)
+    plot_whisker(i_type, meta)
   }
   
   if (0 < meta$n_barv) { # bold ref-line after plotting last bar #TODO Do only once!
@@ -162,11 +168,14 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   if (has_value(meta$draft)) add_draft()
   
   # Close PDF + create PNG
-  if (!is_no(meta$pdf)) {
+  if (is_yes(meta$create_svg)) {
+    dev.off()
+    print(paste("James created", meta$svg))
+  } else if (!is_no(meta$pdf)) {
     dev.off()
     
     # Create PNG
-    if (!has_value(meta$png)) meta$png <- paste0(get_param("name", meta, str_sub(meta$pdf, end = -5)), ".png")
+    if (!has_value(meta$png)) meta$png <- paste0(get_param("name", meta, stringr::str_sub(meta$pdf, end = -5)), ".png")
     if ("unix" == .Platform$OS.type) { # Create PNG
       system(paste("sips -s format png", meta$pdf, "--out", meta$png))
     } else { # assume CPB/Windows environment
@@ -264,9 +273,25 @@ create_pdf <- function(meta) {
   pdf(meta$pdf, title = as.character(get_param("name", meta, "")), width = this_width, height = this_height, pointsize = if (is_class_ppower(meta)) 12 else meta$pointsize)
 }
 
+create_svg <- function(meta) { # TODO combine with code of create_pdf
+  if (is_class_ppower(meta)) {
+    this_width  <- meta$pdf_ppower_width / cm(1)
+    this_height <- meta$pdf_ppower_height / cm(1)      
+  } else {
+    this_width  <- meta$pdf_width / cm(1)
+    this_height <- meta$pdf_height / cm(1)
+  }
+
+  svg(meta$svg, width = this_width, height = this_height, pointsize = if (is_class_ppower(meta)) 12 else meta$pointsize)
+}
+
 plot_graph <- function(meta) {
-  edge <- meta$d
-  rownames(edge) <- meta$d0[,1]
+  if (1 == length(unique(dim(meta$d0))) && all(rownames(meta$d0) == colnames(meta$d0))) { # Ugly hack to make j_plot_data work
+    edge <- meta$d0
+  } else {
+    edge <- meta$d
+    rownames(edge) <- meta$d0[,1]    
+  }
   
   # Prune zero's
   index.zero <- which(colSums(edge) == 0 & rowSums(edge) == 0)
@@ -311,7 +336,7 @@ plot_graph <- function(meta) {
 plot_pie <- function(meta) {
   # Fix col and pie values (slice area)
   this_col <- meta$col_default[1:nrow(meta$d)]
-  slice_value <- if (has_value(meta$slice_value)) meta$slice_value else paste0(round(meta$d[, 1]), str_replace_all(meta$pie_unit, "\\\\s", " "))
+  slice_value <- if (has_value(meta$slice_value)) meta$slice_value else paste0(round(meta$d[, 1]), stringr::str_replace_all(meta$pie_unit, "\\\\s", " "))
   index_empty <- which(is.na(meta$x_at_lab))
   if (length(index_empty)) {
     this_col[index_empty] <- NA # No colour if no name
@@ -379,7 +404,7 @@ add_text_labels <- function(meta) {
       txt     <- txt_lab_sep[i]
       xyp     <- txt_lab_xy_pos_sep[i]
       xy_pos  <- as_numeric_vec(xyp)
-      text(xy_pos[1], xy_pos[2], str_replace_all(txt, "\\\\n", "\n"), pos = if (is.na(xy_pos[3])) NULL else xy_pos[3], col = meta$fg_txt_col, xpd = TRUE)
+      text(xy_pos[1], xy_pos[2], stringr::str_replace_all(txt, "\\\\n", "\n"), pos = if (is.na(xy_pos[3])) NULL else xy_pos[3], col = meta$fg_txt_col, xpd = TRUE)
     }    
   }  
 }
@@ -397,7 +422,7 @@ add_custom_plot <- function(meta) {
 }
 
 is_line_type <- function(this_type) {
-  "line" == str_sub(this_type, 1, 4)
+  "line" == stringr::str_sub(this_type, 1, 4)
 }
 
 set_class <- function(meta) {
@@ -518,6 +543,7 @@ pre_process_meta <- function(meta) {
   meta <- extract_barplot_info(meta)
 
   # Fix colours
+  if (1 < meta$n_marks && 1 == length(meta$col_mark)) meta$col_mark <- rep(meta$col_mark, meta$n_marks)
   meta <- pre_process_spike_colors(meta)
       
   index_bar <- c(meta$bar_next_index, meta$bar_top_index)
@@ -526,7 +552,7 @@ pre_process_meta <- function(meta) {
   meta$pch[meta$dot_index]       <- 16
   meta$pch[meta$line_dot_index]  <- 16
   meta$pch[meta$dot_small_index] <- 16
-  meta$pch[meta$mark_index]      <- as.numeric(str_sub(meta$series_type[meta$mark_index], 1 + nchar(SERIES_TYPE_MARK)))
+  meta$pch[meta$mark_index]      <- as.numeric(stringr::str_sub(meta$series_type[meta$mark_index], 1 + nchar(SERIES_TYPE_MARK)))
   meta$pch[meta$line_index]      <- NA 
 
   return(meta)
@@ -642,10 +668,16 @@ plot_bar_next <- function(i, meta) {
     # for (index in seq_along(meta$x_at)) {
     #   arrows(x0 = meta$x_at[index], y0 = y_low[index], x1 = meta$x_at[index], y_high[index], code = 3, col = meta$col_whisker)
     # }
-    arrows(x0 = meta$x_at, y0 = y_low, x1 = meta$x_at, y_high, code = 3, col = meta$col_default[i], angle = 90, length = meta$whisker_edge_length)
+    # arrows(x0 = meta$x_at, y0 = y_low, x1 = meta$x_at, y_high, code = 3, col = meta$col_default[i], angle = 90, length = meta$whisker_edge_length)
   } else { # bar
     rect(x_bar_left, y_low, x_bar_right, y_high, col = meta$col_default[i], border = NA)
   }
+}
+
+plot_whisker <- function(i, meta) {
+  # Assume we deal with the first column of the whisker
+  this_col <- meta$col_whisker[(1 + which(i == meta$whisker_index)) / 2]
+  arrows(x0 = meta$x, y0 = meta$d[, i], x1 = meta$x, meta$d[, 1+i], code = 3, col = this_col, angle = 90, length = meta$whisker_edge_length)
 }
 
 plot_bar_top <- function(i, meta) {
@@ -843,6 +875,16 @@ add_legend <- function(meta) {
     series_names[!is.na(series_names)] <- paste(series_names[!is.na(series_names)], paste0(rep(" ", meta$legend_distance_columns), collapse = ""))
   }
   
+  # Clean legend for whisker
+  if (length(meta$whisker_index)) {
+    series_names            <- series_names[-meta$whisker_index]
+    meta$lwd_ts             <- meta$lwd_ts[-meta$whisker_index]
+    meta$pch                <- meta$pch[-meta$whisker_index]
+    meta$col_default        <- meta$col_default[-meta$whisker_index]
+    meta$pch                <- meta$pch[-meta$whisker_index]
+    meta$legend_symbol_size <- meta$legend_symbol_size[-meta$whisker_index]
+  }
+  
   if (has_value(meta$legend_order)) {
     index                         <- meta$legend_order
     series_names                  <- series_names[index]
@@ -872,7 +914,6 @@ one_element_for_each_series <- function(meta) {
   n_columns <- ncol(meta$d0) - 1
   if (0 == length(meta$series_type)) meta$series_type <- rep(SERIES_TYPE_LINE, n_columns) # Fix series_type
   if (1 == length(meta$series_type)) meta$series_type <- rep(meta$series_type, n_columns) # Fix series_type
-#  meta$col_default <- meta$col_default[1:n_columns] # Fix col
   if (1 == length(meta$lwd_ts)) meta$lwd_ts <- rep(meta$lwd_ts, n_columns) #rep(meta$lwd_ts, n_columns) # Fix lwd
   if (1 == length(meta$legend_symbol_size)) meta$legend_symbol_size <- rep(meta$legend_symbol_size, n_columns)
   if (1 == length(meta$legend_mark_size)) meta$legend_mark_size <- rep(meta$legend_mark_size, n_columns)
@@ -889,12 +930,15 @@ set_series_specific_legend <- function(meta) {
   meta$lwd_ts[c(index_bar, meta$dot_index, meta$dot_small_index)] <- NA # Block lines for bar plots
 
   # Mark specifics
-  if (meta$n_marks) for (i in meta$mark_index) {
-    if (0 == meta$pch[i]) { # line
-      meta$pch[i] <- NA
+  if (meta$n_marks) for (i in seq_along(meta$mark_index)) {
+    this_index <- meta$mark_index[i]
+    meta$col_default[this_index] <- meta$col_mark[i]
+    
+    if (0 == meta$pch[this_index]) { # line
+      meta$pch[this_index] <- NA
     } else {
-      meta$lwd_ts[i] <- NA
-      meta$legend_symbol_size[i] <- meta$legend_mark_size[i]
+      meta$lwd_ts[this_index] <- NA
+      meta$legend_symbol_size[this_index] <- meta$legend_mark_size[this_index]
     }
   }
 
@@ -965,7 +1009,7 @@ extract_x_axis <- function(meta) {
     meta$x_at_lab <- meta$d0[, 1]
     # TODO Replace dot by comma, etc...
   }
-  meta$x_at_lab <- str_replace_all(meta$x_at_lab, "\\\\n", "\n")
+  meta$x_at_lab <- stringr::str_replace_all(meta$x_at_lab, "\\\\n", "\n")
 
   # Extract x_lim
   if (is.null(meta$x_lim)) {

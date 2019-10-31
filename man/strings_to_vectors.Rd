@@ -4,7 +4,7 @@
 \alias{strings_to_vectors}
 \title{keywords internal}
 \usage{
-strings_to_vectors(meta)
+strings_to_vectors(meta, skip_fields = NULL)
 }
 \arguments{
 \item{meta}{list with meta data}

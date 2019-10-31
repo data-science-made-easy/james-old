@@ -59,7 +59,7 @@ has_value <- function(x) {
   x <- paste(x, collapse="")
   if (is.na(x))
     return(TRUE)
-  return("" != str_trim(x))
+  return("" != stringr::str_trim(x))
 }
 
 #' @keywords internal
@@ -77,10 +77,10 @@ as_native_vec <- function(str) {
 
 #' keywords internal
 #' @param meta list with meta data
-strings_to_vectors <- function(meta) {
+strings_to_vectors <- function(meta, skip_fields = NULL) {
   for (i in seq_along(meta)) {
     val <- meta[[i]]
-    if ("character" == class(val)) {
+    if (!is.element(names(meta)[i], skip_fields) && "character" == class(val)) {
       meta[[i]] <- as_native_vec(val)
     }
   }
@@ -145,7 +145,7 @@ is_yes <- function(val) { # TODO if val is c("y", NULL), the NULL is ignored. An
 }
 
 is_series_type_mark <- function(series_type) {
-  SERIES_TYPE_MARK == str_sub(series_type, 1, nchar(SERIES_TYPE_MARK))  
+  SERIES_TYPE_MARK == stringr::str_sub(series_type, 1, nchar(SERIES_TYPE_MARK))  
 }
 
 # Importing meta data auto-generates vectors where possible. 'restore_vec' can undo so.
@@ -182,7 +182,7 @@ fix_numbers <- function(vec, n_decimals, decimal_sep) {
 
   # Fix separator
   if ("." != decimal_sep)
-    vec <- str_replace(c(vec), "\\.", decimal_sep)
+    vec <- stringr::str_replace(c(vec), "\\.", decimal_sep)
   
   return(vec)
 }
