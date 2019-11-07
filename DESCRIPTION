@@ -1,11 +1,11 @@
 Package: james
 Title: Data I/O and visualisation made easy for Excel users and R programmers
-Version: 19.10
+Version: 19.11
 Author: Martijn Dijkstra
 Maintainer: Martijn Dijkstra <m.dijkstra.cpb@gmail.com>
 Authors@R: "Martijn Dijkstra <m.dijkstra.cpb@gmail.com> [aut, cre]"
 Description: James makes it easy to import, store and visualise (time series) Excel and R data.
-Depends: R (>= 3.4.3), utils, stringr, openxlsx, R6, stats, igraph
+Imports: utils, stringr, openxlsx, R6, stats, igraph
 License: MIT + file LICENSE
 NeedsCompilation: no
 Encoding: UTF-8

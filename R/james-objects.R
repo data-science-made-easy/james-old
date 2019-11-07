@@ -9,7 +9,7 @@ JData <- R6::R6Class("JData",
       self$type     <- type
       self$scenario <- scenario
       self$project  <- project
-      self$meta     <- list(user = Sys.info()[["user"]], born = date(), doc = doc)
+      self$meta     <- list(user = Sys.info()[["user"]], born = unclass(Sys.time()), doc = doc) # as.POSIXct(born, origin = "1970-01-01")
     },
     data     = NULL, # The data
     version  = NULL, # Version, type, scenario, project are James-related meta data

@@ -21,6 +21,9 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
   # Add data to meta data as 'd0'; strip x-axis and add as 'd'
   meta$d0 <- as_data_frame(j_get(index, what = "data"))
 
+  # Add to db
+  j_db_put(meta) # put in db for stats and help
+
   meta <- pre_process_meta(meta) # d0 = as_data_frame(j_get(index, what = "data"))
 
   file_base_name <- get_param("name", meta, get_param("tab", meta, "unknown"))
