@@ -59,7 +59,7 @@ j_db_get_stats <- function(j_db_path = c('/Volumes/p_jamesgebruiker/stats/j_db.s
     mat$timestamp <- as.POSIXct(as.numeric(mat$timestamp), origin = "1970-01-01")
     
     # Enrich user names with full names
-    un_path <- file.path(j_db_path, "usernames.RData")
+    un_path <- file.path(stringr:::str_sub(j_db_path, end=-12), "usernames.RData")
     if (file.exists(un_path)) {
       un <- dget(un_path)
       un_vec <- NULL
@@ -67,6 +67,7 @@ j_db_get_stats <- function(j_db_path = c('/Volumes/p_jamesgebruiker/stats/j_db.s
         un_vec[i] <- un[which(un[, "username"] == mat$user[i]), 2]
       }
       mat <- cbind(mat[, 1], un_vec, mat[, 2:ncol(mat)])
+      colnames(mat)[1:2] <- c("user", "name")
     }
     
   }  
