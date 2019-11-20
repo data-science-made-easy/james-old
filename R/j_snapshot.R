@@ -71,7 +71,7 @@ j_snapshot <- function(is_final = FALSE, create_figs = TRUE, include_figs = TRUE
   cat('\n')
   print("Done!")
   
-  if (open_data_file) system(paste("open", data_file_name))
+  if (open_data_file) system(paste(if ("unix" == .Platform$OS.type) "open" else "start", data_file_name))
   
   return(data_file_name)
 }
