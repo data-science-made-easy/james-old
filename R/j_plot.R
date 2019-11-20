@@ -33,11 +33,12 @@ j_plot <- function(index, meta = list()) { # TODO Naast index ook via 'tab name'
 
   # Init SVG or PDF/PNG?
   if (is_yes(meta$create_svg)) {
-    if (!file.exists(meta$dir_svg)) dir.create(meta$dir_svg, showWarnings = FALSE)
+    dir.create(dirname(meta$svg), showWarnings = FALSE)
+    #if (!file.exists(meta$dir_svg)) dir.create(meta$svg, showWarnings = FALSE)
     create_svg(meta) # Init the SVG
   } else if (!is_no(meta$pdf)) { #TODO solve differently
-    if (!file.exists(meta$dir_pdf)) dir.create(meta$dir_pdf, showWarnings = FALSE)
-    if (!file.exists(meta$dir_png)) dir.create(meta$dir_png, showWarnings = FALSE)
+    dir.create(dirname(meta$pdf), showWarnings = FALSE)
+    dir.create(dirname(meta$png), showWarnings = FALSE)
     create_pdf(meta) # Init the PDF
   }
 

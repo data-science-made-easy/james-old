@@ -64,7 +64,7 @@ j_import <- function(file_name, meta = list(), add_if_duplicate, publish_only = 
       sheet_meta_data <- j_import_settings(meta = sheet_meta_data) # fill with unset global parameters
 
       # Parse strings to vectors of native values (i.e. numeric where posible)
-      sheet_meta_data <- strings_to_vectors(sheet_meta_data, skip_fields = "tab")
+      sheet_meta_data <- strings_to_vectors(sheet_meta_data, skip_fields = c("tab", "sub_title", "title", "x_lab", "y_lab", "y2_lab"))
       
       # Remove NA's
       sheet_meta_data <- sheet_meta_data[which(!is.na(sheet_meta_data))]
