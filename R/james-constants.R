@@ -3,7 +3,8 @@ NO          <- c("n", "N", "no", "No", "NO")
 SETTINGS    <- list(sep = ",") # Separator in xlsx-fields
 TAB_NAME    <- list(help = "help", meta = "meta", constants = "constants")
 META        <- list(settings_file = "settings_file", tab = "tab", dir_pdf = "dir_pdf", dir_png = "dir_png", name = "name", pdf = "pdf", png = "png", id = "id", type = "type", import = "import", series_type = "series_type", swap_xy = "swap_xy", publish = "publish", publish_data = "publish_data") # Define columns in Excel
-JAMES_SETTINGS <- "james-local-settings.xlsx"
+JAMES_SETTINGS_M <- "M:/p_james/settings/james-cepmev.xlsx"
+JAMES_SETTINGS_LOCAL <- "james-local-settings.xlsx"
 ARGS        <- list(add_if_duplicate = "add_if_duplicate")
 CLASS       <- list(jdata = "JData")
 SERIES_TYPE_LINE_PATTERN  <- "line_x_y"

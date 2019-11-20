@@ -12,7 +12,7 @@
 #' @export j_import_settings
 
 j_import_settings <- function(meta = list()) {
-  settings_file_name <- get_param(META$settings_file, meta, JAMES_SETTINGS)
+  settings_file_name <- get_param(META$settings_file, meta, JAMES_SETTINGS_LOCAL)
   
   # Import from which file?
   if (!file.exists(settings_file_name)) {
@@ -20,7 +20,7 @@ j_import_settings <- function(meta = list()) {
     if (-1 == file.access(dirname(settings_file_name), mode = 2)) {
       stop(paste("No write permission for", settings_file_name))
     } else {
-      file.copy(from = system.file("extdata", JAMES_SETTINGS, package = "james"), to = settings_file_name)
+      file.copy(from = system.file("extdata", JAMES_SETTINGS_LOCAL, package = "james"), to = settings_file_name)
       print(paste("James created", settings_file_name))      
     }
   }

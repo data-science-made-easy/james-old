@@ -1,6 +1,6 @@
 j_db_put <- function(meta) { # meta$d0 is data
   if (is_yes(meta$j_debug)) print(paste("IN j_db_put"))
-  db_writable <- 0 == file.access(meta$j_db_path, mode = 2) 
+  db_writable <- !is.null(meta$j_db_path) && 0 == file.access(meta$j_db_path, mode = 2)
   if (is_yes(meta$j_debug)) print(paste("db_writable:", db_writable))
   if (is_yes(meta$j_debug)) print(paste("j_db_path:", meta$j_db_path))
   if (!is_yes(meta$j_db) || !is.character(meta$j_db_table) || !is.character(meta$j_db_path) || !db_writable) return()

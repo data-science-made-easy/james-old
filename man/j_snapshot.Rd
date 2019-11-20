@@ -2,7 +2,7 @@
 % Please edit documentation in R/j_snapshot.R
 \name{j_snapshot}
 \alias{j_snapshot}
-\title{Export data file}
+\title{Export xlsx-data file}
 \usage{
 j_snapshot(is_final = FALSE, create_figs = TRUE, include_figs = TRUE,
   open_data_file = FALSE, meta = list(),
@@ -19,5 +19,5 @@ j_snapshot(is_final = FALSE, create_figs = TRUE, include_figs = TRUE,
 data_file_name
 }
 \description{
-Optionally with png's inside
+Optionally with png's inside.
 }

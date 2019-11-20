@@ -1,6 +1,6 @@
-#' Export data file
+#' Export xlsx-data file
 #'
-#' Optionally with png's inside
+#' Optionally with png's inside.
 #'
 #' @param is_final (Boolean) prepends user (read: dirnames) if FALSE
 #'
@@ -13,7 +13,7 @@ j_snapshot <- function(is_final = FALSE, create_figs = TRUE, include_figs = TRUE
   output_formats <- c("pdf", "png")
 
   # INITIALIZE
-  low_prio_meta <- if (file.exists("M:/p_james/settings/james-cepmev.xlsx")) list(settings_file = "M:/p_james/settings/james-cepmev.xlsx") else list(settings_file = "james-snapshot-settings.xlsx")
+  low_prio_meta <- if (file.exists(JAMES_SETTINGS_M)) list(settings_file = META$JAMES_SETTINGS_M) else list(settings_file = META$JAMES_SETTINGS)
   meta <- james:::combine_lists(high_prio = meta, low_prio = low_prio_meta)
 
   # CLEAN DB
@@ -56,7 +56,7 @@ j_snapshot <- function(is_final = FALSE, create_figs = TRUE, include_figs = TRUE
     tab <- j_ls()
     for (i in tab$index) {
       j_plot(i)
-    }    
+    }
   } else {
     print("NOT Creating figures... (set create_figs = TRUE if you want to do so)")
     include_figs <- FALSE
