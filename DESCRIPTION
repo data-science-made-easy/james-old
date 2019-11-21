@@ -5,7 +5,7 @@ Author: Martijn Dijkstra
 Maintainer: Martijn Dijkstra <m.dijkstra.cpb@gmail.com>
 Authors@R: "Martijn Dijkstra <m.dijkstra.cpb@gmail.com> [aut, cre]"
 Description: James makes it easy to import, store and visualise (time series) Excel and R data.
-Imports: utils, stringr, openxlsx, R6, stats, igraph, RSQLite
+Imports: utils, stringr, openxlsx, R6, stats, igraph, RSQLite, gtools
 License: MIT + file LICENSE
 NeedsCompilation: no
 Encoding: UTF-8
