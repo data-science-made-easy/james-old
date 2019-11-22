@@ -16,5 +16,5 @@ list with meta data
 Import settings from xlsx-file and add them to meta.
 }
 \details{
-\code{meta} gets highest prio. Settings in \code{file_name} get lower prio. If you don't specify \code{file_name}, James will use james-settings.xlsx (in current directory). Side effect: if this file is non-existent, James will put a copy of its default version there.
+\code{meta} gets highest prio. Settings in \code{file_name} get lower prio. If you don't specify \code{file_name}, james will use the james-settings.xlsx from its own package.
 }

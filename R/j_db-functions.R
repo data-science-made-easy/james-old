@@ -41,9 +41,17 @@ list_as_df <- function(lst) {
   lst_as_df
 }
 
-j_db_get_stats <- function(j_db_path = c('/Volumes/p_jamesgebruiker/stats/j_db.sqlite', 'M:/p_jamesgebruiker/stats/j_db.sqlite')[1], j_db_table = "jls") {
+j_db_get_stats <- function(j_db_path = c('/Volumes/p_jamesgebruiker/stats/j_db.sqlite', 'M:/p_jamesgebruiker/stats/j_db.sqlite'), j_db_table = "jls") {
+
+  for (p in j_db_path) {
+    if (file.exists(p)) {
+      j_db_path <- p
+      break
+    }
+  }
+
   con <- DBI::dbConnect(RSQLite::SQLite(), dbname = j_db_path) # :dbname:
-  db_table        <- DBI::dbReadTable(con, j_db_table)
+  db_table <- DBI::dbReadTable(con, j_db_table)
   DBI::dbDisconnect(con)
   
   mat <- as.data.frame(unique(cbind(user = db_table$user, timestamp = NA, path = db_table$j_db_put_path)), stringsAsFactors = F)
@@ -74,8 +82,6 @@ j_db_get_stats <- function(j_db_path = c('/Volumes/p_jamesgebruiker/stats/j_db.s
   
   return(mat)
 }
-
-
 
 
 
