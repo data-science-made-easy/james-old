@@ -75,7 +75,7 @@ j_snapshot <- function(is_final = FALSE, create_figs = TRUE, include_figs = TRUE
     print(paste("Path:", getwd()))
     print(paste("Command:", if (open_data_file) paste(if ("unix" == .Platform$OS.type) "open" else "start", data_file_name)))
   }
-  if (open_data_file) system(paste(if ("unix" == .Platform$OS.type) "open" else "start", data_file_name))
+  if (open_data_file) system(paste(if ("unix" == .Platform$OS.type) "open" else "cmd /c start", data_file_name))
   
   return(data_file_name)
 }
