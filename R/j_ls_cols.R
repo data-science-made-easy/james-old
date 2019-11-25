@@ -10,6 +10,9 @@ j_ls_cols <- function(cols = c("index", "name", "title", "dim|class")) {
           df[i, cols[j]] <- meta[[cols[j]]]
     }
   }
-  
+ 
+  # eliminate non-existent column names
+  cols <- intersect(cols, colnames(df))
+    
   df[, cols]
 }

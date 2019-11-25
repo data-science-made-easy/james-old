@@ -4,11 +4,11 @@
 \alias{j_snapshot}
 \title{Export xlsx-data file}
 \usage{
-j_snapshot(is_final = FALSE, create_figs = TRUE, include_figs = TRUE,
-  open_data_file = FALSE, meta = list(),
+j_snapshot(is_final = FALSE, create_figs = TRUE,
+  include_figs = FALSE, open_data_file = FALSE, meta = list(),
   input_file_name = "cepmev.xlsx", snapshot_dir = file.path("snapshot",
   format(Sys.time(), "\%Y\%m\%d-\%H\%M")),
-  data_file_name = file.path(snapshot_dir, guess_doc_specs()$file_name),
+  data_file_name = guess_doc_specs()$file_name,
   doc_name = guess_doc_specs()$doc_name,
   publication_date = guess_doc_specs()$publication_date)
 }

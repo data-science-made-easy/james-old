@@ -8,7 +8,7 @@
 #'
 #' @export j_snapshot
 
-j_snapshot <- function(is_final = FALSE, create_figs = TRUE, include_figs = TRUE, open_data_file = FALSE, meta = list(), input_file_name = "cepmev.xlsx", snapshot_dir = file.path("snapshot", format(Sys.time(), "%Y%m%d-%H%M")), data_file_name = file.path(snapshot_dir, guess_doc_specs()$file_name), doc_name = guess_doc_specs()$doc_name, publication_date = guess_doc_specs()$publication_date) {
+j_snapshot <- function(is_final = FALSE, create_figs = TRUE, include_figs = FALSE, open_data_file = FALSE, meta = list(), input_file_name = "cepmev.xlsx", snapshot_dir = file.path("snapshot", format(Sys.time(), "%Y%m%d-%H%M")), data_file_name = guess_doc_specs()$file_name, doc_name = guess_doc_specs()$doc_name, publication_date = guess_doc_specs()$publication_date) {
   # CONSTANTS
   output_formats <- c("pdf", "png")
 
@@ -66,6 +66,7 @@ j_snapshot <- function(is_final = FALSE, create_figs = TRUE, include_figs = TRUE
 
   # CREATE DATA FILE
   cat('\n')
+  data_file_name <- file.path(snapshot_dir, data_file_name)
   print(paste0("Creating ", data_file_name, "..."))
   j_export_xlsx(file_name = data_file_name, doc_name = doc_name, publication_date = publication_date, include_figs = include_figs)
   cat('\n')

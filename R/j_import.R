@@ -28,13 +28,25 @@ j_import <- function(file_name, meta = list(), add_if_duplicate, publish_only = 
   sheet_i_meta      <- which(TAB_NAME$meta == sheet_names)
   meta_data         <- if (length(sheet_i_meta)) openxlsx::read.xlsx(file_name, sheet = sheet_i_meta) else NULL
 
+  # #
+  # ## (0) Pre-select tabs we want to import
+  # #
+  # if (publish_only) {
+  #   index <- which(is_yes(meta_data[[META$publish]])) # TODO correct for constants
+  # } else {
+  #   index <- which(is_yes(meta_data[[META$create]])) # TODO correct for constants
+  # }
+  # sheet_names <- intersect(sheet_names, meta_data[[META$tab]][index])
+  # sheet_names <<- sheet_names
+  # meta_data <<- meta_data
+
   #
   ## (1) Import data tabs
   #
   import_index = NULL
   for (sheet_i in seq_along(sheet_names)) {
     # Import data tab
-    tab <- openxlsx::read.xlsx(file_name, sheet = sheet_i)
+    tab <- openxlsx::read.xlsx(file_name, sheet = sheet_i) # TODO Inladen van sheet_names[sheet_i]
     
     # Get right colnames
     tab_column_names        <- openxlsx::read.xlsx(file_name, sheet = sheet_i, colNames = FALSE)[1, ]
