@@ -567,6 +567,7 @@ count_series_types <- function(meta) {
   # Get index for each of series_type
   meta$line_index        <- which(SERIES_TYPE_LINE      == meta$series_type)
   meta$line_dot_index    <- which(SERIES_TYPE_LINE_DOT  == meta$series_type)
+  meta$line_dash_index   <- which(SERIES_TYPE_LINE_DASH == meta$series_type)
   meta$lines_index       <- which(is.element(meta$series_type, SERIES_TYPE_LINES))
 	meta$bar_air_index     <- which(SERIES_TYPE_BAR_AIR   == meta$series_type)
 	meta$bar_next_index    <- which(SERIES_TYPE_BAR_NEXT  == meta$series_type)
@@ -846,8 +847,6 @@ add_legend <- function(meta) {
     meta$col_default <- 1
     if (!has_value(meta$legend_names)) return()
     n_series <- length(meta$legend_names)
-
-    this_lty <- 1:n_series
     
     # Find optimal number of columns if not specified
     legend_n_columns <- meta$legend_n_columns # TODO This code is a duplicate of code below... Pls fix
@@ -857,7 +856,7 @@ add_legend <- function(meta) {
         legend_n_columns <- 3
     }
 
-    legend(meta$legend_x, meta$legend_y, legend = meta$legend_names, text.font = 3, lwd = meta$lwd_ts, col = meta$col_default, lty = this_lty, bty = "n", x.intersp = meta$legend_space_symbol_text, seg.len = meta$legend_line_length_graph, ncol = legend_n_columns, cex = meta$legend_text_size)
+    legend(meta$legend_x, meta$legend_y, legend = meta$legend_names, text.font = 3, lwd = meta$lwd_ts, col = meta$col_default, lty = 1:n_series, bty = "n", x.intersp = meta$legend_space_symbol_text, seg.len = meta$legend_line_length_graph, ncol = legend_n_columns, cex = meta$legend_text_size)
 
     return()
   }
@@ -909,7 +908,7 @@ add_legend <- function(meta) {
   }
 
   # Do the magic
-  legend(meta$legend_x, meta$legend_y, legend = series_names, text.font = 3, lwd = meta$lwd_ts, col = meta$col_default, pch = meta$pch, pt.cex = meta$legend_symbol_size, bty = "n", x.intersp = meta$legend_space_symbol_text, seg.len = meta$legend_line_length, ncol = legend_n_columns, cex = meta$legend_text_size)
+  legend(meta$legend_x, meta$legend_y, legend = series_names, text.font = 3, lwd = meta$lwd_ts, col = meta$col_default, lty = meta$lty, pch = meta$pch, pt.cex = meta$legend_symbol_size, bty = "n", x.intersp = meta$legend_space_symbol_text, seg.len = meta$legend_line_length, ncol = legend_n_columns, cex = meta$legend_text_size)
 }
 
 #' Meta may have variables of length 1 or length > meta$n_series. This function makes all lists have length meta$n_series.
@@ -933,6 +932,10 @@ set_series_specific_legend <- function(meta) {
 
   meta$lwd_ts[c(index_bar, meta$dot_index, meta$dot_small_index)] <- NA # Block lines for bar plots
 
+  # Set series specific line type
+  meta$lty[meta$lines_index]                             <- 1 # All lines (add mark0 below)
+  meta$lty[c(meta$line_dash_index, meta$line_dot_index)] <- 2 # Both dash and dot 
+
   # Mark specifics
   if (meta$n_marks) for (i in seq_along(meta$mark_index)) {
     this_index <- meta$mark_index[i]
@@ -940,6 +943,7 @@ set_series_specific_legend <- function(meta) {
     
     if (0 == meta$pch[this_index]) { # line
       meta$pch[this_index] <- NA
+      meta$lty[this_index] <- 1
     } else {
       meta$lwd_ts[this_index] <- NA
       meta$legend_symbol_size[this_index] <- meta$legend_mark_size[this_index]
