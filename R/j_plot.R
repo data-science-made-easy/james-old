@@ -905,6 +905,7 @@ add_legend <- function(meta) {
     meta$col_default              <- meta$col_default[index]
     meta$pch                      <- meta$pch[index]
     meta$legend_symbol_size       <- meta$legend_symbol_size[index]     
+    meta$lty                      <- meta$lty[index]
   }
 
   # Do the magic
